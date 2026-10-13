@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081326"/>
+      <stop offset="50%" stop-color="#0c1d3b"/>
+      <stop offset="100%" stop-color="#1e4585"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <!-- Caderno / Livro -->
+  <path d="M128 140 C128 120 144 104 164 104 L384 104 C395 104 404 113 404 124 L404 380 C404 391 395 400 384 400 L164 400 C144 400 128 384 128 364 Z" fill="#ffffff" opacity="0.95"/>
+  <rect x="144" y="104" width="32" height="296" fill="url(#accentGrad)" rx="8"/>
+  <!-- Linhas pautadas -->
+  <rect x="204" y="160" width="160" height="12" rx="6" fill="#93c5fd"/>
+  <rect x="204" y="200" width="160" height="12" rx="6" fill="#bfdbfe"/>
+  <rect x="204" y="240" width="160" height="12" rx="6" fill="#bfdbfe"/>
+  <rect x="204" y="280" width="120" height="12" rx="6" fill="#bfdbfe"/>
+  <!-- Lápis Dourado -->
+  <g transform="translate(330, 240) rotate(-35)">
+    <rect x="0" y="0" width="28" height="130" rx="6" fill="#f59e0b"/>
+    <polygon points="0,130 28,130 14,165" fill="#fde68a"/>
+    <polygon points="9,150 19,150 14,165" fill="#1e293b"/>
+    <rect x="0" y="0" width="28" height="24" rx="4" fill="#f43f5e"/>
+    <rect x="0" y="22" width="28" height="8" fill="#e2e8f0"/>
+  </g>
+</svg>
