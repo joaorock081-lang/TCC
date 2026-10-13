@@ -26,6 +26,18 @@
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- Prevenção de FOUC: aplica tema e paleta imediatamente antes de renderizar -->
+  <script>
+    (function() {
+      try {
+        var m = localStorage.getItem('estudamais_theme_mode') || 'light';
+        var a = localStorage.getItem('estudamais_theme_accent') || 'azul-marinho';
+        document.documentElement.setAttribute('data-theme', m);
+        document.documentElement.setAttribute('data-accent', a);
+      } catch(e) {}
+    })();
+  </script>
+
   <!-- Estilos Customizados -->
   <style>
 /* ========================================================
@@ -36,26 +48,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap');
 
 :root {
-  /* Paleta de Azuis - Foco em Azul Marinho Elegante */
-  --navy-950: #081326;
-  --navy-900: #0c1d3b;
-  --navy-850: #10264d;
-  --navy-800: #163366;
-  --navy-700: #1e4585;
-  --navy-600: #2563eb;
-  --navy-500: #3b82f6;
-  --navy-400: #60a5fa;
-  --navy-300: #93c5fd;
-  --navy-200: #bfdbfe;
-  --navy-100: #dbeafe;
-  --navy-50:  #eff6ff;
+  /* ========================================================
+     SISTEMA DE TEMAS DINÂMICOS & CORES (LIGHT / DARK & ACCENTS)
+     ======================================================== */
+  /* Paleta Padrão: Azul Marinho Clássico */
+  --primary-base: #0c1d3b;
+  --primary-dark: #081326;
+  --primary-base-alt: #10264d;
+  --primary-base-light: #163366;
+  --primary-base-lighter: #1e4585;
+  --primary-light: #2563eb;
+  --primary-accent: #3b82f6;
+  --primary-accent-light: #60a5fa;
+  --primary-accent-lighter: #93c5fd;
+  --primary-border: #bfdbfe;
+  --primary-subtle-alt: #dbeafe;
+  --primary-subtle: #eff6ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(37, 99, 235, 0.28);
+  --primary-gradient: linear-gradient(135deg, var(--primary-base) 0%, var(--primary-light) 100%);
 
-  /* Tons de Fundo Aconchegantes e Suaves */
+  /* Mapeamento Dinâmico para retrocompatibilidade com componentes */
+  --navy-950: var(--primary-dark);
+  --navy-900: var(--primary-base);
+  --navy-850: var(--primary-base-alt);
+  --navy-800: var(--primary-base-light);
+  --navy-700: var(--primary-base-lighter);
+  --navy-600: var(--primary-light);
+  --navy-500: var(--primary-accent);
+  --navy-400: var(--primary-accent-light);
+  --navy-300: var(--primary-accent-lighter);
+  --navy-200: var(--primary-border);
+  --navy-100: var(--primary-subtle-alt);
+  --navy-50:  var(--primary-subtle);
+
+  /* Tons de Fundo e Superfícies (Modo Claro) */
   --bg-page: #f2f6fc;
   --bg-surface: #ffffff;
   --bg-paper: #fcfdfd;
   --bg-subtle: #e9f0f9;
   --bg-hover: #e0ecf9;
+  --header-bg: rgba(255, 255, 255, 0.90);
+  --card-bg: #ffffff;
 
   /* Detalhes de Papelaria & Estudo (Lápis, Marca-Texto) */
   --pencil-gold: #f59e0b;
@@ -73,11 +107,11 @@
 
   /* Bordas e Sombras Suaves */
   --border-light: #d8e5f3;
-  --border-focus: #3b82f6;
+  --border-focus: var(--primary-accent);
   --shadow-sm: 0 2px 6px rgba(12, 29, 59, 0.04);
   --shadow-md: 0 6px 18px rgba(12, 29, 59, 0.07);
   --shadow-lg: 0 14px 34px rgba(12, 29, 59, 0.10);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.25);
+  --shadow-glow: 0 0 20px var(--primary-glow);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -86,6 +120,402 @@
 
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================================
+   MODO ESCURO (DARK MODE) DE ALTO CONFORTO VISUAL
+   ======================================================== */
+[data-theme="dark"] {
+  --bg-page: #0b111e;
+  --bg-surface: #121c2e;
+  --bg-paper: #16243a;
+  --bg-subtle: #1c2e4a;
+  --bg-hover: #22385c;
+  --header-bg: rgba(18, 28, 46, 0.92);
+  --card-bg: #121c2e;
+
+  --text-main: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-white: #ffffff;
+
+  --border-light: #233654;
+  --border-focus: var(--primary-accent);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.65);
+
+  --primary-subtle: rgba(255, 255, 255, 0.06);
+  --primary-subtle-alt: rgba(255, 255, 255, 0.09);
+  --primary-border: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================================
+   PALETAS DE CORES DINÂMICAS (7 FAMÍLIAS & SUAS VARIAÇÕES)
+   ======================================================== */
+
+/* --- 1. AZUL --- */
+[data-accent="azul-marinho"] {
+  --primary-base: #0c1d3b;
+  --primary-dark: #071224;
+  --primary-base-alt: #10264d;
+  --primary-base-light: #163366;
+  --primary-base-lighter: #1e4585;
+  --primary-light: #2563eb;
+  --primary-accent: #3b82f6;
+  --primary-accent-light: #60a5fa;
+  --primary-accent-lighter: #93c5fd;
+  --primary-border: #bfdbfe;
+  --primary-subtle-alt: #dbeafe;
+  --primary-subtle: #eff6ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(37, 99, 235, 0.3);
+}
+
+[data-accent="azul-real"] {
+  --primary-base: #1e3a8a;
+  --primary-dark: #172554;
+  --primary-base-alt: #1e40af;
+  --primary-base-light: #2563eb;
+  --primary-base-lighter: #3b82f6;
+  --primary-light: #3b82f6;
+  --primary-accent: #60a5fa;
+  --primary-accent-light: #93c5fd;
+  --primary-accent-lighter: #bfdbfe;
+  --primary-border: #93c5fd;
+  --primary-subtle-alt: #dbeafe;
+  --primary-subtle: #eff6ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(59, 130, 246, 0.3);
+}
+
+[data-accent="azul-celeste"] {
+  --primary-base: #0369a1;
+  --primary-dark: #0c4a6e;
+  --primary-base-alt: #0284c7;
+  --primary-base-light: #0ea5e9;
+  --primary-base-lighter: #38bdf8;
+  --primary-light: #0284c7;
+  --primary-accent: #38bdf8;
+  --primary-accent-light: #7dd3fc;
+  --primary-accent-lighter: #bae6fd;
+  --primary-border: #7dd3fc;
+  --primary-subtle-alt: #e0f2fe;
+  --primary-subtle: #f0f9ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(2, 132, 199, 0.3);
+}
+
+/* --- 2. AMARELO --- */
+[data-accent="amarelo-canario"] {
+  --primary-base: #a16207;
+  --primary-dark: #713f12;
+  --primary-base-alt: #b45309;
+  --primary-base-light: #ca8a04;
+  --primary-base-lighter: #d97706;
+  --primary-light: #eab308;
+  --primary-accent: #facc15;
+  --primary-accent-light: #fde047;
+  --primary-accent-lighter: #fef08a;
+  --primary-border: #fef08a;
+  --primary-subtle-alt: #fef9c3;
+  --primary-subtle: #fefce8;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(234, 179, 8, 0.3);
+}
+
+[data-accent="amarelo-dourado"] {
+  --primary-base: #b45309;
+  --primary-dark: #78350f;
+  --primary-base-alt: #c2410c;
+  --primary-base-light: #d97706;
+  --primary-base-lighter: #f59e0b;
+  --primary-light: #f59e0b;
+  --primary-accent: #fbbf24;
+  --primary-accent-light: #fcd34d;
+  --primary-accent-lighter: #fde68a;
+  --primary-border: #fde68a;
+  --primary-subtle-alt: #fef3c7;
+  --primary-subtle: #fffbeb;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(245, 158, 11, 0.3);
+}
+
+[data-accent="amarelo-mostarda"] {
+  --primary-base: #854d0e;
+  --primary-dark: #543209;
+  --primary-base-alt: #a16207;
+  --primary-base-light: #ca8a04;
+  --primary-base-lighter: #d97706;
+  --primary-light: #ca8a04;
+  --primary-accent: #eab308;
+  --primary-accent-light: #facc15;
+  --primary-accent-lighter: #fef08a;
+  --primary-border: #facc15;
+  --primary-subtle-alt: #fef9c3;
+  --primary-subtle: #fefce8;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(202, 138, 4, 0.3);
+}
+
+/* --- 3. VINHO --- */
+[data-accent="vinho-borgonha"] {
+  --primary-base: #581226;
+  --primary-dark: #3a0a18;
+  --primary-base-alt: #701a31;
+  --primary-base-light: #881337;
+  --primary-base-lighter: #9f1239;
+  --primary-light: #9f1239;
+  --primary-accent: #e11d48;
+  --primary-accent-light: #f43f5e;
+  --primary-accent-lighter: #fda4af;
+  --primary-border: #fecdd3;
+  --primary-subtle-alt: #ffe4e6;
+  --primary-subtle: #fff1f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(159, 18, 57, 0.3);
+}
+
+[data-accent="vinho-marsala"] {
+  --primary-base: #6b213b;
+  --primary-dark: #471526;
+  --primary-base-alt: #831843;
+  --primary-base-light: #9f1239;
+  --primary-base-lighter: #be123c;
+  --primary-light: #be123c;
+  --primary-accent: #fb7185;
+  --primary-accent-light: #fda4af;
+  --primary-accent-lighter: #fecdd3;
+  --primary-border: #fda4af;
+  --primary-subtle-alt: #ffe4e6;
+  --primary-subtle: #fff1f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(190, 18, 60, 0.3);
+}
+
+[data-accent="vinho-tinto"] {
+  --primary-base: #4a0e1e;
+  --primary-dark: #2d0712;
+  --primary-base-alt: #641128;
+  --primary-base-light: #7c1432;
+  --primary-base-lighter: #94183d;
+  --primary-light: #881337;
+  --primary-accent: #be123c;
+  --primary-accent-light: #e11d48;
+  --primary-accent-lighter: #fb7185;
+  --primary-border: #f43f5e;
+  --primary-subtle-alt: #ffe4e6;
+  --primary-subtle: #fff1f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(136, 19, 55, 0.3);
+}
+
+/* --- 4. VERMELHO --- */
+[data-accent="vermelho-carmim"] {
+  --primary-base: #991b1b;
+  --primary-dark: #7f1d1d;
+  --primary-base-alt: #b91c1c;
+  --primary-base-light: #dc2626;
+  --primary-base-lighter: #ef4444;
+  --primary-light: #dc2626;
+  --primary-accent: #ef4444;
+  --primary-accent-light: #f87171;
+  --primary-accent-lighter: #fca5a5;
+  --primary-border: #fecaca;
+  --primary-subtle-alt: #fee2e2;
+  --primary-subtle: #fef2f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(220, 38, 38, 0.3);
+}
+
+[data-accent="vermelho-coral"] {
+  --primary-base: #9a3412;
+  --primary-dark: #7c2d12;
+  --primary-base-alt: #c2410c;
+  --primary-base-light: #ea580c;
+  --primary-base-lighter: #f97316;
+  --primary-light: #ea580c;
+  --primary-accent: #f97316;
+  --primary-accent-light: #fb923c;
+  --primary-accent-lighter: #fdba74;
+  --primary-border: #fed7aa;
+  --primary-subtle-alt: #ffedd5;
+  --primary-subtle: #fff7ed;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(234, 88, 12, 0.3);
+}
+
+[data-accent="vermelho-escarlate"] {
+  --primary-base: #b91c1c;
+  --primary-dark: #881313;
+  --primary-base-alt: #c21d1d;
+  --primary-base-light: #e11d48;
+  --primary-base-lighter: #f43f5e;
+  --primary-light: #e11d48;
+  --primary-accent: #f43f5e;
+  --primary-accent-light: #fb7185;
+  --primary-accent-lighter: #fda4af;
+  --primary-border: #fecdd3;
+  --primary-subtle-alt: #ffe4e6;
+  --primary-subtle: #fff1f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(225, 29, 72, 0.3);
+}
+
+/* --- 5. ROXO --- */
+[data-accent="roxo-ametista"] {
+  --primary-base: #581c87;
+  --primary-dark: #3b0764;
+  --primary-base-alt: #6b21a8;
+  --primary-base-light: #7e22ce;
+  --primary-base-lighter: #9333ea;
+  --primary-light: #9333ea;
+  --primary-accent: #a855f7;
+  --primary-accent-light: #c084fc;
+  --primary-accent-lighter: #d8b4fe;
+  --primary-border: #e9d5ff;
+  --primary-subtle-alt: #f3e8ff;
+  --primary-subtle: #faf5ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(147, 51, 234, 0.3);
+}
+
+[data-accent="roxo-lavanda"] {
+  --primary-base: #4c1d95;
+  --primary-dark: #2e1065;
+  --primary-base-alt: #5b21b6;
+  --primary-base-light: #6d28d9;
+  --primary-base-lighter: #7c3aed;
+  --primary-light: #7c3aed;
+  --primary-accent: #8b5cf6;
+  --primary-accent-light: #a78bfa;
+  --primary-accent-lighter: #c4b5fd;
+  --primary-border: #ddd6fe;
+  --primary-subtle-alt: #ede9fe;
+  --primary-subtle: #f5f3ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(124, 58, 237, 0.3);
+}
+
+[data-accent="roxo-violeta"] {
+  --primary-base: #3b0764;
+  --primary-dark: #24023d;
+  --primary-base-alt: #4c107c;
+  --primary-base-light: #5b21b6;
+  --primary-base-lighter: #7c3aed;
+  --primary-light: #6b21a8;
+  --primary-accent: #9333ea;
+  --primary-accent-light: #a855f7;
+  --primary-accent-lighter: #c084fc;
+  --primary-border: #c084fc;
+  --primary-subtle-alt: #f3e8ff;
+  --primary-subtle: #faf5ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(107, 33, 168, 0.3);
+}
+
+/* --- 6. ROSA --- */
+[data-accent="rosa-pastel"] {
+  --primary-base: #9d174d;
+  --primary-dark: #700c34;
+  --primary-base-alt: #be185d;
+  --primary-base-light: #db2777;
+  --primary-base-lighter: #ec4899;
+  --primary-light: #db2777;
+  --primary-accent: #f472b6;
+  --primary-accent-light: #f9a8d4;
+  --primary-accent-lighter: #fbcfe8;
+  --primary-border: #fbcfe8;
+  --primary-subtle-alt: #fce7f3;
+  --primary-subtle: #fdf2f8;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(219, 39, 119, 0.3);
+}
+
+[data-accent="rosa-magenta"] {
+  --primary-base: #86198f;
+  --primary-dark: #58115e;
+  --primary-base-alt: #a21caf;
+  --primary-base-light: #c026d3;
+  --primary-base-lighter: #d946ef;
+  --primary-light: #c026d3;
+  --primary-accent: #e879f9;
+  --primary-accent-light: #f0abfc;
+  --primary-accent-lighter: #f5d0fe;
+  --primary-border: #f5d0fe;
+  --primary-subtle-alt: #fae8ff;
+  --primary-subtle: #fdf4ff;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(192, 38, 211, 0.3);
+}
+
+[data-accent="rosa-pessego"] {
+  --primary-base: #9f1239;
+  --primary-dark: #6b0e27;
+  --primary-base-alt: #be123c;
+  --primary-base-light: #e11d48;
+  --primary-base-lighter: #f43f5e;
+  --primary-light: #f43f5e;
+  --primary-accent: #fb7185;
+  --primary-accent-light: #fda4af;
+  --primary-accent-lighter: #fecdd3;
+  --primary-border: #fda4af;
+  --primary-subtle-alt: #ffe4e6;
+  --primary-subtle: #fff1f2;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(244, 63, 94, 0.3);
+}
+
+/* --- 7. VERDE --- */
+[data-accent="verde-esmeralda"] {
+  --primary-base: #065f46;
+  --primary-dark: #022c22;
+  --primary-base-alt: #047857;
+  --primary-base-light: #059669;
+  --primary-base-lighter: #10b981;
+  --primary-light: #059669;
+  --primary-accent: #10b981;
+  --primary-accent-light: #34d399;
+  --primary-accent-lighter: #6ee7b7;
+  --primary-border: #a7f3d0;
+  --primary-subtle-alt: #d1fae5;
+  --primary-subtle: #ecfdf5;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(16, 185, 129, 0.3);
+}
+
+[data-accent="verde-menta"] {
+  --primary-base: #0f766e;
+  --primary-dark: #134e4a;
+  --primary-base-alt: #115e59;
+  --primary-base-light: #0d9488;
+  --primary-base-lighter: #14b8a6;
+  --primary-light: #0d9488;
+  --primary-accent: #14b8a6;
+  --primary-accent-light: #2dd4bf;
+  --primary-accent-lighter: #5eead4;
+  --primary-border: #99f6e4;
+  --primary-subtle-alt: #ccfbf1;
+  --primary-subtle: #f0fdfa;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(20, 184, 166, 0.3);
+}
+
+[data-accent="verde-oliva"] {
+  --primary-base: #365314;
+  --primary-dark: #1a2e05;
+  --primary-base-alt: #3f6212;
+  --primary-base-light: #4d7c0f;
+  --primary-base-lighter: #65a30d;
+  --primary-light: #4d7c0f;
+  --primary-accent: #84cc16;
+  --primary-accent-light: #a3e635;
+  --primary-accent-lighter: #bef264;
+  --primary-border: #d9f99d;
+  --primary-subtle-alt: #ecfccb;
+  --primary-subtle: #f7fee7;
+  --primary-contrast-text: #ffffff;
+  --primary-glow: rgba(77, 124, 15, 0.3);
 }
 
 /* Reset Básico */
@@ -3330,6 +3760,522 @@ body {
   backdrop-filter: blur(2px);
 }
 
+/* ========================================================
+   BOTÕES DE TEMA E CORES NO CABEÇALHO
+   ======================================================== */
+.btn-header-theme-toggle {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1.5px solid var(--border-light);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-header-theme-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+  transform: translateY(-2px) rotate(15deg);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-header-theme-toggle i {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-header-palette {
+  background: var(--primary-subtle);
+  color: var(--primary-base);
+  border: 1.5px solid var(--primary-border);
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-header-palette:hover {
+  background: var(--primary-base);
+  color: var(--primary-contrast-text, #ffffff);
+  border-color: var(--primary-base);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.btn-header-palette i {
+  color: var(--primary-accent);
+  font-size: 1rem;
+  transition: transform var(--transition-fast);
+}
+
+.btn-header-palette:hover i {
+  color: var(--primary-contrast-text, #ffffff);
+  transform: rotate(25deg);
+}
+
+/* ========================================================
+   MODAL DE PERSONALIZAÇÃO DE TEMA & PALETAS DE CORES
+   ======================================================== */
+.modal-palette-box {
+  max-width: 680px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  padding: 1.8rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-palette-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1.2rem;
+}
+
+.modal-palette-title-box h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.modal-palette-title-box p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+.modal-btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.modal-btn-close:hover {
+  background: var(--bg-subtle);
+  color: var(--text-main);
+}
+
+.palette-section-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.palette-mode-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mode-card {
+  padding: 1rem 1.2rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-paper);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.mode-card:hover {
+  border-color: var(--primary-accent);
+  transform: translateY(-2px);
+}
+
+.mode-card.active {
+  border-color: var(--primary-accent);
+  background: var(--primary-subtle);
+  box-shadow: 0 0 0 1px var(--primary-accent), 0 4px 14px var(--primary-glow);
+}
+
+.mode-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: var(--bg-surface);
+  color: var(--primary-accent);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.mode-card-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.15rem;
+}
+
+.mode-card-info p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Filtros de Famílias de Cores */
+.palette-family-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.palette-family-btn {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-light);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.palette-family-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+  border-color: var(--primary-border);
+}
+
+.palette-family-btn.active {
+  background: var(--primary-base);
+  color: var(--primary-contrast-text, #ffffff);
+  border-color: var(--primary-base);
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+/* Grade de Cores */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 0.85rem;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 0.25rem 0.25rem 0.5rem;
+}
+
+.color-option-card {
+  padding: 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-paper);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: all var(--transition-fast);
+  position: relative;
+  text-align: left;
+}
+
+.color-option-card:hover {
+  border-color: var(--card-color-sec, var(--primary-accent));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.color-option-card.active {
+  border-color: var(--card-color-pri, var(--primary-base));
+  background: var(--primary-subtle);
+  box-shadow: 0 0 0 1.5px var(--card-color-pri, var(--primary-base)), 0 4px 14px var(--primary-glow);
+}
+
+.color-swatch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.color-swatch-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: transform var(--transition-fast);
+}
+
+.color-option-card:hover .color-swatch-circle {
+  transform: scale(1.12);
+}
+
+.color-family-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+}
+
+.color-info-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.color-info-sub {
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.color-preview-pill {
+  margin-top: auto;
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-full);
+  text-align: center;
+  display: inline-block;
+  background: var(--card-color-pri, var(--primary-base));
+  color: #ffffff;
+}
+
+.color-active-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--primary-base);
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.color-option-card.active .color-active-badge {
+  display: flex;
+}
+
+.modal-palette-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border-light);
+  padding-top: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.btn-palette-reset {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-palette-reset:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.btn-palette-done {
+  background: var(--primary-gradient);
+  color: var(--primary-contrast-text, #ffffff);
+  border: none;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  transition: all var(--transition-fast);
+}
+
+.btn-palette-done:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+/* ========================================================
+   OVERRIDE ELEGANTE DE COMPONENTES NO MODO ESCURO
+   ======================================================== */
+[data-theme="dark"] body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(20, 35, 60, 0.45) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(25, 20, 50, 0.4) 0%, transparent 45%);
+}
+
+[data-theme="dark"] .site-header {
+  background: var(--header-bg);
+  border-bottom-color: var(--border-light);
+}
+
+[data-theme="dark"] .nav-btn {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .nav-btn:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .nav-btn.active {
+  background: var(--primary-base);
+  color: var(--primary-contrast-text, #ffffff);
+}
+
+[data-theme="dark"] .brand-name {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .brand-tagline {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .vestibular-card,
+[data-theme="dark"] .tip-card,
+[data-theme="dark"] .quote-card,
+[data-theme="dark"] .study-stat-card,
+[data-theme="dark"] .quick-access-card,
+[data-theme="dark"] .topic-item,
+[data-theme="dark"] .lit-card,
+[data-theme="dark"] .redacao-criteria-card,
+[data-theme="dark"] .nota-card-item,
+[data-theme="dark"] .tarefa-item,
+[data-theme="dark"] .pomodoro-box,
+[data-theme="dark"] .sound-card,
+[data-theme="dark"] .quiz-box,
+[data-theme="dark"] .quiz-option-btn,
+[data-theme="dark"] .search-bar-box,
+[data-theme="dark"] .resultados-busca-dropdown,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .modal-palette-box,
+[data-theme="dark"] .scratchpad-sheet-container,
+[data-theme="dark"] .lousa-modal-container {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-light) !important;
+  color: var(--text-main);
+}
+
+[data-theme="dark"] .mobile-bottom-nav {
+  background: var(--header-bg);
+  border-top-color: var(--border-light);
+}
+
+[data-theme="dark"] .mobile-nav-btn {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .mobile-nav-btn.active {
+  color: var(--primary-accent);
+}
+
+[data-theme="dark"] .topic-item:hover {
+  background: var(--bg-hover) !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--bg-paper) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .lousa-canvas-wrapper {
+  background: #111a2e;
+  background-image: 
+    linear-gradient(#1c2d4a 1px, transparent 1px),
+    linear-gradient(90deg, #1c2d4a 1px, transparent 1px);
+}
+
+[data-theme="dark"] .lousa-grid-hint {
+  background: rgba(17, 26, 46, 0.85);
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .palette-mode-selector {
+    grid-template-columns: 1fr;
+  }
+  .palette-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 
 </style>
 </head>
@@ -3392,6 +4338,17 @@ body {
       </nav>
 
       <div class="header-actions">
+        <!-- Alternador Rápido Claro / Escuro -->
+        <button class="btn-header-theme-toggle" id="btn-theme-toggle" onclick="alternarModoEscuro()" title="Alternar Modo Claro / Escuro" aria-label="Modo Claro ou Escuro">
+          <i class="fa-solid fa-moon" id="icon-theme-toggle"></i>
+        </button>
+
+        <!-- Seletor de Cores do Tema -->
+        <button class="btn-header-palette" onclick="abrirModalCores()" title="Personalizar Cores do Tema" aria-label="Cores do Tema">
+          <i class="fa-solid fa-palette"></i>
+          <span>Cores</span>
+        </button>
+
         <button class="btn-header-scratchpad" onclick="alternarLousaRascunho()" title="Abrir Lousa para Rabiscar e Fazer Contas">
           <i class="fa-solid fa-pen-ruler"></i>
           <span>Lousa de Contas</span>
@@ -4027,6 +4984,102 @@ body {
       <span>Foco, constância e bons estudos! 🎓✏️</span>
     </div>
   </footer>
+
+  <!-- ========================================================
+       MODAL DE PERSONALIZAÇÃO DE TEMA & PALETAS DE CORES
+       ======================================================== -->
+  <div id="modal-cores" class="modal-overlay" onclick="if(event.target === this) fecharModalCores()">
+    <div class="modal-palette-box">
+      
+      <div class="modal-palette-header">
+        <div class="modal-palette-title-box">
+          <h3><i class="fa-solid fa-palette"></i> Personalizar Aparência & Cores</h3>
+          <p>Escolha o modo de estudo e sua paleta de cores favorita para uma experiência única!</p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalCores()" aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Seletor de Modo Claro / Escuro -->
+      <div>
+        <div class="palette-section-title">
+          <i class="fa-solid fa-circle-half-stroke"></i> Modo de Iluminação
+        </div>
+        <div class="palette-mode-selector">
+          <div class="mode-card active" id="mode-card-light" onclick="selecionarModoTema('light')">
+            <div class="mode-card-icon">
+              <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+            </div>
+            <div class="mode-card-info">
+              <h4>Modo Claro</h4>
+              <p>Cores nítidas e aconchegantes para o dia</p>
+            </div>
+          </div>
+          <div class="mode-card" id="mode-card-dark" onclick="selecionarModoTema('dark')">
+            <div class="mode-card-icon">
+              <i class="fa-solid fa-moon" style="color: #6366f1;"></i>
+            </div>
+            <div class="mode-card-info">
+              <h4>Modo Escuro</h4>
+              <p>Conforto visual e descanso para os olhos à noite</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seletor de Paletas de Cores -->
+      <div>
+        <div class="palette-section-title">
+          <i class="fa-solid fa-swatchbook"></i> Cor de Destaque dos Estudos
+        </div>
+
+        <!-- Abas de Famílias de Cores -->
+        <div class="palette-family-tabs">
+          <button class="palette-family-btn active" onclick="filtrarFamiliaCores('todas', this)">
+            <i class="fa-solid fa-border-all"></i> Todas
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Azul', this)">
+            <i class="fa-solid fa-droplet" style="color: #2563eb;"></i> Azul
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Amarelo', this)">
+            <i class="fa-solid fa-sun" style="color: #ca8a04;"></i> Amarelo
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Vinho', this)">
+            <i class="fa-solid fa-wine-glass" style="color: #9f1239;"></i> Vinho
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Vermelho', this)">
+            <i class="fa-solid fa-fire" style="color: #dc2626;"></i> Vermelho
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Roxo', this)">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #9333ea;"></i> Roxo
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Rosa', this)">
+            <i class="fa-solid fa-heart" style="color: #db2777;"></i> Rosa
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Verde', this)">
+            <i class="fa-solid fa-leaf" style="color: #059669;"></i> Verde
+          </button>
+        </div>
+
+        <!-- Grade Dinâmica das 21 Cores -->
+        <div class="palette-grid" id="palette-colors-grid">
+          <!-- Renderizado via JavaScript renderizarPaletasCores() -->
+        </div>
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="modal-palette-footer">
+        <button class="btn-palette-reset" onclick="restaurarTemaPadrao()">
+          <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão (Azul Marinho)
+        </button>
+        <button class="btn-palette-done" onclick="fecharModalCores()">
+          <i class="fa-solid fa-check"></i> Concluir Personalização
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- ========================================================
        BARRA DE NAVEGAÇÃO INFERIOR PARA CELULARES & TABLETS ANDROID
@@ -5605,6 +6658,10 @@ const AppState = {
     maxHistory: 15,
     isVisible: false,
     isMinimizado: false
+  },
+  theme: {
+    mode: 'light',
+    accent: 'azul-marinho'
   }
 };
 
@@ -5620,6 +6677,7 @@ const FRASES_MOTIVACIONAIS = [
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
+  inicializarTema();
   carregarDadosLocais();
   configurarNavegacao();
   renderizarFraseMotivacional();
@@ -7062,6 +8120,215 @@ window.limparLousa = function() {
   }
   mostrarToast('Lousa de rascunho limpa!');
 };
+
+/* ========================================================
+   SISTEMA DE PERSONALIZAÇÃO DE TEMAS E CORES
+   7 Famílias de Cores: Azul, Amarelo, Vinho, Vermelho, Roxo, Rosa, Verde
+   Mais de 21 Variações Vibrantes & Aconchegantes
+   ======================================================== */
+const PALETAS_CORES = [
+  {
+    familia: 'Azul',
+    icone: 'fa-droplet',
+    cores: [
+      { id: 'azul-marinho', nome: 'Azul Marinho', tipo: 'Clássico Oficial', corHex: '#0c1d3b', corSec: '#2563eb', desc: 'Profundo e elegante, o visual oficial do portal' },
+      { id: 'azul-real', nome: 'Azul Real / Safira', tipo: 'Acadêmico Vivo', corHex: '#1e3a8a', corSec: '#3b82f6', desc: 'Vibrante, intelectual e dinâmico' },
+      { id: 'azul-celeste', nome: 'Azul Celeste / Céu', tipo: 'Suave & Arejado', corHex: '#0369a1', corSec: '#38bdf8', desc: 'Leve, calmo e tranquilo para estudos diurnos' }
+    ]
+  },
+  {
+    familia: 'Amarelo',
+    icone: 'fa-sun',
+    cores: [
+      { id: 'amarelo-canario', nome: 'Amarelo Canário', tipo: 'Vibrante & Criativo', corHex: '#a16207', corSec: '#facc15', desc: 'Alegre, vivo e estimulante para o raciocínio' },
+      { id: 'amarelo-dourado', nome: 'Amarelo Ouro / Âmbar', tipo: 'Dourado Acolhedor', corHex: '#b45309', corSec: '#fbbf24', desc: 'Quente e aconchegante, lembra cadernos de couro' },
+      { id: 'amarelo-mostarda', nome: 'Amarelo Mostarda', tipo: 'Elegante Retrô', corHex: '#854d0e', corSec: '#eab308', desc: 'Foco suave e relaxante para leitura prolongada' }
+    ]
+  },
+  {
+    familia: 'Vinho',
+    icone: 'fa-wine-glass',
+    cores: [
+      { id: 'vinho-borgonha', nome: 'Vinho Borgonha', tipo: 'Nobre Clássico', corHex: '#581226', corSec: '#e11d48', desc: 'Profundo, solene e altamente imersivo' },
+      { id: 'vinho-marsala', nome: 'Vinho Marsala', tipo: 'Sofisticado', corHex: '#6b213b', corSec: '#fb7185', desc: 'Moderno, refinado e com ótimo contraste' },
+      { id: 'vinho-tinto', nome: 'Vinho Tinto / Rubi', tipo: 'Intenso & Noturno', corHex: '#4a0e1e', corSec: '#be123c', desc: 'Marcante para foco em resoluções difíceis' }
+    ]
+  },
+  {
+    familia: 'Vermelho',
+    icone: 'fa-fire',
+    cores: [
+      { id: 'vermelho-carmim', nome: 'Vermelho Carmim', tipo: 'Foco & Disciplina', corHex: '#991b1b', corSec: '#ef4444', desc: 'Energético, firme e focado em metas' },
+      { id: 'vermelho-coral', nome: 'Vermelho Coral / Terracota', tipo: 'Suave Acolhedor', corHex: '#9a3412', corSec: '#f97316', desc: 'Caloroso e confortável para não cansar a vista' },
+      { id: 'vermelho-escarlate', nome: 'Vermelho Escarlate', tipo: 'Vibrante Ativo', corHex: '#b91c1c', corSec: '#f43f5e', desc: 'Intenso, dinâmico e estimulante' }
+    ]
+  },
+  {
+    familia: 'Roxo',
+    icone: 'fa-wand-magic-sparkles',
+    cores: [
+      { id: 'roxo-ametista', nome: 'Roxo Ametista', tipo: 'Inspiração & Foco', corHex: '#581c87', corSec: '#a855f7', desc: 'Místico, equilibrado e intelectual' },
+      { id: 'roxo-lavanda', nome: 'Roxo Lavanda', tipo: 'Sereno & Anti-estresse', corHex: '#4c1d95', corSec: '#8b5cf6', desc: 'Calmante e relaxante para a ansiedade pré-prova' },
+      { id: 'roxo-violeta', nome: 'Roxo Violeta Profundo', tipo: 'Imersão Noturna', corHex: '#3b0764', corSec: '#9333ea', desc: 'Foco profundo em ambientes de pouca luz' }
+    ]
+  },
+  {
+    familia: 'Rosa',
+    icone: 'fa-heart',
+    cores: [
+      { id: 'rosa-pastel', nome: 'Rosa Pastel / Sakura', tipo: 'Aesthetic Notas', corHex: '#9d174d', corSec: '#f472b6', desc: 'Delicado e aconchegante no estilo caderno de estudos' },
+      { id: 'rosa-magenta', nome: 'Rosa Magenta / Fúcsia', tipo: 'Criativo Moderno', corHex: '#86198f', corSec: '#e879f9', desc: 'Ousado, moderno e vibrante' },
+      { id: 'rosa-pessego', nome: 'Rosa Pêssego', tipo: 'Acolhedor Suave', corHex: '#9f1239', corSec: '#fb7185', desc: 'Confortável, caloroso e relaxante' }
+    ]
+  },
+  {
+    familia: 'Verde',
+    icone: 'fa-leaf',
+    cores: [
+      { id: 'verde-esmeralda', nome: 'Verde Esmeralda', tipo: 'Revigorante', corHex: '#065f46', corSec: '#10b981', desc: 'Tranquilo, natural e estimula a memorização' },
+      { id: 'verde-menta', nome: 'Verde Menta / Sálvia', tipo: 'Fresco & Clean', corHex: '#0f766e', corSec: '#14b8a6', desc: 'Arejado, clean e muito moderno' },
+      { id: 'verde-oliva', nome: 'Verde Floresta / Oliva', tipo: 'Equilíbrio & Serenidade', corHex: '#365314', corSec: '#84cc16', desc: 'Orgânico, maduro e transmite firmeza nos estudos' }
+    ]
+  }
+];
+
+window.inicializarTema = function() {
+  const modoSalvo = localStorage.getItem('estudamais_theme_mode') || 'light';
+  const acentoSalvo = localStorage.getItem('estudamais_theme_accent') || 'azul-marinho';
+  aplicarTema(modoSalvo, acentoSalvo, false);
+};
+
+window.aplicarTema = function(modo, acento, exibirNotificacao = false) {
+  if (modo) {
+    AppState.theme.mode = modo;
+    document.documentElement.setAttribute('data-theme', modo);
+    document.body.setAttribute('data-theme', modo);
+    localStorage.setItem('estudamais_theme_mode', modo);
+    
+    // Atualiza ícone do botão
+    const iconBtn = document.getElementById('icon-theme-toggle');
+    if (iconBtn) {
+      iconBtn.className = modo === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      if (iconBtn.parentElement) {
+        iconBtn.parentElement.title = modo === 'dark' ? 'Ativar Modo Claro' : 'Ativar Modo Escuro';
+      }
+    }
+  }
+
+  if (acento) {
+    AppState.theme.accent = acento;
+    document.documentElement.setAttribute('data-accent', acento);
+    document.body.setAttribute('data-accent', acento);
+    localStorage.setItem('estudamais_theme_accent', acento);
+  }
+
+  atualizarSelecaoVisualTema();
+
+  if (exibirNotificacao) {
+    const nomeCor = obterNomeCorPorId(AppState.theme.accent);
+    const nomeModo = AppState.theme.mode === 'dark' ? 'Modo Escuro' : 'Modo Claro';
+    mostrarToast(`Aparência atualizada: ${nomeModo} • ${nomeCor}`);
+  }
+};
+
+window.alternarModoEscuro = function() {
+  const novoModo = AppState.theme.mode === 'dark' ? 'light' : 'dark';
+  aplicarTema(novoModo, AppState.theme.accent, true);
+};
+
+window.abrirModalCores = function() {
+  const modal = document.getElementById('modal-cores');
+  if (modal) {
+    renderizarPaletasCores();
+    modal.classList.add('active');
+  }
+};
+
+window.fecharModalCores = function() {
+  const modal = document.getElementById('modal-cores');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+};
+
+window.selecionarModoTema = function(modo) {
+  aplicarTema(modo, AppState.theme.accent, false);
+};
+
+window.selecionarCorTema = function(idCor) {
+  aplicarTema(AppState.theme.mode, idCor, true);
+};
+
+window.restaurarTemaPadrao = function() {
+  aplicarTema('light', 'azul-marinho', true);
+  fecharModalCores();
+};
+
+window.renderizarPaletasCores = function(filtroFamilia = 'todas') {
+  const container = document.getElementById('palette-colors-grid');
+  if (!container) return;
+
+  let html = '';
+  PALETAS_CORES.forEach(fam => {
+    if (filtroFamilia !== 'todas' && fam.familia.toLowerCase() !== filtroFamilia.toLowerCase()) {
+      return;
+    }
+    fam.cores.forEach(c => {
+      const isActive = c.id === AppState.theme.accent;
+      html += `
+        <div class="color-option-card ${isActive ? 'active' : ''}" 
+             data-color-id="${c.id}" 
+             style="--card-color-pri: ${c.corHex}; --card-color-sec: ${c.corSec};"
+             onclick="selecionarCorTema('${c.id}')">
+          <div class="color-active-badge"><i class="fa-solid fa-check"></i></div>
+          <div class="color-swatch-header">
+            <div class="color-swatch-circle" style="background: linear-gradient(135deg, ${c.corHex}, ${c.corSec});">
+              <i class="fa-solid ${fam.icone}"></i>
+            </div>
+            <span class="color-family-tag">${fam.familia}</span>
+          </div>
+          <div class="color-info-title">${c.nome}</div>
+          <div class="color-info-sub">${c.desc}</div>
+          <div class="color-preview-pill">${c.tipo}</div>
+        </div>
+      `;
+    });
+  });
+
+  container.innerHTML = html;
+  atualizarSelecaoVisualTema();
+};
+
+window.filtrarFamiliaCores = function(familia, btnEl) {
+  document.querySelectorAll('.palette-family-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  renderizarPaletasCores(familia);
+};
+
+window.atualizarSelecaoVisualTema = function() {
+  // Atualiza botões de modo
+  const cardLight = document.getElementById('mode-card-light');
+  const cardDark = document.getElementById('mode-card-dark');
+  if (cardLight && cardDark) {
+    cardLight.classList.toggle('active', AppState.theme.mode === 'light');
+    cardDark.classList.toggle('active', AppState.theme.mode === 'dark');
+  }
+
+  // Atualiza cards de cores
+  document.querySelectorAll('.color-option-card').forEach(card => {
+    const corId = card.getAttribute('data-color-id');
+    card.classList.toggle('active', corId === AppState.theme.accent);
+  });
+};
+
+function obterNomeCorPorId(idCor) {
+  for (const fam of PALETAS_CORES) {
+    const encontrada = fam.cores.find(c => c.id === idCor);
+    if (encontrada) return encontrada.nome;
+  }
+  return 'Personalizada';
+}
+
 
 
 </script>
