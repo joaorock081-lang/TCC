@@ -1029,6 +1029,11 @@ body {
 .search-bar-wrapper {
   margin-bottom: 2.2rem;
   position: relative;
+  z-index: 1000 !important;
+}
+
+.search-bar-wrapper:focus-within {
+  z-index: 10000 !important;
 }
 
 .search-box-inner {
@@ -1070,16 +1075,16 @@ body {
 /* Resultados da Busca Flutuante */
 .resultados-busca-dropdown {
   position: absolute;
-  top: 105%;
+  top: calc(100% + 8px);
   left: 0;
   right: 0;
   background: #ffffff;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.28);
+  border: 1.5px solid var(--border-light);
   max-height: 440px;
   overflow-y: auto;
-  z-index: 500;
+  z-index: 99999 !important;
   display: none;
 }
 
@@ -1174,6 +1179,8 @@ body {
   align-items: center;
   gap: 1.2rem;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 1 !important;
 }
 
 .quote-icon {
@@ -4584,6 +4591,162 @@ body {
 [data-theme="dark"] .badge-vestibular,
 [data-theme="dark"] .busca-badge-vest {
   background: var(--primary-base) !important;
+  color: #ffffff !important;
+}
+
+/* ========================================================
+   DARK MODE — VISIBILIDADE DAS FONTES E CARDS DOS VESTIBULARES
+   ======================================================== */
+
+[data-theme="dark"] .vest-card-preview {
+  background: var(--bg-surface, #121c2e) !important;
+  border-color: var(--border-light, #233654) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .vest-card-preview:hover {
+  border-color: var(--primary-accent, #38bdf8) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
+  transform: translateY(-4px);
+}
+
+[data-theme="dark"] .vest-card-preview .vest-preview-nome {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="dark"] .vest-card-preview .vest-preview-desc {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .vest-card-preview .vest-badge-mini {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+
+[data-theme="dark"] .vest-card-preview .vest-preview-icon {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--primary-accent, #38bdf8) !important;
+}
+
+[data-theme="dark"] .vest-card-preview .btn-acessar-vest {
+  background: #1c2e4a !important;
+  color: #ffffff !important;
+  border: 1px solid #2d466e !important;
+}
+
+[data-theme="dark"] .vest-card-preview .btn-acessar-vest:hover {
+  background: var(--primary-base, #2563eb) !important;
+  border-color: var(--primary-accent, #38bdf8) !important;
+  color: #ffffff !important;
+}
+
+/* --- Barra de busca e Dropdown no escuro --- */
+[data-theme="dark"] .search-box-inner {
+  background: var(--bg-surface, #121c2e) !important;
+  border-color: var(--border-light, #233654) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .search-box-inner input {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .search-box-inner input::placeholder {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .search-box-inner i {
+  color: var(--primary-accent, #38bdf8) !important;
+}
+
+[data-theme="dark"] .resultados-busca-dropdown {
+  background: #121c2e !important;
+  border-color: #233654 !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .busca-header-info {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-bottom-color: #233654 !important;
+}
+
+[data-theme="dark"] .busca-card-item {
+  border-bottom-color: #1e293b !important;
+}
+
+[data-theme="dark"] .busca-card-item:hover {
+  background: #1c2e4a !important;
+}
+
+[data-theme="dark"] .busca-disc {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .busca-topico {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .busca-topico mark {
+  background: #eab308 !important;
+  color: #000000 !important;
+}
+
+/* --- Frase do Dia e Banner de Progresso no escuro --- */
+[data-theme="dark"] .card-frase-dia {
+  background: var(--bg-surface, #121c2e) !important;
+  border-color: var(--border-light, #233654) !important;
+  border-left-color: var(--primary-accent, #38bdf8) !important;
+}
+
+[data-theme="dark"] .frase-texto {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .frase-autor {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .quote-icon {
+  color: var(--primary-accent, #38bdf8) !important;
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .progresso-geral-banner {
+  background: var(--bg-surface, #121c2e) !important;
+  border-color: var(--border-light, #233654) !important;
+}
+
+[data-theme="dark"] .progresso-titulo {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .progresso-trilho {
+  background: #1e293b !important;
+}
+
+/* --- Botões de alternância de vestibular no escuro --- */
+[data-theme="dark"] .vest-tab-btn {
+  background: var(--bg-surface, #121c2e) !important;
+  color: #cbd5e1 !important;
+  border-color: var(--border-light, #233654) !important;
+}
+
+[data-theme="dark"] .vest-tab-btn .tab-badge {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .vest-tab-btn.active {
+  background: var(--primary-base, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: var(--primary-accent, #38bdf8) !important;
+}
+
+[data-theme="dark"] .vest-tab-btn.active .tab-badge {
+  background: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
 }
 
@@ -8736,89 +8899,89 @@ const VESTIBULARES_DATA = {
     id: "ufmg",
     nome: "UFMG",
     tituloCompleto: "Universidade Federal de Minas Gerais",
-    badge: "Federal â€¢ SiSU & Habilidades",
+    badge: "Federal • SiSU & Habilidades",
     corBadge: "#b91c1c",
     icone: "fa-landmark",
-    resumo: "Uma das instituiÃ§Ãµes mais prestigiadas da AmÃ©rica Latina. O ingresso ocorre prioritariamente pelo SiSU/ENEM com pesos especÃ­ficos e notas de corte concorridÃ­ssimas, alÃ©m de provas de habilidades especÃ­ficas para cursos artÃ­sticos e arquitetura.",
+    resumo: "Uma das instituições mais prestigiadas da América Latina. O ingresso ocorre prioritariamente pelo SiSU/ENEM com pesos específicos e notas de corte concorridíssimas, além de provas de habilidades específicas para cursos artísticos e arquitetura.",
     detalhesGerais: {
-      formato: "Via ENEM / SiSU (1Âª chamada no inÃ­cio do ano) + Provas Complementares para MÃºsica/Design/Teatro",
-      totalQuestoes: "Utiliza as 180 questÃµes do ENEM + RedaÃ§Ã£o",
-      criterioCorrecao: "Pesos ponderados por Ã¡rea conforme o curso escolhido (Ex: Medicina peso 4 em Natureza e RedaÃ§Ã£o)",
-      dicaChave: "Para cursos de alta concorrÃªncia na UFMG, a RedaÃ§Ã£o e a Ã¡rea de CiÃªncias da Natureza/MatemÃ¡tica definem a aprovaÃ§Ã£o pela pontuaÃ§Ã£o no SiSU."
+      formato: "Via ENEM / SiSU (1ª chamada no início do ano) + Provas Complementares para Música/Design/Teatro",
+      totalQuestoes: "Utiliza as 180 questões do ENEM + Redação",
+      criterioCorrecao: "Pesos ponderados por área conforme o curso escolhido (Ex: Medicina peso 4 em Natureza e Redação)",
+      dicaChave: "Para cursos de alta concorrência na UFMG, a Redação e a área de Ciências da Natureza/Matemática definem a aprovação pela pontuação no SiSU."
     },
     redacao: {
-      titulo: "RedaÃ§Ã£o UFMG (PadrÃ£o ENEM)",
-      descricao: "Nota da RedaÃ§Ã£o do ENEM com peso de atÃ© 4x no SiSU da UFMG.",
+      titulo: "Redação UFMG (Padrão ENEM)",
+      descricao: "Nota da Redação do ENEM com peso de até 4x no SiSU da UFMG.",
       competencias: [
-        { num: 1, nome: "Norma Culta", desc: "CorreÃ§Ã£o gramatical rigorosa" },
-        { num: 2, nome: "RepertÃ³rio Sociocultural", desc: "AplicaÃ§Ã£o produtiva de filÃ³sofos e sociÃ³logos" },
+        { num: 1, nome: "Norma Culta", desc: "Correção gramatical rigorosa" },
+        { num: 2, nome: "Repertório Sociocultural", desc: "Aplicação produtiva de filósofos e sociólogos" },
         { num: 3, nome: "Projeto de Texto", desc: "Planejamento argumentativo e teses claras" },
-        { num: 4, nome: "CoesÃ£o Textual", desc: "Operadores argumentativos interparÃ¡grafos" },
-        { num: 5, nome: "Proposta Completa", desc: "Agente, AÃ§Ã£o, Meio/Modo, Efeito e Detalhamento" }
+        { num: 4, nome: "Coesão Textual", desc: "Operadores argumentativos interparágrafos" },
+        { num: 5, nome: "Proposta Completa", desc: "Agente, Ação, Meio/Modo, Efeito e Detalhamento" }
       ]
     },
     areas: [
       {
-        nome: "CiÃªncias da Natureza & SaÃºde",
+        nome: "Ciências da Natureza & Saúde",
         icone: "fa-dna",
         disciplinas: [
           {
-            nome: "Biologia e BioquÃ­mica (Peso MÃ¡ximo para Medicina)",
+            nome: "Biologia e Bioquímica (Peso Máximo para Medicina)",
             topicos: [
-              "Fisiologia e Anatomia Humana (sistemas endÃ³crino, cardiovascular, renal e nervoso)",
-              "GenÃ©tica ClÃ¡ssica, Biologia Molecular e Engenharia GenÃ©tica",
-              "Ecologia Aplicada, Biomas Brasileiros (Cerrado e Mata AtlÃ¢ntica) e Impactos Ambientais",
-              "Citologia: metabolismo energÃ©tico (fotossÃ­ntese, fermentaÃ§Ã£o e respiraÃ§Ã£o celular)",
-              "EvoluÃ§Ã£o BiolÃ³gica, especiaÃ§Ã£o e teorias evolutivas"
+              "Fisiologia e Anatomia Humana (sistemas endócrino, cardiovascular, renal e nervoso)",
+              "Genética Clássica, Biologia Molecular e Engenharia Genética",
+              "Ecologia Aplicada, Biomas Brasileiros (Cerrado e Mata Atlântica) e Impactos Ambientais",
+              "Citologia: metabolismo energético (fotossíntese, fermentação e respiração celular)",
+              "Evolução Biológica, especiação e teorias evolutivas"
             ]
           },
           {
-            nome: "QuÃ­mica Geral e OrgÃ¢nica",
+            nome: "Química Geral e Orgânica",
             topicos: [
               "Estequiometria com pureza, rendimento e reagente limitante",
-              "FÃ­sico-QuÃ­mica: SoluÃ§Ãµes, concentraÃ§Ã£o molar, termoquÃ­mica e equilÃ­brios quÃ­micos",
-              "QuÃ­mica OrgÃ¢nica: FunÃ§Ãµes oxigenadas e nitrogenadas, isomeria e reaÃ§Ãµes orgÃ¢nicas",
-              "EletroquÃ­mica: Pilhas, eletrÃ³lise Ã­gnea e aquosa, potenciais de reduÃ§Ã£o"
+              "Físico-Química: Soluções, concentração molar, termoquímica e equilíbrios químicos",
+              "Química Orgânica: Funções oxigenadas e nitrogenadas, isomeria e reações orgânicas",
+              "Eletroquímica: Pilhas, eletrólise ígnea e aquosa, potenciais de redução"
             ]
           }
         ]
       },
       {
-        nome: "CiÃªncias Exatas & Tecnologia",
+        nome: "Ciências Exatas & Tecnologia",
         icone: "fa-calculator",
         disciplinas: [
           {
-            nome: "MatemÃ¡tica e Suas Tecnologias",
+            nome: "Matemática e Suas Tecnologias",
             topicos: [
-              "FunÃ§Ãµes Afim, QuadrÃ¡tica, Exponencial e LogarÃ­tmica",
+              "Funções Afim, Quadrática, Exponencial e Logarítmica",
               "Geometria Espacial (prismas, cilindros, cones, esferas) e Geometria Plana",
-              "EstatÃ­stica Descritiva: MÃ©dia ponderada, mediana, moda e desvio padrÃ£o",
-              "MatemÃ¡tica Financeira e AnÃ¡lise CombinatÃ³ria com Probabilidade"
+              "Estatística Descritiva: Média ponderada, mediana, moda e desvio padrão",
+              "Matemática Financeira e Análise Combinatória com Probabilidade"
             ]
           },
           {
-            nome: "FÃ­sica ClÃ¡ssica e Moderna",
+            nome: "Física Clássica e Moderna",
             topicos: [
-              "MecÃ¢nica: DinÃ¢mica Newtoniana, trabalho, energia e conservaÃ§Ã£o da quantidade de movimento",
-              "Termologia: Calorimetria, dilataÃ§Ã£o tÃ©rmica e Leis da TermodinÃ¢mica",
-              "Ã“ptica GeomÃ©trica e OndulatÃ³ria (interferÃªncia, difraÃ§Ã£o e refraÃ§Ã£o)",
-              "EletrodinÃ¢mica: Circuitos elÃ©tricos, Lei de Ohm e potÃªncia elÃ©trica consumida"
+              "Mecânica: Dinâmica Newtoniana, trabalho, energia e conservação da quantidade de movimento",
+              "Termologia: Calorimetria, dilatação térmica e Leis da Termodinâmica",
+              "Ã“ptica Geométrica e Ondulatória (interferência, difração e refração)",
+              "Eletrodinâmica: Circuitos elétricos, Lei de Ohm e potência elétrica consumida"
             ]
           }
         ]
       },
       {
-        nome: "CiÃªncias Humanas e Sociais",
+        nome: "Ciências Humanas e Sociais",
         icone: "fa-book-atlas",
         disciplinas: [
           {
-            nome: "HistÃ³ria e Geografia de Minas e do Brasil",
+            nome: "História e Geografia de Minas e do Brasil",
             topicos: [
-              "Ciclo do Ouro e Sociedade Mineradora no sÃ©culo XVIII em Minas Gerais",
-              "InconfidÃªncia Mineira e processos de emancipaÃ§Ã£o polÃ­tica",
-              "RevoluÃ§Ã£o de 1930, Estado Novo e RepÃºblica Populista",
-              "Geografia EconÃ´mica: QuadrilÃ¡tero FerrÃ­fero, mineraÃ§Ã£o, agropecuÃ¡ria e bacias hidrogrÃ¡ficas",
-              "UrbanizaÃ§Ã£o e industrializaÃ§Ã£o brasileira no sÃ©culo XX"
+              "Ciclo do Ouro e Sociedade Mineradora no século XVIII em Minas Gerais",
+              "Inconfidência Mineira e processos de emancipação política",
+              "Revolução de 1930, Estado Novo e República Populista",
+              "Geografia Econômica: Quadrilátero Ferrífero, mineração, agropecuária e bacias hidrográficas",
+              "Urbanização e industrialização brasileira no século XX"
             ]
           }
         ]
@@ -8832,20 +8995,20 @@ const VESTIBULARES_DATA = {
     badge: "Vestibular Unificado UFSC/IFSC",
     corBadge: "#047857",
     icone: "fa-compass",
-    resumo: "Conhecida por seu vestibular tradicional unificado com o IFSC. Ã‰ famosa pelo modelo de questÃµes de proposiÃ§Ãµes mÃºltiplas (somatÃ³ria), onde cada alternativa tem valor binÃ¡rio (01, 02, 04, 08, 16, 32) e o candidato deve assinalar o somatÃ³rio exato das corretas.",
+    resumo: "Conhecida por seu vestibular tradicional unificado com o IFSC. Ã‰ famosa pelo modelo de questões de proposições múltiplas (somatória), onde cada alternativa tem valor binário (01, 02, 04, 08, 16, 32) e o candidato deve assinalar o somatório exato das corretas.",
     detalhesGerais: {
-      formato: "2 Tardes de Provas no final de semana (Provas Objetivas de SomatÃ³ria + QuestÃµes Discursivas + RedaÃ§Ã£o)",
-      totalQuestoes: "80 proposiÃ§Ãµes somatÃ³rias + RedaÃ§Ã£o + 4 questÃµes discursivas",
-      criterioCorrecao: "PontuaÃ§Ã£o proporcional para somatÃ³rias parcialmente corretas (sem assinalar itens falsos)",
-      dicaChave: "Nas questÃµes de somatÃ³ria, nunca chute se tiver dÃºvida: marcar uma proposiÃ§Ã£o errada penaliza severamente o escore da questÃ£o."
+      formato: "2 Tardes de Provas no final de semana (Provas Objetivas de Somatória + Questões Discursivas + Redação)",
+      totalQuestoes: "80 proposições somatórias + Redação + 4 questões discursivas",
+      criterioCorrecao: "Pontuação proporcional para somatórias parcialmente corretas (sem assinalar itens falsos)",
+      dicaChave: "Nas questões de somatória, nunca chute se tiver dúvida: marcar uma proposição errada penaliza severamente o escore da questão."
     },
     redacao: {
-      titulo: "RedaÃ§Ã£o UFSC: GÃªneros Textuais Variados",
-      descricao: "A banca propÃµe escolha entre 3 gÃªneros textuais (artigo de opiniÃ£o, crÃ´nica, carta ou conto reflexivo).",
+      titulo: "Redação UFSC: Gêneros Textuais Variados",
+      descricao: "A banca propõe escolha entre 3 gêneros textuais (artigo de opinião, crônica, carta ou conto reflexivo).",
       competencias: [
-        { num: 1, nome: "AdequaÃ§Ã£o ao GÃªnero", desc: "Seguir fielmente as convenÃ§Ãµes estruturais do gÃªnero escolhido." },
-        { num: 2, nome: "ArticulaÃ§Ã£o de Ideias", desc: "ProgressÃ£o temÃ¡tica fluida e coesÃ£o textual sÃ³lida." },
-        { num: 3, nome: "ExpressÃ£o Escrita Formal", desc: "Riqueza vocabular e correÃ§Ã£o lÃ©xico-gramatical." }
+        { num: 1, nome: "Adequação ao Gênero", desc: "Seguir fielmente as convenções estruturais do gênero escolhido." },
+        { num: 2, nome: "Articulação de Ideias", desc: "Progressão temática fluida e coesão textual sólida." },
+        { num: 3, nome: "Expressão Escrita Formal", desc: "Riqueza vocabular e correção léxico-gramatical." }
       ]
     },
     areas: [
@@ -8854,27 +9017,27 @@ const VESTIBULARES_DATA = {
         icone: "fa-atom",
         disciplinas: [
           {
-            nome: "MatemÃ¡tica e FÃ­sica de SomatÃ³ria",
+            nome: "Matemática e Física de Somatória",
             topicos: [
-              "Trigonometria e AnÃ¡lise de FunÃ§Ãµes TrigonomÃ©tricas",
-              "PolinÃ´mios, EquaÃ§Ãµes AlgÃ©bricas e NÃºmeros Complexos",
-              "FÃ­sica TÃ©rmica e HidrostÃ¡tica (PrincÃ­pio de Pascal e Empuxo de Arquimedes)",
-              "Eletromagnetismo: Campo magnÃ©tico, forÃ§a de Lorentz e induÃ§Ã£o de Faraday"
+              "Trigonometria e Análise de Funções Trigonométricas",
+              "Polinômios, Equações Algébricas e Números Complexos",
+              "Física Térmica e Hidrostática (Princípio de Pascal e Empuxo de Arquimedes)",
+              "Eletromagnetismo: Campo magnético, força de Lorentz e indução de Faraday"
             ]
           }
         ]
       },
       {
-        nome: "BiolÃ³gicas, QuÃ­micas e Meio Ambiente",
+        nome: "Biológicas, Químicas e Meio Ambiente",
         icone: "fa-leaf",
         disciplinas: [
           {
-            nome: "Biologia e QuÃ­mica Geral",
+            nome: "Biologia e Química Geral",
             topicos: [
               "Ecologia Marinha e Costeira: Manguezais, restingas e ecossistemas do litoral sul",
               "Zoologia e Fisiologia Comparada de Vertebrados e Invertebrados",
-              "EquilÃ­brio IÃ´nico: pH, pOH, hidrÃ³lise salina e soluÃ§Ãµes tampÃ£o",
-              "QuÃ­mica Ambiental: Chuva Ã¡cida, efeito estufa e tratamento de efluentes"
+              "Equilíbrio Iônico: pH, pOH, hidrólise salina e soluções tampão",
+              "Química Ambiental: Chuva ácida, efeito estufa e tratamento de efluentes"
             ]
           }
         ]
@@ -8884,12 +9047,12 @@ const VESTIBULARES_DATA = {
         icone: "fa-feather",
         disciplinas: [
           {
-            nome: "LÃ­ngua Portuguesa, Literatura e HistÃ³ria do Sul",
+            nome: "Língua Portuguesa, Literatura e História do Sul",
             topicos: [
-              "Obras LiterÃ¡rias de Leitura ObrigatÃ³ria indicadas pela Coperve/UFSC",
-              "ColonizaÃ§Ã£o e Povoamento do Sul do Brasil: ImigraÃ§Ã£o aÃ§oriana, alemÃ£ e italiana",
-              "Guerra dos Farrapos e Guerra do Contestado em territÃ³rio catarinense",
-              "AnÃ¡lise de textos contemporÃ¢neos e variaÃ§Ã£o linguÃ­stica regional"
+              "Obras Literárias de Leitura Obrigatória indicadas pela Coperve/UFSC",
+              "Colonização e Povoamento do Sul do Brasil: Imigração açoriana, alemã e italiana",
+              "Guerra dos Farrapos e Guerra do Contestado em território catarinense",
+              "Análise de textos contemporâneos e variação linguística regional"
             ]
           }
         ]
@@ -8900,68 +9063,68 @@ const VESTIBULARES_DATA = {
     id: "ime",
     nome: "IME",
     tituloCompleto: "Instituto Militar de Engenharia",
-    badge: "Militar â€¢ NÃ­vel OlÃ­mpico",
+    badge: "Militar • Nível Olímpico",
     corBadge: "#0f172a",
     icone: "fa-shield-halved",
-    resumo: "Localizado na Praia Vermelha (Rio de Janeiro), o IME forma engenheiros civis e militares com rigor matemÃ¡tico supremo. Ao lado do ITA, Ã© um dos vestibulares mais difÃ­ceis do mundo.",
+    resumo: "Localizado na Praia Vermelha (Rio de Janeiro), o IME forma engenheiros civis e militares com rigor matemático supremo. Ao lado do ITA, é um dos vestibulares mais difíceis do mundo.",
     detalhesGerais: {
-      formato: "1Âª Fase Objetiva eliminatÃ³ria (40 questÃµes de Mat/FÃ­s/QuÃ­m) + 2Âª Fase Discursiva de 4 dias",
-      totalQuestoes: "40 questÃµes objetivas (1Âª fase) + Provas discursivas com 10 questÃµes complexas por dia",
-      criterioCorrecao: "CritÃ©rio estrito com pontuaÃ§Ã£o parcial por desenvolvimento coerente nas etapas analÃ­ticas",
-      dicaChave: "Domine demonstraÃ§Ãµes formais de teoremas, geometria espacial e plana avanÃ§ada, e cÃ¡lculo conceitual."
+      formato: "1ª Fase Objetiva eliminatória (40 questões de Mat/Fís/Quím) + 2ª Fase Discursiva de 4 dias",
+      totalQuestoes: "40 questões objetivas (1ª fase) + Provas discursivas com 10 questões complexas por dia",
+      criterioCorrecao: "Critério estrito com pontuação parcial por desenvolvimento coerente nas etapas analíticas",
+      dicaChave: "Domine demonstrações formais de teoremas, geometria espacial e plana avançada, e cálculo conceitual."
     },
     redacao: {
-      titulo: "RedaÃ§Ã£o IME: DissertaÃ§Ã£o Formal Argumentativa",
-      descricao: "Texto dissertativo sobre valores cÃ­vicos, Ã©tica cientÃ­fica, lideranÃ§a, tecnologia de defesa ou desafios civilizatÃ³rios.",
+      titulo: "Redação IME: Dissertação Formal Argumentativa",
+      descricao: "Texto dissertativo sobre valores cívicos, ética científica, liderança, tecnologia de defesa ou desafios civilizatórios.",
       competencias: [
-        { num: 1, nome: "Rigor Argumentativo", desc: "Clareza lÃ³gica sem contradiÃ§Ãµes conceituais." },
-        { num: 2, nome: "Norma PadrÃ£o Culta", desc: "VocabulÃ¡rio formal e domÃ­nio de sintaxe complexa." }
+        { num: 1, nome: "Rigor Argumentativo", desc: "Clareza lógica sem contradições conceituais." },
+        { num: 2, nome: "Norma Padrão Culta", desc: "Vocabulário formal e domínio de sintaxe complexa." }
       ]
     },
     areas: [
       {
-        nome: "MatemÃ¡tica Pura e Aplicada (AvanÃ§ado)",
+        nome: "Matemática Pura e Aplicada (Avançado)",
         icone: "fa-square-root-variable",
         disciplinas: [
           {
-            nome: "Ãlgebra, AnÃ¡lise e Geometria do IME",
+            nome: "Álgebra, Análise e Geometria do IME",
             topicos: [
-              "PolinÃ´mios complexos, Teorema Fundamental da Ãlgebra e RelaÃ§Ãµes de Girard",
-              "Sistemas Lineares e Ãlgebra Matricial: Determinantes, Teorema de Laplace e Matriz Inversa",
-              "Geometria AnalÃ­tica no RÂ³: EquaÃ§Ãµes da reta, plano, distÃ¢ncias e esferas",
-              "Trigonometria AvanÃ§ada: TransformaÃ§Ãµes, identidades de ProstafÃ©rese e equaÃ§Ãµes angulares",
-              "InduÃ§Ã£o MatemÃ¡tica e Teoria Elementar dos NÃºmeros (CongruÃªncia e MDC)"
+              "Polinômios complexos, Teorema Fundamental da Álgebra e Relações de Girard",
+              "Sistemas Lineares e Álgebra Matricial: Determinantes, Teorema de Laplace e Matriz Inversa",
+              "Geometria Analítica no R³: Equações da reta, plano, distâncias e esferas",
+              "Trigonometria Avançada: Transformações, identidades de Prostaférese e equações angulares",
+              "Indução Matemática e Teoria Elementar dos Números (Congruência e MDC)"
             ]
           }
         ]
       },
       {
-        nome: "FÃ­sica e Engenharia BÃ¡sica",
+        nome: "Física e Engenharia Básica",
         icone: "fa-bolt-lightning",
         disciplinas: [
           {
-            nome: "MecÃ¢nica Racional e FÃ­sica Geral",
+            nome: "Mecânica Racional e Física Geral",
             topicos: [
-              "CinemÃ¡tica Vetorial e Movimento em Coordenadas Polares e IntrÃ­nsecas",
-              "DinÃ¢mica de Corpos RÃ­gidos, Momento de InÃ©rcia e Torque",
-              "OscilaÃ§Ãµes MecÃ¢nicas: MHS acoplado, amortecimento e ressonÃ¢ncia",
-              "GravitaÃ§Ã£o Universal e Ã“rbitas Keplerianas elÃ­pticas e hiperbÃ³licas",
-              "TermodinÃ¢mica de Gases Reais, Ciclos de Carnot e Entropia EstatÃ­stica"
+              "Cinemática Vetorial e Movimento em Coordenadas Polares e Intrínsecas",
+              "Dinâmica de Corpos Rígidos, Momento de Inércia e Torque",
+              "Oscilações Mecânicas: MHS acoplado, amortecimento e ressonância",
+              "Gravitação Universal e Ã“rbitas Keplerianas elípticas e hiperbólicas",
+              "Termodinâmica de Gases Reais, Ciclos de Carnot e Entropia Estatística"
             ]
           }
         ]
       },
       {
-        nome: "QuÃ­mica TeÃ³rica e Estrutural",
+        nome: "Química Teórica e Estrutural",
         icone: "fa-flask-vial",
         disciplinas: [
           {
-            nome: "FÃ­sico-QuÃ­mica e QuÃ­mica InorgÃ¢nica",
+            nome: "Físico-Química e Química Inorgânica",
             topicos: [
-              "CinÃ©tica QuÃ­mica: Mecanismos de reaÃ§Ã£o, ordem de reaÃ§Ã£o e Lei de Arrhenius",
-              "EquilÃ­brio QuÃ­mico em Fase Gasosa (Kp, Kc) e HeterogÃªneo",
-              "TermoquÃ­mica e EletroquÃ­mica: EquaÃ§Ã£o de Nernst e Pilhas em condiÃ§Ãµes nÃ£o-padrÃ£o",
-              "Teoria QuÃ¢ntica do Ãtomo, orbitais hÃ­bridos e Geometria Molecular VSEPR"
+              "Cinética Química: Mecanismos de reação, ordem de reação e Lei de Arrhenius",
+              "Equilíbrio Químico em Fase Gasosa (Kp, Kc) e Heterogêneo",
+              "Termoquímica e Eletroquímica: Equação de Nernst e Pilhas em condições não-padrão",
+              "Teoria Quântica do Átomo, orbitais híbridos e Geometria Molecular VSEPR"
             ]
           }
         ]
@@ -8971,38 +9134,38 @@ const VESTIBULARES_DATA = {
   uece: {
     id: "uece",
     nome: "UECE",
-    tituloCompleto: "Universidade Estadual do CearÃ¡",
-    badge: "Estadual â€¢ Nordeste de ExcelÃªncia",
+    tituloCompleto: "Universidade Estadual do Ceará",
+    badge: "Estadual • Nordeste de Excelência",
     corBadge: "#ea580c",
     icone: "fa-sun",
-    resumo: "A principal universidade estadual do CearÃ¡, com vestibular prÃ³prio tradicional e concorrido, especialmente para Medicina e CiÃªncias da SaÃºde em Fortaleza e interior.",
+    resumo: "A principal universidade estadual do Ceará, com vestibular próprio tradicional e concorrido, especialmente para Medicina e Ciências da Saúde em Fortaleza e interior.",
     detalhesGerais: {
-      formato: "2 Fases: 1Âª Fase com 85 questÃµes objetivas gerais + 2Âª Fase com 3 provas especÃ­ficas + RedaÃ§Ã£o",
-      totalQuestoes: "85 questÃµes gerais (1Âª fase) + 60 questÃµes especÃ­ficas discursivas/objetivas (2Âª fase)",
-      criterioCorrecao: "MÃ©dia ponderada com corte por pontos especÃ­ficos de cada carreira",
-      dicaChave: "Na UECE, Biologia e QuÃ­mica cobram detalhes conceituais precisos de botÃ¢nica, zoologia e quÃ­mica analÃ­tica."
+      formato: "2 Fases: 1ª Fase com 85 questões objetivas gerais + 2ª Fase com 3 provas específicas + Redação",
+      totalQuestoes: "85 questões gerais (1ª fase) + 60 questões específicas discursivas/objetivas (2ª fase)",
+      criterioCorrecao: "Média ponderada com corte por pontos específicos de cada carreira",
+      dicaChave: "Na UECE, Biologia e Química cobram detalhes conceituais precisos de botânica, zoologia e química analítica."
     },
     redacao: {
-      titulo: "RedaÃ§Ã£o UECE: Dois Temas para Escolha",
-      descricao: "A banca apresenta duas propostas completas de gÃªneros distintos (geralmente Artigo de OpiniÃ£o ou CrÃ´nica/Carta).",
+      titulo: "Redação UECE: Dois Temas para Escolha",
+      descricao: "A banca apresenta duas propostas completas de gêneros distintos (geralmente Artigo de Opinião ou Crônica/Carta).",
       competencias: [
-        { num: 1, nome: "CompreensÃ£o da Proposta", desc: "Atendimento estrito ao gÃªnero e tema selecionado." },
-        { num: 2, nome: "CoesÃ£o e CoerÃªncia", desc: "ArticulaÃ§Ã£o lÃ³gica sem rodeios e pontuaÃ§Ã£o impecÃ¡vel." },
-        { num: 3, nome: "Criatividade e Autoria", desc: "Voz prÃ³pria, maturidade de pensamento e expressividade." }
+        { num: 1, nome: "Compreensão da Proposta", desc: "Atendimento estrito ao gênero e tema selecionado." },
+        { num: 2, nome: "Coesão e Coerência", desc: "Articulação lógica sem rodeios e pontuação impecável." },
+        { num: 3, nome: "Criatividade e Autoria", desc: "Voz própria, maturidade de pensamento e expressividade." }
       ]
     },
     areas: [
       {
-        nome: "CiÃªncias BiolÃ³gicas e da SaÃºde",
+        nome: "Ciências Biológicas e da Saúde",
         icone: "fa-heart-pulse",
         disciplinas: [
           {
-            nome: "Biologia ClÃ¡ssica e BotÃ¢nica da UECE",
+            nome: "Biologia Clássica e Botânica da UECE",
             topicos: [
-              "Fisiologia e Morfologia Vegetal: TranspiraÃ§Ã£o, conduÃ§Ã£o de seiva e fitormÃ´nios",
-              "Bioma Caatinga: AdaptaÃ§Ãµes das plantas xerÃ³fitas e fauna do semiÃ¡rido",
-              "Parasitologia Humana: DoenÃ§a de Chagas, Leishmaniose, Dengue e Esquistossomose",
-              "GenÃ©tica Mendeliana e Grupos SanguÃ­neos (Sistema ABO e fator Rh)"
+              "Fisiologia e Morfologia Vegetal: Transpiração, condução de seiva e fitormônios",
+              "Bioma Caatinga: Adaptações das plantas xerófitas e fauna do semiárido",
+              "Parasitologia Humana: Doença de Chagas, Leishmaniose, Dengue e Esquistossomose",
+              "Genética Mendeliana e Grupos Sanguíneos (Sistema ABO e fator Rh)"
             ]
           }
         ]
@@ -9012,12 +9175,12 @@ const VESTIBULARES_DATA = {
         icone: "fa-masks-theater",
         disciplinas: [
           {
-            nome: "HistÃ³ria e Geografia do CearÃ¡ e Nordeste",
+            nome: "História e Geografia do Ceará e Nordeste",
             topicos: [
-              "Secas no Nordeste e PolÃ­ticas PÃºblicas de Recursos HÃ­dricos (TransposiÃ§Ã£o do Rio SÃ£o Francisco)",
-              "HistÃ³ria do CearÃ¡: ConfederaÃ§Ã£o do Equador e AboliÃ§Ã£o pioneira dos escravizados em RedenÃ§Ã£o (1884)",
-              "Cultura Popular Nordestina: Cordel, xilogravura e movimentos sociais (CaldeirÃ£o e Canudos)",
-              "Geografia Urbana de Fortaleza e desenvolvimento do Complexo PortuÃ¡rio do PecÃ©m"
+              "Secas no Nordeste e Políticas Públicas de Recursos Hídricos (Transposição do Rio São Francisco)",
+              "História do Ceará: Confederação do Equador e Abolição pioneira dos escravizados em Redenção (1884)",
+              "Cultura Popular Nordestina: Cordel, xilogravura e movimentos sociais (Caldeirão e Canudos)",
+              "Geografia Urbana de Fortaleza e desenvolvimento do Complexo Portuário do Pecém"
             ]
           }
         ]
@@ -9027,12 +9190,12 @@ const VESTIBULARES_DATA = {
         icone: "fa-pen-ruler",
         disciplinas: [
           {
-            nome: "LÃ­ngua Portuguesa, Literatura e MatemÃ¡tica",
+            nome: "Língua Portuguesa, Literatura e Matemática",
             topicos: [
-              "Romantismo e Regionalismo na Literatura Cearense (JosÃ© de Alencar, Rachel de Queiroz, Patativa do AssarÃ©)",
-              "Sintaxe de PerÃ­odo Composto e Emprego dos Pronomes Relativos",
-              "Geometria Euclidiana Plana e Trigonometria no TriÃ¢ngulo RetÃ¢ngulo",
-              "ProgressÃµes AritmÃ©ticas (PA) e GeomÃ©tricas (PG) aplicadas a problemas prÃ¡ticos"
+              "Romantismo e Regionalismo na Literatura Cearense (José de Alencar, Rachel de Queiroz, Patativa do Assaré)",
+              "Sintaxe de Período Composto e Emprego dos Pronomes Relativos",
+              "Geometria Euclidiana Plana e Trigonometria no Triângulo Retângulo",
+              "Progressões Aritméticas (PA) e Geométricas (PG) aplicadas a problemas práticos"
             ]
           }
         ]
