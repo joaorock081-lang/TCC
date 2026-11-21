@@ -686,6 +686,33 @@ window.executarLoginConta = async function(e) {
   if (typeof tocarSomAcertoQuiz === 'function') tocarSomAcertoQuiz();
 };
 
+// Atalho para Avaliadores, Professores e Visitantes da Banca do TCC
+window.entrarComoVisitante = async function() {
+  const visitante = {
+    id: 'user_visitante_tcc',
+    nome: 'Visitante (Avaliador TCC)',
+    email: 'visitante@estudamais.com',
+    vestibular: 'ENEM',
+    curso: 'Geral / Avaliação TCC',
+    avatar: 'fa-user-graduate',
+    createdAt: new Date().toISOString()
+  };
+
+  AppState.currentUser = visitante;
+  AppState.isAuthGate = false;
+  document.body.classList.remove('auth-gate-active');
+  const banner = document.getElementById('auth-gate-banner');
+  if (banner) banner.style.display = 'none';
+  localStorage.setItem('estudamais_auth_session', JSON.stringify(visitante));
+
+  carregarDadosUsuarioAtivo(visitante.id);
+  atualizarUIAreaUsuario();
+  fecharModalAuth();
+  if (typeof renderizarAbaPerfil === 'function') renderizarAbaPerfil();
+
+  mostrarToast('👋 Bem-vindo(a) ao EstudaMais! Acesso liberado no Modo Visitante.');
+};
+
 // Executa Logout
 window.executarLogoutConta = function() {
   if (confirm('Tem certeza de que deseja sair da sua conta? Todos os seus dados salvos continuarão seguros no seu banco de dados local.')) {

@@ -7909,6 +7909,70 @@ button:active {
   text-decoration: underline;
 }
 
+.auth-demo-shortcut {
+  margin-top: 0.8rem;
+  text-align: center;
+}
+
+.auth-divider-ou {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 0.75rem 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.auth-divider-ou::before,
+.auth-divider-ou::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.auth-divider-ou span {
+  padding: 0 0.8rem;
+}
+
+.btn-auth-demo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1.5px dashed var(--primary-accent);
+  background: var(--primary-subtle);
+  color: var(--primary-accent);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-auth-demo:hover {
+  background: var(--primary-accent);
+  color: #ffffff;
+  border-style: solid;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .btn-auth-demo {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+[data-theme="dark"] .btn-auth-demo:hover {
+  background: #38bdf8;
+  color: #0b111e;
+}
+
 /* Modal de Perfil */
 .modal-perfil-card {
   max-width: 580px !important;
@@ -10935,6 +10999,12 @@ body.auth-gate-active #modal-auth .btn-modal-cancel {
           <span>Ainda não tem conta no EstudaMais?</span>
           <button type="button" class="link-btn-switch" onclick="alternarAbaAuth('cadastro')">Cadastre-se grátis agora!</button>
         </div>
+        <div class="auth-demo-shortcut">
+          <div class="auth-divider-ou"><span>ou para avaliação rápida</span></div>
+          <button type="button" class="btn-auth-demo" onclick="entrarComoVisitante()">
+            <i class="fa-solid fa-graduation-cap"></i> Entrar como Convidado / Avaliador da Banca
+          </button>
+        </div>
       </form>
 
       <!-- Formulário de Cadastro -->
@@ -11022,6 +11092,12 @@ body.auth-gate-active #modal-auth .btn-modal-cancel {
         <div class="auth-switch-prompt">
           <span>Já possui uma conta criada?</span>
           <button type="button" class="link-btn-switch" onclick="alternarAbaAuth('login')">Faça login agora</button>
+        </div>
+        <div class="auth-demo-shortcut">
+          <div class="auth-divider-ou"><span>ou para avaliação rápida</span></div>
+          <button type="button" class="btn-auth-demo" onclick="entrarComoVisitante()">
+            <i class="fa-solid fa-graduation-cap"></i> Entrar como Convidado / Avaliador da Banca
+          </button>
         </div>
       </form>
     </div>
@@ -14940,6 +15016,33 @@ window.executarLoginConta = async function(e) {
 
   mostrarToast(`✨ Login realizado com sucesso! Bons estudos, ${usuario.nome.split(' ')[0]}!`);
   if (typeof tocarSomAcertoQuiz === 'function') tocarSomAcertoQuiz();
+};
+
+// Atalho para Avaliadores, Professores e Visitantes da Banca do TCC
+window.entrarComoVisitante = async function() {
+  const visitante = {
+    id: 'user_visitante_tcc',
+    nome: 'Visitante (Avaliador TCC)',
+    email: 'visitante@estudamais.com',
+    vestibular: 'ENEM',
+    curso: 'Geral / Avaliação TCC',
+    avatar: 'fa-user-graduate',
+    createdAt: new Date().toISOString()
+  };
+
+  AppState.currentUser = visitante;
+  AppState.isAuthGate = false;
+  document.body.classList.remove('auth-gate-active');
+  const banner = document.getElementById('auth-gate-banner');
+  if (banner) banner.style.display = 'none';
+  localStorage.setItem('estudamais_auth_session', JSON.stringify(visitante));
+
+  carregarDadosUsuarioAtivo(visitante.id);
+  atualizarUIAreaUsuario();
+  fecharModalAuth();
+  if (typeof renderizarAbaPerfil === 'function') renderizarAbaPerfil();
+
+  mostrarToast('👋 Bem-vindo(a) ao EstudaMais! Acesso liberado no Modo Visitante.');
 };
 
 // Executa Logout
