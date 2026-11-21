@@ -94,6 +94,20 @@ O portal traz uma curadoria aprofundada baseada nos editais e estatísticas de i
 
 ---
 
+### 🎨 I. Sistema Completo de Temas (Modo Claro, Modo Escuro & 21 Paletas de Cores)
+- **Alternador Rápido de Iluminação:** Alternância instantânea com 1 clique entre **Modo Claro (☀️)** e **Modo Escuro (🌙)** com proteção visual noturna de alto contraste.
+- **Estúdio de Personalização de Cores:** Mais de 21 tonalidades exclusivas organizadas em **7 famílias de cores**:
+  1. **Azul:** *Azul Marinho Clássico*, *Azul Real / Safira* e *Azul Celeste*.
+  2. **Amarelo:** *Amarelo Canário Vibrante*, *Amarelo Ouro / Âmbar* e *Amarelo Mostarda*.
+  3. **Vinho:** *Vinho Borgonha Nobre*, *Vinho Marsala Sofisticado* e *Vinho Tinto / Rubi*.
+  4. **Vermelho:** *Vermelho Carmim Foco*, *Vermelho Coral / Terracota* e *Vermelho Escarlate*.
+  5. **Roxo:** *Roxo Ametista Inspirador*, *Roxo Lavanda Sereno* e *Roxo Violeta Profundo*.
+  6. **Rosa:** *Rosa Pastel / Sakura*, *Rosa Magenta / Fúcsia* e *Rosa Pêssego*.
+  7. **Verde:** *Verde Esmeralda Revigorante*, *Verde Menta / Sálvia* e *Verde Floresta / Oliva*.
+- **Persistência Completa:** Escolhas salvas no `LocalStorage` do navegador com preloader anti-flicker.
+
+---
+
 ## 🎨 3. Identidade Visual e Experiência do Usuário (UI/UX)
 
 - **Cores Predominantes:** Paleta cuidadosamente construída com vários tons de azul, com destaque para o **Azul Marinho** (`#081326`, `#0c1d3b`, `#163366`, `#1e4585`, `#2563eb`), fundos suaves em tom de nuvem/gelo (`#f2f6fc`, `#e9f0f9`) e detalhes de papelaria em dourado/lápis (`#f59e0b`).

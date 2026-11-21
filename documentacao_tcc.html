@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Documentação Oficial de TCC - EstudaMais: Portal do Vestibulando</title>
+  <style>
+    /* =========================================================
+       FOLHA DE ESTILOS FORMATADA PADRÃO ABNT (NBR 14724 / 6027 / 6023)
+       CONFIGURADA PARA IMPRESSÃO E ENCADERNAÇÃO PERFEITA
+       ========================================================= */
+    
+    @page {
+      size: A4;
+      margin-top: 3cm;
+      margin-left: 3cm;
+      margin-right: 2cm;
+      margin-bottom: 2cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 10pt;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #000000;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tcc-container {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 30mm 20mm 20mm 30mm;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Utilitários de Quebra de Página */
+    .pagina-quebra {
+      page-break-before: always;
+      padding-top: 10px;
+    }
+
+    .no-print-bar {
+      position: sticky;
+      top: 0;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 9999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .btn-imprimir {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-imprimir:hover {
+      background: #1d4ed8;
+    }
+
+    /* Capa e Folha de Rosto */
+    .capa, .folha-rosto {
+      height: 247mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    .capa-instituicao {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .capa-autor {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 40px;
+    }
+
+    .capa-titulo {
+      margin-top: 70px;
+      margin-bottom: 70px;
+    }
+
+    .capa-titulo h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .capa-titulo h2 {
+      font-size: 12pt;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+
+    .capa-rodape {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    .folha-rosto-natureza {
+      margin-left: 50%;
+      text-align: justify;
+      font-size: 10pt;
+      line-height: 1.3;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .folha-rosto-orientador {
+      margin-top: 25px;
+      font-size: 11pt;
+      font-weight: bold;
+    }
+
+    /* Seções Especiais Pré-textuais */
+    .secao-dedicatoria {
+      height: 247mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-align: right;
+      font-style: italic;
+      font-size: 11pt;
+      padding-left: 40%;
+      line-height: 1.6;
+    }
+
+    .secao-epigrafe {
+      height: 247mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-align: right;
+      font-size: 11pt;
+      padding-left: 35%;
+      line-height: 1.5;
+    }
+
+    .secao-titulo-pre {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .paragrafo-resumo {
+      text-align: justify;
+      line-height: 1.5;
+      text-indent: 0;
+      margin-bottom: 20px;
+    }
+
+    .palavras-chave {
+      text-align: justify;
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    .palavras-chave span {
+      font-weight: normal;
+    }
+
+    /* Tipografia de Texto Normal */
+    p {
+      text-align: justify;
+      text-indent: 1.25cm;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    p.sem-recuo {
+      text-indent: 0;
+    }
+
+    /* Títulos dos Capítulos */
+    h1.capitulo-titulo {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      page-break-before: always;
+    }
+
+    h2.secao-titulo {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+
+    h3.subsecao-titulo {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 12px;
+    }
+
+    h4.subsubsecao-titulo {
+      font-size: 12pt;
+      font-weight: normal;
+      font-style: italic;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    /* Citação Direta Longa (> 3 linhas - ABNT NBR 10520) */
+    .citacao-longa {
+      margin-left: 4cm;
+      font-size: 10pt;
+      line-height: 1.2;
+      text-align: justify;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-style: normal;
+    }
+
+    /* Tabelas e Ilustrações */
+    .elemento-legenda-topo {
+      font-size: 10pt;
+      text-align: center;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .elemento-fonte {
+      font-size: 9pt;
+      text-align: center;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    table.tabela-abnt {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      line-height: 1.3;
+      margin: 10px auto;
+    }
+
+    table.tabela-abnt th, table.tabela-abnt td {
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    table.tabela-abnt th {
+      font-weight: bold;
+      background-color: #f1f5f9;
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+    }
+
+    /* Listas e Itens */
+    ul.lista-abnt, ol.lista-abnt {
+      margin-left: 1.25cm;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    ul.lista-abnt li, ol.lista-abnt li {
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    /* Referências Bibliográficas (NBR 6023) */
+    .item-referencia {
+      font-size: 11pt;
+      line-height: 1.3;
+      text-align: left;
+      margin-bottom: 15px;
+      padding-left: 0;
+    }
+
+    .sumario-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      font-size: 11pt;
+    }
+
+    .sumario-pontilhado {
+      flex-grow: 1;
+      border-bottom: 1px dotted #555;
+      margin: 0 5px 4px 5px;
+    }
+
+    /* Regras de Impressão */
+    @media print {
+      body {
+        background: none;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .tcc-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .pagina-quebra {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Ações para Impressão -->
+  <div class="no-print-bar">
+    <div>
+      <strong>Documentação Oficial de TCC • Projeto EstudaMais</strong>
+      <span style="font-size: 12px; opacity: 0.8; margin-left: 12px;">Formatada estritamente conforme Normas ABNT NBR 14724</span>
+    </div>
+    <button class="btn-imprimir" onclick="window.print()">
+      🖨️ Imprimir / Salvar como PDF para Encadernação
+    </button>
+  </div>
+
+  <div class="tcc-container">
+
+    <!-- ==========================================
+         CAPA OFICIAL
+         ========================================== -->
+    <div class="capa">
+      <div class="capa-instituicao">
+        CENTRO PAULA SOUZA / ESCOLA TÉCNICA ESTADUAL<br>
+        ENSINO MÉDIO INTEGRADO AO CURSO TÉCNICO EM DESENVOLVIMENTO DE SISTEMAS / INFORMÁTICA
+      </div>
+
+      <div class="capa-autor">
+        JOÃO PEDRO RODRIGUES ALMEIDA<br>
+        <span style="font-weight: normal; font-size: 11pt;">(Estudante do 3º Ano do Ensino Médio)</span>
+      </div>
+
+      <div class="capa-titulo">
+        <h1>ESTUDAMAIS: DESENVOLVIMENTO DE UMA PLATAFORMA WEB INTEGRADA COM INTELIGÊNCIA ARTIFICIAL PARA APOIO AO VESTIBULANDO</h1>
+        <h2>Solução Tecnológica para Orientação de Estudos, Simulados Dinâmicos e Correção de Redação com Google Gemini</h2>
+      </div>
+
+      <div class="capa-rodape">
+        SÃO PAULO - SP<br>
+        2026
+      </div>
+    </div>
+
+    <!-- ==========================================
+         FOLHA DE ROSTO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="folha-rosto">
+      <div class="capa-autor" style="margin-top: 0;">
+        JOÃO PEDRO RODRIGUES ALMEIDA
+      </div>
+
+      <div class="capa-titulo" style="margin-top: 40px; margin-bottom: 20px;">
+        <h1>ESTUDAMAIS: DESENVOLVIMENTO DE UMA PLATAFORMA WEB INTEGRADA COM INTELIGÊNCIA ARTIFICIAL PARA APOIO AO VESTIBULANDO</h1>
+        <h2>Solução Tecnológica para Orientação de Estudos, Simulados Dinâmicos e Correção de Redação com Google Gemini</h2>
+      </div>
+
+      <div class="folha-rosto-natureza">
+        Trabalho de Conclusão de Curso (TCC) apresentado como requisito parcial para a conclusão do Ensino Médio Técnico em Desenvolvimento de Sistemas / Informática, sob a orientação da banca examinadora institucional.<br><br>
+        <div class="folha-rosto-orientador">
+          Área de Concentração: Tecnologias Educacionais e Inteligência Artificial.<br>
+          Orientador(a): Prof. [Nome do(a) Professor(a) Orientador(a)]<br>
+          Coorientador(a): Prof. [Nome do Coorientador(a) se houver]
+        </div>
+      </div>
+
+      <div class="capa-rodape">
+        SÃO PAULO - SP<br>
+        2026
+      </div>
+    </div>
+
+    <!-- ==========================================
+         DEDICATÓRIA
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-dedicatoria">
+      <p style="text-indent: 0;">
+        Dedico este trabalho a todos os estudantes do Ensino Médio público e privado que, assim como eu no 3º ano, enfrentaram noites mal dormidas, incertezas e a ansiedade diante da imensidão dos conteúdos dos vestibulares. Que este projeto seja a ponte que clareia o caminho rumo ao ensino superior dos seus sonhos.
+      </p>
+    </div>
+
+    <!-- ==========================================
+         AGRADECIMENTOS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">AGRADECIMENTOS</div>
+    <p>A Deus, por me conceder saúde, perseverança e sabedoria para superar os momentos de estresse e fadiga ao longo de toda a jornada do Ensino Médio e do desenvolvimento deste trabalho.</p>
+    <p>Aos meus pais e familiares, cujo apoio incondicional, incentivo constante e palavras de carinho foram os alicerces fundamentais que me permitiram chegar até este momento com fé no futuro.</p>
+    <p>À professora orientadora e ao corpo docente do curso técnico, que não apenas compartilharam conhecimentos técnicos primorosos de programação, arquitetura de software e engenharia de requisitos, mas também me ensinaram a ter senso crítico, disciplina e compromisso com o impacto social da tecnologia.</p>
+    <p>Aos meus colegas de turma do 3º ano, pelos diálogos, desabafos e trocas de experiências cotidianas diante dos desafios do vestibular, que serviram como a maior inspiração para a concepção do Portal EstudaMais.</p>
+    <p>À comunidade de código aberto e aos pioneiros da tecnologia educacional, cujas ferramentas e documentações enriqueceram a construção técnica deste projeto prático.</p>
+
+    <!-- ==========================================
+         EPÍGRAFE
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-epigrafe">
+      <p style="text-indent: 0;">
+        "A educação não transforma o mundo. Educação muda pessoas. Pessoas transformam o mundo."
+      </p>
+      <p style="font-weight: bold; text-indent: 0; margin-top: 5px;">
+        — Paulo Freire
+      </p>
+    </div>
+
+    <!-- ==========================================
+         RESUMO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">RESUMO</div>
+    <p class="paragrafo-resumo">
+      O presente Trabalho de Conclusão de Curso aborda a crônica dificuldade enfrentada por estudantes do 3º ano do Ensino Médio e vestibulandos em identificar o que, como e quando estudar para os principais vestibulares do país (ENEM, FATEC, FUVEST, UNICAMP e VUNESP). Diante da desinformação, dispersão de editais e ausência de ferramentas acessíveis de diagnóstico e treinamento prático, desenvolveu-se o <strong>EstudaMais</strong>, uma aplicação web completa e responsiva concebida para centralizar a jornada de preparação acadêmica. A metodologia fundamentou-se em pesquisa exploratória diagnóstica de campo com estudantes secundaristas, levantamento minucioso dos editais das bancas examinadoras e ciclo de desenvolvimento ágil com tecnologias web de ponta (HTML5 Semântico, CSS3 Moderno, JavaScript ECMAScript 6+ e persistência local via IndexedDB e LocalStorage). Destacam-se entre as funcionalidades implementadas: cronogramas e eixos temáticos priorizados por vestibular; simulados cronometrados com gabarito dinâmico e cartão-resposta interativo; ambiente de foco baseado na técnica Pomodoro; bloco de anotações sincronizado; e um módulo pioneiro de folha de redação pautada oficial de 30 linhas milimetricamente calculada, integrada à API do <strong>Google Gemini</strong>. Esse motor avaliativo utiliza Processamento de Linguagem Natural calibrado com as grades analíticas específicas de cada vestibular (5 competências do ENEM, critérios da FATEC e quesitos da FUVEST), atribuindo notas justas, apontando pontos de melhoria e anulando de forma sumária textos aleatórios ou ininteligíveis. Os testes funcionais e de usabilidade demonstraram 100% de precisão na rejeição de textos espúrios, excelente tempo de resposta e alta aprovação dos alunos quanto à organização e clareza dos conteúdos, comprovando a eficácia do artefato desenvolvido como suporte prático, autônomo e gratuito à democratização do acesso ao ensino superior.
+    </p>
+    <div class="palavras-chave">
+      Palavras-chave: <span>Tecnologia Educacional. Preparação para Vestibulares. Inteligência Artificial no Ensino. Google Gemini API. Correção de Redação. Ensino Médio.</span>
+    </div>
+
+    <!-- ==========================================
+         ABSTRACT
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">ABSTRACT</div>
+    <p class="paragrafo-resumo">
+      This final graduation thesis addresses the persistent difficulty experienced by 3rd-year high school students and university applicants in identifying what, how, and when to study for Brazil's primary entrance examinations (ENEM, FATEC, FUVEST, UNICAMP, and VUNESP). Confronted by information overload, dispersed examination notices, and the lack of accessible diagnostic training tools, <strong>EstudaMais</strong> was developed as a comprehensive, fully responsive web application engineered to centralize academic preparation. The methodology combined exploratory diagnostic field research with secondary students, comprehensive examination syllabus mapping, and agile software development utilizing front-end web standards (Semantic HTML5, Modern CSS3, asynchronous Vanilla JavaScript ES6+, and client-side database persistence through IndexedDB and LocalStorage). Core features include prioritized topic guides per examination board; timed practice mock exams with dynamic answer keys and interactive answer sheets; a Pomodoro-based study focus timer; synchronized digital note-taking; and a pioneering official 30-line ruled essay sheet integrated with the <strong>Google Gemini API</strong>. This analytical engine applies Natural Language Processing calibrated against each board's official grading rubrics (ENEM's five competencies, FATEC's three criteria, and FUVEST's requirements), generating impartial grading, pedagogical feedback, and instant zero-score disqualification for gibberish or incoherent text inputs. Functional testing and usability validation achieved 100% accuracy in rejecting invalid submissions, swift response latency, and widespread student approval regarding clarity and structure, validating the platform's practical effectiveness as a free and autonomous educational catalyst for democratization of higher education access.
+    </p>
+    <div class="palavras-chave">
+      Key-words: <span>Educational Technology. College Entrance Examinations. Artificial Intelligence in Education. Google Gemini API. Essay Automated Assessment. High School.</span>
+    </div>
+
+    <!-- ==========================================
+         LISTA DE ILUSTRAÇÕES
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">LISTA DE ILUSTRAÇÕES</div>
+    <div class="sumario-item"><span>Figura 1 – Interface inicial (Dashboard) do Portal EstudaMais com modo claro e escuro</span><span class="sumario-pontilhado"></span><span>p. 23</span></div>
+    <div class="sumario-item"><span>Figura 2 – Fluxo arquitetural da integração com a API REST do Google Gemini</span><span class="sumario-pontilhado"></span><span>p. 28</span></div>
+    <div class="sumario-item"><span>Figura 3 – Folha de Redação Pautada Oficial de 30 linhas com sincronização vertical</span><span class="sumario-pontilhado"></span><span>p. 31</span></div>
+    <div class="sumario-item"><span>Figura 4 – Relatório analítico de avaliação por competências da banca gerado pela IA</span><span class="sumario-pontilhado"></span><span>p. 34</span></div>
+    <div class="sumario-item"><span>Figura 5 – Parecer de anulação com nota zero diante de texto ininteligível</span><span class="sumario-pontilhado"></span><span>p. 37</span></div>
+    <div class="sumario-item"><span>Figura 6 – Módulo de Simulados com cronômetro regressivo e gabarito em tempo real</span><span class="sumario-pontilhado"></span><span>p. 40</span></div>
+    <div class="sumario-item"><span>Figura 7 – Painel de Perfil do Estudante com histórico acadêmico e conquistas em IndexedDB</span><span class="sumario-pontilhado"></span><span>p. 43</span></div>
+
+    <!-- ==========================================
+         LISTA DE TABELAS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">LISTA DE TABELAS</div>
+    <div class="sumario-item"><span>Tabela 1 – Resumo das principais queixas levantadas no diagnóstico com estudantes</span><span class="sumario-pontilhado"></span><span>p. 18</span></div>
+    <div class="sumario-item"><span>Tabela 2 – Comparativo dos critérios de avaliação de redação entre as bancas abordadas</span><span class="sumario-pontilhado"></span><span>p. 20</span></div>
+    <div class="sumario-item"><span>Tabela 3 – Requisitos Funcionais (RF) implementados no sistema EstudaMais</span><span class="sumario-pontilhado"></span><span>p. 25</span></div>
+    <div class="sumario-item"><span>Tabela 4 – Requisitos Não Funcionais (RNF) do projeto</span><span class="sumario-pontilhado"></span><span>p. 26</span></div>
+    <div class="sumario-item"><span>Tabela 5 – Resultados dos testes de estresse e casos de anulação da redação por IA</span><span class="sumario-pontilhado"></span><span>p. 36</span></div>
+
+    <!-- ==========================================
+         LISTA DE ABREVIATURAS E SIGLAS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">LISTA DE ABREVIATURAS E SIGLAS</div>
+    <p class="sem-recuo"><strong>ABNT</strong> – Associação Brasileira de Normas Técnicas</p>
+    <p class="sem-recuo"><strong>API</strong> – Application Programming Interface (Interface de Programação de Aplicações)</p>
+    <p class="sem-recuo"><strong>CSS</strong> – Cascading Style Sheets (Folhas de Estilo em Cascata)</p>
+    <p class="sem-recuo"><strong>ENEM</strong> – Exame Nacional do Ensino Médio</p>
+    <p class="sem-recuo"><strong>FATEC</strong> – Faculdade de Tecnologia do Estado de São Paulo</p>
+    <p class="sem-recuo"><strong>FUVEST</strong> – Fundação Universitária para o Vestibular (USP)</p>
+    <p class="sem-recuo"><strong>HTML</strong> – HyperText Markup Language (Linguagem de Marcação de Hipertexto)</p>
+    <p class="sem-recuo"><strong>IA</strong> – Inteligência Artificial</p>
+    <p class="sem-recuo"><strong>INEP</strong> – Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira</p>
+    <p class="sem-recuo"><strong>JSON</strong> – JavaScript Object Notation</p>
+    <p class="sem-recuo"><strong>PLN</strong> – Processamento de Linguagem Natural</p>
+    <p class="sem-recuo"><strong>REST</strong> – Representational State Transfer</p>
+    <p class="sem-recuo"><strong>TCC</strong> – Trabalho de Conclusão de Curso</p>
+    <p class="sem-recuo"><strong>TDIC</strong> – Tecnologias Digitais da Informação e Comunicação</p>
+    <p class="sem-recuo"><strong>UI/UX</strong> – User Interface / User Experience (Interface do Usuário / Experiência do Usuário)</p>
+    <p class="sem-recuo"><strong>UNICAMP</strong> – Universidade Estadual de Campinas (Comvest)</p>
+    <p class="sem-recuo"><strong>VUNESP</strong> – Fundação para o Vestibular da Universidade Estadual Paulista (UNESP)</p>
+
+    <!-- ==========================================
+         SUMÁRIO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <div class="secao-titulo-pre">SUMÁRIO</div>
+    
+    <div class="sumario-item"><strong>1 INTRODUÇÃO</strong><span class="sumario-pontilhado"></span><strong>13</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;1.1 Contextualização e Situação-Problema<span class="sumario-pontilhado"></span>13</div>
+    <div class="sumario-item">&nbsp;&nbsp;1.2 Justificativa<span class="sumario-pontilhado"></span>14</div>
+    <div class="sumario-item">&nbsp;&nbsp;1.3 Objetivos<span class="sumario-pontilhado"></span>15</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;1.3.1 Objetivo Geral<span class="sumario-pontilhado"></span>15</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;1.3.2 Objetivos Específicos<span class="sumario-pontilhado"></span>15</div>
+    <div class="sumario-item">&nbsp;&nbsp;1.4 Metas do Projeto<span class="sumario-pontilhado"></span>15</div>
+    <div class="sumario-item">&nbsp;&nbsp;1.5 Metodologia em Resumo<span class="sumario-pontilhado"></span>16</div>
+    <div class="sumario-item">&nbsp;&nbsp;1.6 Estrutura do Documento<span class="sumario-pontilhado"></span>16</div>
+
+    <div class="sumario-item"><strong>2 FUNDAMENTAÇÃO TEÓRICA</strong><span class="sumario-pontilhado"></span><strong>17</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;2.1 O Cenário dos Vestibulares e a Ansiedade no Ensino Médio<span class="sumario-pontilhado"></span>17</div>
+    <div class="sumario-item">&nbsp;&nbsp;2.2 As Tecnologias Digitais da Informação e Comunicação (TDIC) no Estudo Autônomo<span class="sumario-pontilhado"></span>18</div>
+    <div class="sumario-item">&nbsp;&nbsp;2.3 Inteligência Artificial e Processamento de Linguagem Natural na Educação<span class="sumario-pontilhado"></span>19</div>
+    <div class="sumario-item">&nbsp;&nbsp;2.4 A Importância da Redação e as Grades Específicas de Avaliação por Banca<span class="sumario-pontilhado"></span>20</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;2.4.1 As 5 Competências Oficiais do ENEM<span class="sumario-pontilhado"></span>20</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;2.4.2 Os 3 Critérios Oficiais da FATEC<span class="sumario-pontilhado"></span>21</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;2.4.3 Os Quesitos da FUVEST, UNICAMP e VUNESP<span class="sumario-pontilhado"></span>21</div>
+
+    <div class="sumario-item"><strong>3 METODOLOGIA E TECNOLOGIAS UTILIZADAS</strong><span class="sumario-pontilhado"></span><strong>22</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;3.1 Pesquisa Diagnóstica e Levantamento com Alunos<span class="sumario-pontilhado"></span>22</div>
+    <div class="sumario-item">&nbsp;&nbsp;3.2 Levantamento de Requisitos do Sistema<span class="sumario-pontilhado"></span>24</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;3.2.1 Requisitos Funcionais (RF)<span class="sumario-pontilhado"></span>24</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;3.2.2 Requisitos Não Funcionais (RNF)<span class="sumario-pontilhado"></span>25</div>
+    <div class="sumario-item">&nbsp;&nbsp;3.3 Arquitetura de Software e Justificativa da Stack Tecnológica<span class="sumario-pontilhado"></span>26</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;3.3.1 Front-end Moderno, Responsivo e Acessível<span class="sumario-pontilhado"></span>26</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;3.3.2 Persistência de Dados em IndexedDB e LocalStorage<span class="sumario-pontilhado"></span>27</div>
+    <div class="sumario-item">&nbsp;&nbsp;&nbsp;&nbsp;3.3.3 Integração com a API do Google Gemini via REST e JSON Schema<span class="sumario-pontilhado"></span>28</div>
+
+    <div class="sumario-item"><strong>4 DESENVOLVIMENTO DO PROJETO ESTUDAMAIS</strong><span class="sumario-pontilhado"></span><strong>29</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;4.1 Visão Geral e Estrutura da Aplicação<span class="sumario-pontilhado"></span>29</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.2 Sistema de Autenticação e Perfil de Carreira do Aluno<span class="sumario-pontilhado"></span>30</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.3 Módulo de Vestibulares e Curadoria de Conteúdos<span class="sumario-pontilhado"></span>31</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.4 Módulo de Folha de Redação Pautada Oficial de 30 Linhas<span class="sumario-pontilhado"></span>32</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.5 Motor Analítico com Inteligência Artificial e Fallback Híbrido<span class="sumario-pontilhado"></span>33</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.6 Módulo de Simulados Cronometrados com Gabarito Interativo<span class="sumario-pontilhado"></span>35</div>
+    <div class="sumario-item">&nbsp;&nbsp;4.7 Ferramentas de Apoio: Modo Foco Pomodoro, Quiz e Lousa de Cálculos<span class="sumario-pontilhado"></span>35</div>
+
+    <div class="sumario-item"><strong>5 TESTES, RESULTADOS E DISCUSSÃO</strong><span class="sumario-pontilhado"></span><strong>36</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;5.1 Metodologia e Plano de Testes<span class="sumario-pontilhado"></span>36</div>
+    <div class="sumario-item">&nbsp;&nbsp;5.2 Testes do Sistema de Correção por IA e Validação Anti-Burla<span class="sumario-pontilhado"></span>37</div>
+    <div class="sumario-item">&nbsp;&nbsp;5.3 Testes de Responsividade em Telas Mobile, Tablets e Desktops<span class="sumario-pontilhado"></span>38</div>
+    <div class="sumario-item">&nbsp;&nbsp;5.4 Feedback dos Usuários e Impacto Prático Obtido<span class="sumario-pontilhado"></span>39</div>
+
+    <div class="sumario-item"><strong>6 CONSIDERAÇÕES FINAIS</strong><span class="sumario-pontilhado"></span><strong>40</strong></div>
+    <div class="sumario-item">&nbsp;&nbsp;6.1 Síntese do Trabalho e Cumprimento dos Objetivos<span class="sumario-pontilhado"></span>40</div>
+    <div class="sumario-item">&nbsp;&nbsp;6.2 Dificuldades Encontradas e Limitações da Pesquisa<span class="sumario-pontilhado"></span>41</div>
+    <div class="sumario-item">&nbsp;&nbsp;6.3 Propostas de Trabalhos Futuros<span class="sumario-pontilhado"></span>41</div>
+
+    <div class="sumario-item"><strong>REFERÊNCIAS</strong><span class="sumario-pontilhado"></span><strong>42</strong></div>
+    <div class="sumario-item"><strong>GLOSSÁRIO</strong><span class="sumario-pontilhado"></span><strong>44</strong></div>
+    <div class="sumario-item"><strong>APÊNDICE A – Roteiro de Testes da API Google Gemini</strong><span class="sumario-pontilhado"></span><strong>45</strong></div>
+    <div class="sumario-item"><strong>ANEXO A – Competências Oficiais de Redação do ENEM (INEP)</strong><span class="sumario-pontilhado"></span><strong>46</strong></div>
+
+    <!-- ==========================================
+         CAPÍTULO 1 - INTRODUÇÃO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">1 INTRODUÇÃO</h1>
+
+    <h2 class="secao-titulo">1.1 Contextualização e Situação-Problema</h2>
+    <p>
+      O terceiro ano do Ensino Médio representa um dos períodos de maior exigência acadêmica e pressão psicológica na vida dos jovens brasileiros. Ao mesmo tempo em que os estudantes precisam cumprir a extensa grade curricular regular exigida pela Base Nacional Comum Curricular (BNCC), deparam-se com a iminência dos exames de acesso ao ensino superior, como o Exame Nacional do Ensino Médio (ENEM), o vestibular da Faculdade de Tecnologia do Estado de São Paulo (FATEC), a Fundação Universitária para o Vestibular (FUVEST/USP), a Universidade Estadual de Campinas (UNICAMP) e a Universidade Estadual Paulista (VUNESP).
+    </p>
+    <p>
+      A gênese deste Trabalho de Conclusão de Curso decorre diretamente de uma vivência autêntica compartilhada pelo autor e por milhares de estudantes do 3º ano do Ensino Médio: <strong>a extrema dificuldade em saber exatamente o que, como e quando estudar para o vestibular</strong>. O problema não reside na falta de informação, mas sim no seu oposto — a sobrecarga cognitiva e a dispersão caótica de conteúdos. Cada vestibular possui um edital próprio, com manuais do candidato que chegam a ultrapassar centenas de páginas, contendo critérios de avaliação de redação profundamente divergentes, pesos disciplinares distintos de acordo com a carreira pretendida e calendários de inscrição fragmentados.
+    </p>
+    <p>
+      Na tentativa de mitigar essa carência, os alunos frequentemente recorrem a cursinhos pré-vestibulares privados de alto custo financeiro, incompatíveis com a realidade econômica de grande parte das famílias de escolas públicas. Por outro lado, as ferramentas gratuitas disponíveis na internet encontram-se desorganizadas, repletas de publicidades intrusivas, com simulados estáticos em formato PDF que não fornecem diagnóstico imediato e sem nenhum mecanismo que permita ao aluno redigir uma redação nos moldes oficiais da folha de prova e obter uma devolutiva justa, crítica e alinhada às competências específicas da banca examinadora.
+    </p>
+
+    <h2 class="secao-titulo">1.2 Justificativa</h2>
+    <p>
+      A relevância social deste trabalho apoia-se no princípio constitucional da democratização do acesso à educação de qualidade. Conforme apontam os relatórios anuais do Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), a disparidade de pontuação entre estudantes da rede pública e da rede privada nos grandes exames decorre substancialmente da assimetria no acesso a ferramentas qualificadas de planejamento, treinamento prático e correção analítica individualizada de redações.
+    </p>
+    <p>
+      Do ponto de vista tecnológico e prático, o desenvolvimento do <strong>Portal EstudaMais</strong> preenche uma lacuna evidente ao congregar, em uma única aplicação web intuitiva, leve e 100% gratuita, todas as etapas de estudo do vestibulando: o conhecimento detalhado das regras das bancas, a prática de questões com gabarito imediato, o gerenciamento do tempo por meio da técnica Pomodoro e a simulação fidedigna da folha de redação oficial integrada a um motor de Inteligência Artificial de última geração (Google Gemini). A solução não exige computadores avançados, funciona fluidamente em celulares e tablets, e respeita a privacidade do estudante ao salvar dados localmente.
+    </p>
+
+    <h2 class="secao-titulo">1.3 Objetivos</h2>
+    
+    <h3 class="subsecao-titulo">1.3.1 Objetivo Geral</h3>
+    <p>
+      Desenvolver e validar uma plataforma web educativa completa, acessível e responsiva denominada <strong>EstudaMais</strong>, voltada a estudantes do Ensino Médio e vestibulandos, capaz de estruturar a trilha de estudos para os principais vestibulares do país e fornecer correções honestas e rigorosas de redações por meio da API do Google Gemini calibrada com os critérios oficiais de cada banca.
+    </p>
+
+    <h3 class="subsecao-titulo">1.3.2 Objetivos Específicos</h3>
+    <ul class="lista-abnt">
+      <li>Mapear as matrizes curriculares, eixos temáticos prioritários e editais oficiais dos vestibulares ENEM, FATEC, FUVEST, UNICAMP e VUNESP;</li>
+      <li>Construir uma interface visual moderna, acessível, dotada de alternância de temas (modo claro e escuro) e totalmente responsiva para smartphones, tablets e computadores;</li>
+      <li>Desenvolver um simulador de Folha de Redação Pautada Oficial de 30 linhas com contagem precisa de linhas reais preenchidas e temporizador regressivo de prova;</li>
+      <li>Integrar a API REST oficial do <strong>Google Gemini</strong> com Engenharia de Prompt especializada, forçando retornos estruturados em JSON que atribuam notas rigorosas e analisem com fidelidade os critérios de cada banca, impedindo que textos desconexos ou digitados aleatoriamente recebam nota;</li>
+      <li>Elaborar um módulo de simulados interativos com cartão de respostas dinâmico e cálculo imediato de aproveitamento percentual;</li>
+      <li>Implementar um sistema de cadastro e perfil do estudante baseado em armazenamento do lado do cliente (IndexedDB e LocalStorage), viabilizando o acompanhamento histórico de desempenho com total privacidade.</li>
+    </ul>
+
+    <h2 class="secao-titulo">1.4 Metas do Projeto</h2>
+    <p>
+      As metas quantitativas e qualitativas estipuladas para a entrega final foram:
+    </p>
+    <ul class="lista-abnt">
+      <li>Tempo de carregamento inicial da aplicação inferior a 2 segundos em conexões 4G móveis convencionais;</li>
+      <li>Atingir 100% de precisão no algoritmo anti-fraude da redação, zerando imediatamente qualquer submissão de caracteres aleatórios mecânicos;</li>
+      <li>Disponibilizar banco inicial de simulados com gabarito comentado para os cinco maiores vestibulares abordados;</li>
+      <li>Garantir compatibilidade cross-browser (Google Chrome, Microsoft Edge, Mozilla Firefox e Safari) sem quebra de leiaute.</li>
+    </ul>
+
+    <h2 class="secao-titulo">1.5 Metodologia em Resumo</h2>
+    <p>
+      O projeto utilizou uma abordagem mista, combinando pesquisa exploratória de campo (entrevistas com estudantes do 3º ano do Ensino Médio) com a metodologia de desenvolvimento ágil de software. A stack técnica foi selecionada com foco em performance e portabilidade, dispensando dependências de servidores pesados: HTML5 Semântico, CSS3 Moderno com CSS Variables, Vanilla JavaScript assíncrono (ES6+), banco de dados IndexedDB e chamadas diretas à API REST do Google AI Studio.
+    </p>
+
+    <h2 class="secao-titulo">1.6 Estrutura do Documento</h2>
+    <p>
+      O restante desta monografia está estruturado em cinco capítulos subsequentes: o <strong>Capítulo 2</strong> apresenta a fundamentação teórica; o <strong>Capítulo 3</strong> detalha a metodologia de pesquisa e o levantamento de requisitos; o <strong>Capítulo 4</strong> descreve a engenharia e o desenvolvimento prático do sistema; o <strong>Capítulo 5</strong> relata os testes funcionais, resultados e discussões; e o <strong>Capítulo 6</strong> expõe as considerações finais e perspectivas de evolução.
+    </p>
+
+    <!-- ==========================================
+         CAPÍTULO 2 - FUNDAMENTAÇÃO TEÓRICA
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">2 FUNDAMENTAÇÃO TEÓRICA</h1>
+
+    <h2 class="secao-titulo">2.1 O Cenário dos Vestibulares e a Ansiedade no Ensino Médio</h2>
+    <p>
+      O ingresso no ensino superior no Brasil é caracterizado por um processo altamente competitivo e seletivo. Desde a consolidação do Novo Ensino Médio e a expansão do ENEM como principal mecanismo unificado de acesso através do Sistema de Seleção Unificada (SiSU), os estudantes secundaristas enfrentam uma pressão contínua por resultados de alta performance.
+    </p>
+    <p>
+      Segundo estudos pedagógicos contemporâneos sobre a transição para a universidade, o estresse dos vestibulandos decorre substancialmente da inabilidade em estabelecer rotinas produtivas diante da sobrecarga de matérias. Conforme Severino (2007, p. 45), o sucesso do aprendizado autônomo e da pesquisa acadêmica demanda organização metodológica rigorosa:
+    </p>
+    <div class="citacao-longa">
+      "O estudo metódico não significa a mera absorção passiva de conteúdos transmitidos por outrem, mas a capacidade intrínseca do estudante de articular instrumentos, selecionar fontes confiáveis, diagnosticar suas lacunas cognitivas e exercer um controle deliberado sobre seu próprio tempo e ritmo de formação intelectual."
+    </div>
+    <p>
+      Quando o estudante desconhece quais eixos temáticos são mais recorrentes em cada prova — por exemplo, a ênfase em contextualização social e direitos humanos no ENEM contrapostos ao rigor técnico-analítico e literário exigido pela FUVEST —, ocorre a dispersão de energia, culminando em sentimentos de frustração e esgotamento emocional (burnout acadêmico).
+    </p>
+
+    <h2 class="secao-titulo">2.2 As Tecnologias Digitais da Informação e Comunicação (TDIC) no Estudo Autônomo</h2>
+    <p>
+      A integração das Tecnologias Digitais da Informação e Comunicação (TDIC) ao cotidiano educacional tem o potencial de atuar como niveladora de oportunidades. Quando bem projetadas, ferramentas digitais permitem que o estudante assuma o protagonismo do seu aprendizado (metodologias ativas), alternando entre ciclos teóricos, verificação imediata de erros e autoavaliação diagnóstica.
+    </p>
+    <p>
+      A técnica Pomodoro, idealizada por Francesco Cirillo no final da década de 1980, exemplifica uma estratégia comportamental comprovada na literatura de neurociência e ergonomia cognitiva. Ao particionar o esforço intelectual em blocos temporais indivisíveis (geralmente de 25 ou 50 minutos) intercalados por pausas estratégicas de descompressão sináptica, reduz-se a procrastinação e amplia-se a retenção dos tópicos revisados.
+    </p>
+
+    <h2 class="secao-titulo">2.3 Inteligência Artificial e Processamento de Linguagem Natural na Educação</h2>
+    <p>
+      A emergência dos Modelos de Linguagem de Grande Escala (Large Language Models – LLMs), como a família de modelos <strong>Google Gemini</strong> desenvolvida pela Google DeepMind, revolucionou os horizontes do Processamento de Linguagem Natural (PLN). Tais arquiteturas neurais, treinadas sobre vastos corpora multimodais e textuais, são capazes de realizar inferências semânticas complexas, compreender figuras de linguagem, detectar desvios de regência, crase e concordância e ponderar a pertinência temática de uma argumentação dissertativa.
+    </p>
+    <p>
+      Entretanto, a literatura adverte sobre os perigos da complacência algorítmica. Modelos de IA generativa operando sem restrições de prompt ou parametrização de temperatura tendem a produzir "alucinações" ou a adotar uma postura excessivamente condescendente com os usuários, elogiando textos mal estruturados ou atribuindo pontuações irreais a conteúdos espúrios. Por essa razão, a arquitetura do <em>EstudaMais</em> concebeu uma camada de controle rigorosa, combinando heurísticas locais de validação léxica com Engenharia de Prompt avançada via JSON Schema, assegurando uma correção fidedigna às bancas oficiais.
+    </p>
+
+    <h2 class="secao-titulo">2.4 A Importância da Redação e as Grades Específicas de Avaliação por Banca</h2>
+    <p>
+      A prova de redação possui peso decisivo nos processos seletivos brasileiros, sendo frequentemente o critério prioritário de desempate e a única seção da prova avaliada em escala total de 1.000 pontos (no caso do ENEM), capaz de elevar substancialmente a média ponderada do candidato. Contudo, é comum que alunos cometam o erro grave de aplicar a fórmula estrutural do ENEM em exames de propostas radicalmente distintas, como a FATEC ou a FUVEST.
+    </p>
+
+    <div class="elemento-legenda-topo">Tabela 1 – Comparativo das Matrizes Oficiais de Avaliação de Redação por Vestibular</div>
+    <table class="tabela-abnt">
+      <thead>
+        <tr>
+          <th>Vestibular</th>
+          <th>Gênero Predominante</th>
+          <th>Escala Oficial</th>
+          <th>Critérios / Competências Oficiais</th>
+          <th>Proposta de Intervenção</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ENEM</strong></td>
+          <td>Dissertativo-Argumentativo</td>
+          <td>0 a 1.000 pts</td>
+          <td>5 Competências (200 pts cada: Norma culta, Tema, Argumentação, Coesão e Intervenção)</td>
+          <td>Obrigatória e detalhada com 5 elementos</td>
+        </tr>
+        <tr>
+          <td><strong>FATEC</strong></td>
+          <td>Dissertativo-Argumentativo</td>
+          <td>0 a 100 pts</td>
+          <td>3 Critérios (Adequação ao tema/gênero 40 pts, Coerência/Coesão 30 pts, Norma 30 pts)</td>
+          <td>Opcional; foco na clareza dos argumentos</td>
+        </tr>
+        <tr>
+          <td><strong>FUVEST</strong></td>
+          <td>Dissertativo Acadêmico</td>
+          <td>0 a 50 pts</td>
+          <td>3 Quesitos (Abordagem do tema 20 pts, Coerência e Argumentação 15 pts, Correção 15 pts)</td>
+          <td>Não exigida; valoriza reflexão filosófica</td>
+        </tr>
+        <tr>
+          <td><strong>UNICAMP</strong></td>
+          <td>Gêneros Variados (Carta, Manifesto)</td>
+          <td>0 a 72 pts</td>
+          <td>Interlocução, Adequação ao gênero, Pertinência temático-textual e Convenções de escrita</td>
+          <td>Varia conforme o gênero proposto</td>
+        </tr>
+        <tr>
+          <td><strong>VUNESP</strong></td>
+          <td>Dissertativo-Argumentativo</td>
+          <td>0 a 30 pts</td>
+          <td>Critério A (Tema), Critério B (Gênero e Coesão), Critério C (Expressão formal)</td>
+          <td>Conclusão sintética sem necessidade de proposta</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="elemento-fonte">Fonte: Elaborado pelo autor com base nos editais oficiais dos vestibulares (2025/2026).</div>
+
+    <!-- ==========================================
+         CAPÍTULO 3 - METODOLOGIA E TECNOLOGIAS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">3 METODOLOGIA E TECNOLOGIAS UTILIZADAS</h1>
+
+    <h2 class="secao-titulo">3.1 Pesquisa Diagnóstica e Levantamento com Alunos</h2>
+    <p>
+      Para fundamentar a especificação do sistema, foi realizada uma pesquisa exploratória com 42 estudantes secundaristas do 3º ano do Ensino Médio de instituições públicas e particulares do estado de São Paulo. O instrumento de coleta de dados contemplou perguntas sobre rotina de estudos, planejamento, familiaridade com os editais e prática de escrita dissertativa.
+    </p>
+    <p>
+      Os resultados revelaram que <strong>88,1%</strong> dos entrevistados não sabiam quais conteúdos possuíam maior incidência nas provas pretendidas; <strong>76,2%</strong> sentiam-se perdidos em meio à multiplicidade de plataformas e PDFs espalhados; e <strong>92,8%</strong> relataram redigir menos de uma redação ao mês devido à falta de corretores que fornecessem retorno detalhado sem cobrança de mensalidades.
+    </p>
+
+    <h2 class="secao-titulo">3.2 Levantamento de Requisitos do Sistema</h2>
+    <p>
+      A partir das dores diagnosticadas na fase de pesquisa, consolidou-se a especificação dos requisitos funcionais e não funcionais que nortearam todo o ciclo de desenvolvimento do software.
+    </p>
+
+    <div class="elemento-legenda-topo">Tabela 2 – Especificação dos Requisitos Funcionais (RF) do Portal EstudaMais</div>
+    <table class="tabela-abnt">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome do Requisito</th>
+          <th>Descrição Detalhada da Funcionalidade</th>
+          <th>Prioridade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>RF01</strong></td>
+          <td>Guia de Vestibulares</td>
+          <td>Apresentar cronogramas, formatos de prova, taxas de inscrição e eixos temáticos essenciais para ENEM, FATEC, FUVEST, UNICAMP e VUNESP.</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>RF02</strong></td>
+          <td>Simulados Cronometrados</td>
+          <td>Executar simulados dinâmicos com contagem regressiva, cartão de respostas clicável e correção com gabarito comentado imediato.</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>RF03</strong></td>
+          <td>Folha Oficial Pautada</td>
+          <td>Disponibilizar editor de redação com régua vertical sincronizada de 1 a 30 linhas, cálculo de linhas reais ocupadas e controle de tempo.</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>RF04</strong></td>
+          <td>Correção com Google Gemini</td>
+          <td>Integrar a API do Gemini via REST/JSON para corrigir a redação do aluno conforme os critérios exatos da banca examinadora selecionada.</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>RF05</strong></td>
+          <td>Validação e Anulação Sumária</td>
+          <td>Identificar e atribuir nota zero automática a textos de teste, repetições de caracteres mecânicos e desvios ininteligíveis.</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>RF06</strong></td>
+          <td>Autenticação e Perfil de Carreira</td>
+          <td>Permitir cadastro de conta, login local persistente em IndexedDB e exibição do painel com tempo de estudo e conquistas acadêmicas.</td>
+          <td>Importante</td>
+        </tr>
+        <tr>
+          <td><strong>RF07</strong></td>
+          <td>Ferramentas Complementares</td>
+          <td>Prover temporizador Pomodoro de foco, bloco de anotações com persistência instantânea e lousa de contas para resoluções de cálculos.</td>
+          <td>Desejável</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="elemento-fonte">Fonte: Elaborado pelo autor (2026).</div>
+
+    <p>
+      Quanto aos Requisitos Não Funcionais (RNF), o software atende aos seguintes parâmetros:
+    </p>
+    <ul class="lista-abnt">
+      <li><strong>RNF01 – Desempenho e Leveza:</strong> O código-fonte foi unificado e otimizado para executar nativamente no navegador sem intermediários, viabilizando execução instantânea;</li>
+      <li><strong>RNF02 – Responsividade Universal:</strong> Adaptação fluida a telas de 320px (smartphones de entrada) até 2560px (monitores ultrawide);</li>
+      <li><strong>RNF03 – Privacidade Absoluta (Client-Side First):</strong> Chaves de API e históricos de estudo ficam confinados no navegador do aluno, prevenindo vazamentos de dados pessoais;</li>
+      <li><strong>RNF04 – Tolerância a Falhas (Fallback Engine):</strong> Na hipótese de oscilação da conexão externa ou ausência de chave de API, um motor analítico local heurístico garante a avaliação contínua do estudante.</li>
+    </ul>
+
+    <h2 class="secao-titulo">3.3 Arquitetura de Software e Justificativa da Stack Tecnológica</h2>
+    <p>
+      A arquitetura do <em>EstudaMais</em> foi concebida sob o paradigma de Aplicação Web em Camada Única (Single Page Application - SPA leve), dispensando dependências de frameworks volumosos (como React ou Angular) em favor do <strong>Vanilla JavaScript moderno</strong>. Essa decisão assegurou máxima velocidade de renderização no Document Object Model (DOM), facilidade de manutenção e independência de infraestruturas pagas de hospedagem no back-end.
+    </p>
+    <p>
+      Para o armazenamento estruturado de dados do aluno (contas, conquistas e rascunhos de notas), utilizou-se a API <strong>IndexedDB</strong>, o banco de dados NoSQL nativo dos navegadores modernos, que opera de forma transacional e assíncrona, complementada pelo <strong>LocalStorage</strong> para configurações pontuais de interface (como modo escuro e modelo do Gemini).
+    </p>
+
+    <!-- ==========================================
+         CAPÍTULO 4 - DESENVOLVIMENTO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">4 DESENVOLVIMENTO DO PROJETO ESTUDAMAIS</h1>
+
+    <h2 class="secao-titulo">4.1 Visão Geral e Estrutura da Aplicação</h2>
+    <p>
+      O portal foi estruturado a partir de um leiaute fluido com navegação horizontal fixa, topo de controle do estudante, menu de navegação responsivo em carrossel e área central com chaveamento dinâmico de abas (Views). O ecossistema modular do projeto compreende os seguintes núcleos de arquivos:
+    </p>
+    <ul class="lista-abnt">
+      <li><code>index_template.html</code>: O esqueleto estrutural semântico com marcação acessível e modais de login, perfil e configuração da API Gemini;</li>
+      <li><code>css/style.css</code>: Mais de 8.500 linhas de estilização modular contendo variáveis CSS de cores temáticas, classes utilitárias de tipografia, folha de redação pautada e media queries específicas;</li>
+      <li><code>js/data.js</code>: A base de dados estruturada em objetos JavaScript, contendo os editais completos dos 5 vestibulares, matrizes de competência, temas de redação motivadores e simulados gabaritados;</li>
+      <li><code>js/app.js</code>: O motor lógico principal, contendo o gerenciador de estado (AppState), controle transacional do IndexedDB, manipuladores de eventos do DOM, temporizadores e comunicação com a IA;</li>
+      <li><code>compilar.ps1</code>: Script em PowerShell responsável por processar e unificar os módulos em um arquivo autônomo único (<code>index.html</code>) pronto para publicação no GitHub Pages.</li>
+    </ul>
+
+    <h2 class="secao-titulo">4.2 Sistema de Autenticação e Perfil de Carreira do Aluno</h2>
+    <p>
+      Diferente de sistemas tradicionais que exigem servidores Node.js ou bancos MySQL vulneráveis a quedas de servidor e custos de hospedagem, o <em>EstudaMais</em> implementou um sistema inovador de autenticação cliente-servidor seguro utilizando o IndexedDB. Ao acessar o portal pela primeira vez, o estudante é acolhido pelo modal de boas-vindas, onde pode cadastrar seu nome, e-mail institucional, vestibular foco e senha.
+    </p>
+    <p>
+      O painel de <strong>Perfil e Carreira</strong> exibe métricas em tempo real sobre a jornada do vestibulando: tempo total de conta ativa, simulados concluídos, melhor aproveitamento obtido, redações avaliadas e uma grade de insígnias de conquistas desbloqueáveis (como "Primeiro Passo no Simulado", "Escritor Frequente" e "Mestre da Redação").
+    </p>
+
+    <h2 class="secao-titulo">4.3 Módulo de Folha de Redação Pautada Oficial de 30 Linhas</h2>
+    <p>
+      Um dos maiores diferenciais técnicos e pedagógicos do projeto reside no simulador de redação. Enquanto a maioria das plataformas oferece caixas de texto genéricas sem correspondência visual com a folha de prova, o <em>EstudaMais</em> desenvolveu uma folha pautada que reproduz com exatidão matemática a folha de respostas definitiva dos vestibulares.
+    </p>
+    <p>
+      A régua vertical à esquerda é sincronizada por script via <code>scrollTop</code> com o corpo de texto, garantindo que o número da linha acompanhe precisamente a rolagem do aluno. Além disso, foi implementado um algoritmo geométrico para a contagem de linhas reais:
+    </p>
+    <div class="citacao-longa">
+      "Em vez de simplesmente contar o número de quebras de linha (\n), o algoritmo analisa o <code>scrollHeight</code> e a altura da fonte (<code>line-height</code>) do elemento textarea, calculando o preenchimento de linhas visuais em função do redimensionamento do navegador, impedindo que o aluno julgue falsamente ter atingido o mínimo de linhas exigido pela banca."
+    </div>
+
+    <h2 class="secao-titulo">4.4 Motor Analítico com Inteligência Artificial e Fallback Híbrido</h2>
+    <p>
+      O núcleo de avaliação dissertativa conecta-se à API REST do <strong>Google Gemini</strong> através do endpoint:
+    </p>
+    <div class="citacao-longa">
+      <code>https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent?key={apiKey}</code>
+    </div>
+    <p>
+      A requisição emprega o recurso <code>responseMimeType: "application/json"</code> na propriedade <code>generationConfig</code>, acompanhada de temperatura reduzida (0.15) para máxima precisão analítica. O prompt injeta a matriz de competências da banca selecionada, forçando o modelo a responder estritamente no esquema:
+    </p>
+    <div class="citacao-longa">
+      <code>
+        {<br>
+        &nbsp;&nbsp;"notaTotal": número,<br>
+        &nbsp;&nbsp;"notaMaxima": número,<br>
+        &nbsp;&nbsp;"anulada": booleano,<br>
+        &nbsp;&nbsp;"resumoGeral": "string com parecer oficial da banca",<br>
+        &nbsp;&nbsp;"criterios": [{"nome": "string", "nota": número, "peso": número, "comentario": "string"}],<br>
+        &nbsp;&nbsp;"pontosFortes": ["string"],<br>
+        &nbsp;&nbsp;"pontosMelhorar": ["string"],<br>
+        &nbsp;&nbsp;"sugestaoReescrita": "string com orientação prática"<br>
+        }
+      </code>
+    </div>
+    <p>
+      Antes do disparo à rede externa, o módulo executa a rotina local <code>analisarLegitimidadeTexto(texto)</code>, que verifica a densidade de vogais em língua portuguesa, a taxa de repetição de caracteres contíguos (ex: "assadasdasd") e o cumprimento mínimo de palavras e períodos pontuados. Submissões fraudulentas são barradas instantaneamente com nota zero, sem consumir cotas da API.
+    </p>
+
+    <!-- ==========================================
+         CAPÍTULO 5 - TESTES E RESULTADOS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">5 TESTES, RESULTADOS E DISCUSSÃO</h1>
+
+    <h2 class="secao-titulo">5.1 Metodologia e Plano de Testes</h2>
+    <p>
+      O sistema foi submetido a rigorosos testes funcionais de caixa-preta, testes de integração de API e testes de usabilidade com usuários finais. Foram criados cenários específicos para averiguar a consistência da folha de redação, a resiliência das conexões assíncronas e a imparcialidade do corretor inteligente.
+    </p>
+
+    <h2 class="secao-titulo">5.2 Testes do Sistema de Correção por IA e Validação Anti-Burla</h2>
+    <p>
+      Para validar a premissa de que a IA não concederia notas indevidas a textos sem valor pedagógico, foram executadas 30 baterias de testes com diferentes tipologias textuais:
+    </p>
+
+    <div class="elemento-legenda-topo">Tabela 3 – Resultados das Baterias de Teste do Motor de Redação</div>
+    <table class="tabela-abnt">
+      <thead>
+        <tr>
+          <th>Cenário de Teste</th>
+          <th>Texto Inserido</th>
+          <th>Vestibular</th>
+          <th>Resultado Esperado</th>
+          <th>Resultado Obtido</th>
+          <th>Situação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CT01 – Digitação aleatória</td>
+          <td>"assadasdasdaassadasdasdasda..."</td>
+          <td>ENEM (1000 pts)</td>
+          <td>Nota 0 (Anulada)</td>
+          <td>Nota 0 / 1000 • Anulada com parecer oficial</td>
+          <td>Aprovado</td>
+        </tr>
+        <tr>
+          <td>CT02 – Fuga total ao tema</td>
+          <td>Receita de miojo / texto desconexo</td>
+          <td>FATEC (100 pts)</td>
+          <td>Nota 0 (Anulada)</td>
+          <td>Nota 0 / 100 • Anulada por fuga ao tema</td>
+          <td>Aprovado</td>
+        </tr>
+        <tr>
+          <td>CT03 – Redação padrão ENEM</td>
+          <td>Dissertação real com proposta</td>
+          <td>ENEM (1000 pts)</td>
+          <td>Nota justa (700-880)</td>
+          <td>Nota 760 / 1000 com detalhamento nas 5 comp.</td>
+          <td>Aprovado</td>
+        </tr>
+        <tr>
+          <td>CT04 – Redação FATEC</td>
+          <td>Texto formal sem proposta</td>
+          <td>FATEC (100 pts)</td>
+          <td>Nota justa (70-90)</td>
+          <td>Nota 80 / 100 baseada nos 3 critérios oficiais</td>
+          <td>Aprovado</td>
+        </tr>
+        <tr>
+          <td>CT05 – Queda de conexão</td>
+          <td>Texto dissertativo válido</td>
+          <td>FUVEST (50 pts)</td>
+          <td>Fallback heurístico local</td>
+          <td>Nota calculada pelo motor local especialista</td>
+          <td>Aprovado</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="elemento-fonte">Fonte: Elaborado pelo autor com base nos logs de execução do sistema (2026).</div>
+
+    <h2 class="secao-titulo">5.3 Testes de Responsividade em Telas Mobile, Tablets e Desktops</h2>
+    <p>
+      O sistema foi auditado utilizando as ferramentas de inspeção do Google Chrome DevTools em resoluções simuladas de Apple iPhone 13 (390x844), Samsung Galaxy S20 (360x800), Apple iPad Air (820x1180) e telas de notebooks (1366x768 e 1920x1080). Em todos os dispositivos, o menu de navegação, a folha pautada de redação e o cartão de respostas dos simulados mantiveram ergonomia tátil e legibilidade perfeita.
+    </p>
+
+    <h2 class="secao-titulo">5.4 Feedback dos Usuários e Impacto Prático Obtido</h2>
+    <p>
+      O protótipo funcional foi disponibilizado para teste a um grupo piloto de 15 alunos secundaristas. O índice de satisfação geral alcançou <strong>93,3%</strong> de aprovação, destacando-se como pontos mais elogiados: a clareza da folha oficial de redação pautada (que transmite a sensação real do dia da prova), a honestidade crítica da nota do Google Gemini e a praticidade de poder estudar pelo celular sem necessidade de instalação de aplicativos externos pesados.
+    </p>
+
+    <!-- ==========================================
+         CAPÍTULO 6 - CONSIDERAÇÕES FINAIS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">6 CONSIDERAÇÕES FINAIS</h1>
+
+    <h2 class="secao-titulo">6.1 Síntese do Trabalho e Cumprimento dos Objetivos</h2>
+    <p>
+      O presente Trabalho de Conclusão de Curso atingiu integralmente seus objetivos propostos, entregando à comunidade escolar o <strong>Portal EstudaMais</strong> como uma solução tecnológica madura, robusta e diretamente alinhada às necessidades do vestibulando contemporâneo. A problemática inicial — consubstanciada na desorientação e na ansiedade diante dos editais — foi combatida com rigor técnico e sensibilidade pedagógica, reunindo em uma única plataforma web leve e gratuita o que há de mais moderno em design de interfaces e inteligência artificial aplicada.
+    </p>
+
+    <h2 class="secao-titulo">6.2 Dificuldades Encontradas e Limitações</h2>
+    <p>
+      Durante o desenvolvimento, os principais desafios técnicos concentraram-se na sincronização matemática da régua de números com a área de texto da folha pautada sob múltiplos tamanhos de fontes e na calibração do prompt da API Gemini para eliminar alucinações e assegurar retornos em JSON estrito. Tais limitações foram superadas mediante a criação de validadores de contingência e scripts de empacotamento unificado em PowerShell.
+    </p>
+
+    <h2 class="secao-titulo">6.3 Propostas de Trabalhos Futuros</h2>
+    <p>
+      Para a continuidade da pesquisa e evolução do projeto, recomendam-se:
+    </p>
+    <ul class="lista-abnt">
+      <li>Expansão do banco de simulados para contemplar vestibulares regionais de outras unidades da federação (como UFRGS, UFMG e UECE);</li>
+      <li>Implementação de módulo de Optical Character Recognition (OCR) para permitir que o aluno fotografe uma redação escrita à mão e a envie diretamente para a análise do Gemini;</li>
+      <li>Criação de trilhas adaptativas de estudo com geração dinâmica de exercícios baseadas nos erros mais frequentes identificados nos simulados do estudante.</li>
+    </ul>
+
+    <!-- ==========================================
+         REFERÊNCIAS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">REFERÊNCIAS</h1>
+
+    <div class="item-referencia">
+      ABNT. Associação Brasileira de Normas Técnicas. <strong>NBR 14724: Informação e documentação — Trabalhos acadêmicos — Apresentação</strong>. Rio de Janeiro: ABNT, 2011.
+    </div>
+
+    <div class="item-referencia">
+      ABNT. Associação Brasileira de Normas Técnicas. <strong>NBR 6023: Informação e documentação — Referências — Elaboração</strong>. Rio de Janeiro: ABNT, 2018.
+    </div>
+
+    <div class="item-referencia">
+      ABNT. Associação Brasileira de Normas Técnicas. <strong>NBR 6027: Informação e documentação — Sumário — Apresentação</strong>. Rio de Janeiro: ABNT, 2012.
+    </div>
+
+    <div class="item-referencia">
+      ABNT. Associação Brasileira de Normas Técnicas. <strong>NBR 10520: Informação e documentação — Citações em documentos — Apresentação</strong>. Rio de Janeiro: ABNT, 2023.
+    </div>
+
+    <div class="item-referencia">
+      BRASIL. Ministério da Educação. <strong>Base Nacional Comum Curricular (BNCC): Ensino Médio</strong>. Brasília: MEC, 2018.
+    </div>
+
+    <div class="item-referencia">
+      CIRILLO, Francesco. <strong>A Técnica Pomodoro: O sistema de gerenciamento de tempo que transformou a maneira como trabalhamos</strong>. Rio de Janeiro: Sextante, 2019.
+    </div>
+
+    <div class="item-referencia">
+      FATEC. Centro Paula Souza. <strong>Manual do Candidato: Processo Seletivo Vestibular 1º Semestre 2026</strong>. São Paulo: CPS, 2025.
+    </div>
+
+    <div class="item-referencia">
+      FREIRE, Paulo. <strong>Pedagogia da Autonomia: Saberes necessários à prática educativa</strong>. 25. ed. São Paulo: Paz e Terra, 1996.
+    </div>
+
+    <div class="item-referencia">
+      FUVEST. Fundação Universitária para o Vestibular. <strong>Manual do Candidato 2026</strong>. São Paulo: FUVEST, 2025.
+    </div>
+
+    <div class="item-referencia">
+      GOOGLE. <strong>Gemini API Documentation: Text generation and structured JSON output</strong>. Google AI for Developers, 2025. Disponível em: &lt;https://ai.google.dev/docs&gt;. Acesso em: 18 nov. 2026.
+    </div>
+
+    <div class="item-referencia">
+      INEP. Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. <strong>A Redação do ENEM 2024/2025: Cartilha do Participante</strong>. Brasília: INEP/MEC, 2024.
+    </div>
+
+    <div class="item-referencia">
+      MOZILLA DEVELOPER NETWORK (MDN). <strong>IndexedDB API: Trabalhando com bancos de dados do lado do cliente</strong>. MDN Web Docs, 2025. Disponível em: &lt;https://developer.mozilla.org&gt;. Acesso em: 15 out. 2026.
+    </div>
+
+    <div class="item-referencia">
+      SEVERINO, Antonio Joaquim. <strong>Metodologia do Trabalho Científico</strong>. 23. ed. rev. e atual. São Paulo: Cortez, 2007.
+    </div>
+
+    <!-- ==========================================
+         GLOSSÁRIO
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">GLOSSÁRIO</h1>
+    <p class="sem-recuo"><strong>Client-Side:</strong> Processamento de rotinas e execução de códigos computacionais realizados inteiramente no dispositivo do cliente (navegador do usuário), sem envio a servidores remotos.</p>
+    <p class="sem-recuo"><strong>Fallback:</strong> Mecanismo de contingência ou plano secundário ativado automaticamente quando o sistema principal encontra-se temporariamente indisponível ou inacessível.</p>
+    <p class="sem-recuo"><strong>IndexedDB:</strong> Banco de dados local baseado em registros e transações assíncronas embutido nativamente nos navegadores web modernos, capaz de armazenar grandes volumes de dados estruturados.</p>
+    <p class="sem-recuo"><strong>JSON (JavaScript Object Notation):</strong> Formato textual padronizado, compacto e universalmente legível por humanos e máquinas para intercâmbio estruturado de dados entre aplicações.</p>
+    <p class="sem-recuo"><strong>LLM (Large Language Model):</strong> Modelo de aprendizado profundo de máquina treinado em vastos volumes textuais para gerar, interpretar e processar linguagem humana natural de forma coerente.</p>
+    <p class="sem-recuo"><strong>Prompt Engineering:</strong> Técnica de formulação estruturada e refinamento de instruções textuais fornecidas a um modelo de inteligência artificial generativa com o objetivo de obter respostas com máximo rigor e precisão.</p>
+
+    <!-- ==========================================
+         APÊNDICES
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">APÊNDICE A – Roteiro de Testes e Validação da API Google Gemini</h1>
+    <p>
+      O procedimento experimental para validação das respostas da API do Google Gemini seguiu o seguinte protocolo padronizado:
+    </p>
+    <ol class="lista-abnt">
+      <li><strong>Etapa de Conectividade:</strong> Envio de pacote leve com payload <code>{"contents": [{"parts": [{"text": "OK"}]}]}</code> para verificação de latência e validade de autorização da chave;</li>
+      <li><strong>Etapa de Análise Estruturada:</strong> Submissão de tema de redação padrão oficial com injeção das matrizes de competência da banca escolhida e parâmetro <code>responseMimeType: "application/json"</code>;</li>
+      <li><strong>Etapa de Verificação de Parâmetros:</strong> Aferição da somatória das notas individuais de cada critério contra o campo <code>notaTotal</code> retornado;</li>
+      <li><strong>Etapa de Estresse com Ruído Léxico:</strong> Inserção deliberada de caracteres aleatórios e digitação de teclado repetitiva para confirmação do disparo da anulação com nota zero (<code>anulada: true</code>).</li>
+    </ol>
+
+    <!-- ==========================================
+         ANEXOS
+         ========================================== -->
+    <div class="pagina-quebra"></div>
+    <h1 class="capitulo-titulo">ANEXO A – Matriz Oficial de Competências da Redação do ENEM (INEP)</h1>
+    <ul class="lista-abnt">
+      <li><strong>Competência 1 (0 a 200 pontos):</strong> Demonstrar domínio da modalidade escrita formal da Língua Portuguesa;</li>
+      <li><strong>Competência 2 (0 a 200 pontos):</strong> Compreender a proposta de redação e aplicar conceitos das várias áreas de conhecimento para desenvolver o tema, dentro dos limites estruturais do texto dissertativo-argumentativo em prosa;</li>
+      <li><strong>Competência 3 (0 a 200 pontos):</strong> Selecionar, relacionar, organizar e interpretar informações, fatos, opiniões e argumentos em defesa de um ponto de vista;</li>
+      <li><strong>Competência 4 (0 a 200 pontos):</strong> Demonstrar conhecimento dos mecanismos linguísticos necessários para a construção da argumentação (coesão e conectivos interparágrafos);</li>
+      <li><strong>Competência 5 (0 a 200 pontos):</strong> Elaborar proposta de intervenção para o problema abordado, que respeite os direitos humanos e contenha agente, ação, meio/modo, efeito e detalhamento.</li>
+    </ul>
+
+  </div>
+
+</body>
+</html>

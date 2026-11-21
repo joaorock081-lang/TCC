@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BASE DE DADOS DOS VESTIBULARES E DICAS DE ESTUDO
  * Projeto de TCC: Plataforma de Apoio aos Estudos para Vestibulandos
  */
@@ -1012,6 +1012,313 @@ const VESTIBULARES_DATA = {
         ]
       }
     ]
+  },
+  ufmg: {
+    id: "ufmg",
+    nome: "UFMG",
+    tituloCompleto: "Universidade Federal de Minas Gerais",
+    badge: "Federal • SiSU & Habilidades",
+    corBadge: "#b91c1c",
+    icone: "fa-landmark",
+    resumo: "Uma das instituições mais prestigiadas da América Latina. O ingresso ocorre prioritariamente pelo SiSU/ENEM com pesos específicos e notas de corte concorridíssimas, além de provas de habilidades específicas para cursos artísticos e arquitetura.",
+    detalhesGerais: {
+      formato: "Via ENEM / SiSU (1ª chamada no início do ano) + Provas Complementares para Música/Design/Teatro",
+      totalQuestoes: "Utiliza as 180 questões do ENEM + Redação",
+      criterioCorrecao: "Pesos ponderados por área conforme o curso escolhido (Ex: Medicina peso 4 em Natureza e Redação)",
+      dicaChave: "Para cursos de alta concorrência na UFMG, a Redação e a área de Ciências da Natureza/Matemática definem a aprovação pela pontuação no SiSU."
+    },
+    redacao: {
+      titulo: "Redação UFMG (Padrão ENEM)",
+      descricao: "Nota da Redação do ENEM com peso de até 4x no SiSU da UFMG.",
+      competencias: [
+        { num: 1, nome: "Norma Culta", desc: "Correção gramatical rigorosa" },
+        { num: 2, nome: "Repertório Sociocultural", desc: "Aplicação produtiva de filósofos e sociólogos" },
+        { num: 3, nome: "Projeto de Texto", desc: "Planejamento argumentativo e teses claras" },
+        { num: 4, nome: "Coesão Textual", desc: "Operadores argumentativos interparágrafos" },
+        { num: 5, nome: "Proposta Completa", desc: "Agente, Ação, Meio/Modo, Efeito e Detalhamento" }
+      ]
+    },
+    areas: [
+      {
+        nome: "Ciências da Natureza & Saúde",
+        icone: "fa-dna",
+        disciplinas: [
+          {
+            nome: "Biologia e Bioquímica (Peso Máximo para Medicina)",
+            topicos: [
+              "Fisiologia e Anatomia Humana (sistemas endócrino, cardiovascular, renal e nervoso)",
+              "Genética Clássica, Biologia Molecular e Engenharia Genética",
+              "Ecologia Aplicada, Biomas Brasileiros (Cerrado e Mata Atlântica) e Impactos Ambientais",
+              "Citologia: metabolismo energético (fotossíntese, fermentação e respiração celular)",
+              "Evolução Biológica, especiação e teorias evolutivas"
+            ]
+          },
+          {
+            nome: "Química Geral e Orgânica",
+            topicos: [
+              "Estequiometria com pureza, rendimento e reagente limitante",
+              "Físico-Química: Soluções, concentração molar, termoquímica e equilíbrios químicos",
+              "Química Orgânica: Funções oxigenadas e nitrogenadas, isomeria e reações orgânicas",
+              "Eletroquímica: Pilhas, eletrólise ígnea e aquosa, potenciais de redução"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Ciências Exatas & Tecnologia",
+        icone: "fa-calculator",
+        disciplinas: [
+          {
+            nome: "Matemática e Suas Tecnologias",
+            topicos: [
+              "Funções Afim, Quadrática, Exponencial e Logarítmica",
+              "Geometria Espacial (prismas, cilindros, cones, esferas) e Geometria Plana",
+              "Estatística Descritiva: Média ponderada, mediana, moda e desvio padrão",
+              "Matemática Financeira e Análise Combinatória com Probabilidade"
+            ]
+          },
+          {
+            nome: "Física Clássica e Moderna",
+            topicos: [
+              "Mecânica: Dinâmica Newtoniana, trabalho, energia e conservação da quantidade de movimento",
+              "Termologia: Calorimetria, dilatação térmica e Leis da Termodinâmica",
+              "Óptica Geométrica e Ondulatória (interferência, difração e refração)",
+              "Eletrodinâmica: Circuitos elétricos, Lei de Ohm e potência elétrica consumida"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Ciências Humanas e Sociais",
+        icone: "fa-book-atlas",
+        disciplinas: [
+          {
+            nome: "História e Geografia de Minas e do Brasil",
+            topicos: [
+              "Ciclo do Ouro e Sociedade Mineradora no século XVIII em Minas Gerais",
+              "Inconfidência Mineira e processos de emancipação política",
+              "Revolução de 1930, Estado Novo e República Populista",
+              "Geografia Econômica: Quadrilátero Ferrífero, mineração, agropecuária e bacias hidrográficas",
+              "Urbanização e industrialização brasileira no século XX"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  ufsc: {
+    id: "ufsc",
+    nome: "UFSC",
+    tituloCompleto: "Universidade Federal de Santa Catarina",
+    badge: "Vestibular Unificado UFSC/IFSC",
+    corBadge: "#047857",
+    icone: "fa-compass",
+    resumo: "Conhecida por seu vestibular tradicional unificado com o IFSC. É famosa pelo modelo de questões de proposições múltiplas (somatória), onde cada alternativa tem valor binário (01, 02, 04, 08, 16, 32) e o candidato deve assinalar o somatório exato das corretas.",
+    detalhesGerais: {
+      formato: "2 Tardes de Provas no final de semana (Provas Objetivas de Somatória + Questões Discursivas + Redação)",
+      totalQuestoes: "80 proposições somatórias + Redação + 4 questões discursivas",
+      criterioCorrecao: "Pontuação proporcional para somatórias parcialmente corretas (sem assinalar itens falsos)",
+      dicaChave: "Nas questões de somatória, nunca chute se tiver dúvida: marcar uma proposição errada penaliza severamente o escore da questão."
+    },
+    redacao: {
+      titulo: "Redação UFSC: Gêneros Textuais Variados",
+      descricao: "A banca propõe escolha entre 3 gêneros textuais (artigo de opinião, crônica, carta ou conto reflexivo).",
+      competencias: [
+        { num: 1, nome: "Adequação ao Gênero", desc: "Seguir fielmente as convenções estruturais do gênero escolhido." },
+        { num: 2, nome: "Articulação de Ideias", desc: "Progressão temática fluida e coesão textual sólida." },
+        { num: 3, nome: "Expressão Escrita Formal", desc: "Riqueza vocabular e correção léxico-gramatical." }
+      ]
+    },
+    areas: [
+      {
+        nome: "Exatas e Tecnologias",
+        icone: "fa-atom",
+        disciplinas: [
+          {
+            nome: "Matemática e Física de Somatória",
+            topicos: [
+              "Trigonometria e Análise de Funções Trigonométricas",
+              "Polinômios, Equações Algébricas e Números Complexos",
+              "Física Térmica e Hidrostática (Princípio de Pascal e Empuxo de Arquimedes)",
+              "Eletromagnetismo: Campo magnético, força de Lorentz e indução de Faraday"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Biológicas, Químicas e Meio Ambiente",
+        icone: "fa-leaf",
+        disciplinas: [
+          {
+            nome: "Biologia e Química Geral",
+            topicos: [
+              "Ecologia Marinha e Costeira: Manguezais, restingas e ecossistemas do litoral sul",
+              "Zoologia e Fisiologia Comparada de Vertebrados e Invertebrados",
+              "Equilíbrio Iônico: pH, pOH, hidrólise salina e soluções tampão",
+              "Química Ambiental: Chuva ácida, efeito estufa e tratamento de efluentes"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Humanas, Literatura Catarinense e Linguagens",
+        icone: "fa-feather",
+        disciplinas: [
+          {
+            nome: "Língua Portuguesa, Literatura e História do Sul",
+            topicos: [
+              "Obras Literárias de Leitura Obrigatória indicadas pela Coperve/UFSC",
+              "Colonização e Povoamento do Sul do Brasil: Imigração açoriana, alemã e italiana",
+              "Guerra dos Farrapos e Guerra do Contestado em território catarinense",
+              "Análise de textos contemporâneos e variação linguística regional"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  ime: {
+    id: "ime",
+    nome: "IME",
+    tituloCompleto: "Instituto Militar de Engenharia",
+    badge: "Militar • Nível Olímpico",
+    corBadge: "#0f172a",
+    icone: "fa-shield-halved",
+    resumo: "Localizado na Praia Vermelha (Rio de Janeiro), o IME forma engenheiros civis e militares com rigor matemático supremo. Ao lado do ITA, é um dos vestibulares mais difíceis do mundo.",
+    detalhesGerais: {
+      formato: "1ª Fase Objetiva eliminatória (40 questões de Mat/Fís/Quím) + 2ª Fase Discursiva de 4 dias",
+      totalQuestoes: "40 questões objetivas (1ª fase) + Provas discursivas com 10 questões complexas por dia",
+      criterioCorrecao: "Critério estrito com pontuação parcial por desenvolvimento coerente nas etapas analíticas",
+      dicaChave: "Domine demonstrações formais de teoremas, geometria espacial e plana avançada, e cálculo conceitual."
+    },
+    redacao: {
+      titulo: "Redação IME: Dissertação Formal Argumentativa",
+      descricao: "Texto dissertativo sobre valores cívicos, ética científica, liderança, tecnologia de defesa ou desafios civilizatórios.",
+      competencias: [
+        { num: 1, nome: "Rigor Argumentativo", desc: "Clareza lógica sem contradições conceituais." },
+        { num: 2, nome: "Norma Padrão Culta", desc: "Vocabulário formal e domínio de sintaxe complexa." }
+      ]
+    },
+    areas: [
+      {
+        nome: "Matemática Pura e Aplicada (Avançado)",
+        icone: "fa-square-root-variable",
+        disciplinas: [
+          {
+            nome: "Álgebra, Análise e Geometria do IME",
+            topicos: [
+              "Polinômios complexos, Teorema Fundamental da Álgebra e Relações de Girard",
+              "Sistemas Lineares e Álgebra Matricial: Determinantes, Teorema de Laplace e Matriz Inversa",
+              "Geometria Analítica no R³: Equações da reta, plano, distâncias e esferas",
+              "Trigonometria Avançada: Transformações, identidades de Prostaférese e equações angulares",
+              "Indução Matemática e Teoria Elementar dos Números (Congruência e MDC)"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Física e Engenharia Básica",
+        icone: "fa-bolt-lightning",
+        disciplinas: [
+          {
+            nome: "Mecânica Racional e Física Geral",
+            topicos: [
+              "Cinemática Vetorial e Movimento em Coordenadas Polares e Intrínsecas",
+              "Dinâmica de Corpos Rígidos, Momento de Inércia e Torque",
+              "Oscilações Mecânicas: MHS acoplado, amortecimento e ressonância",
+              "Gravitação Universal e Órbitas Keplerianas elípticas e hiperbólicas",
+              "Termodinâmica de Gases Reais, Ciclos de Carnot e Entropia Estatística"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Química Teórica e Estrutural",
+        icone: "fa-flask-vial",
+        disciplinas: [
+          {
+            nome: "Físico-Química e Química Inorgânica",
+            topicos: [
+              "Cinética Química: Mecanismos de reação, ordem de reação e Lei de Arrhenius",
+              "Equilíbrio Químico em Fase Gasosa (Kp, Kc) e Heterogêneo",
+              "Termoquímica e Eletroquímica: Equação de Nernst e Pilhas em condições não-padrão",
+              "Teoria Quântica do Átomo, orbitais híbridos e Geometria Molecular VSEPR"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  uece: {
+    id: "uece",
+    nome: "UECE",
+    tituloCompleto: "Universidade Estadual do Ceará",
+    badge: "Estadual • Nordeste de Excelência",
+    corBadge: "#ea580c",
+    icone: "fa-sun",
+    resumo: "A principal universidade estadual do Ceará, com vestibular próprio tradicional e concorrido, especialmente para Medicina e Ciências da Saúde em Fortaleza e interior.",
+    detalhesGerais: {
+      formato: "2 Fases: 1ª Fase com 85 questões objetivas gerais + 2ª Fase com 3 provas específicas + Redação",
+      totalQuestoes: "85 questões gerais (1ª fase) + 60 questões específicas discursivas/objetivas (2ª fase)",
+      criterioCorrecao: "Média ponderada com corte por pontos específicos de cada carreira",
+      dicaChave: "Na UECE, Biologia e Química cobram detalhes conceituais precisos de botânica, zoologia e química analítica."
+    },
+    redacao: {
+      titulo: "Redação UECE: Dois Temas para Escolha",
+      descricao: "A banca apresenta duas propostas completas de gêneros distintos (geralmente Artigo de Opinião ou Crônica/Carta).",
+      competencias: [
+        { num: 1, nome: "Compreensão da Proposta", desc: "Atendimento estrito ao gênero e tema selecionado." },
+        { num: 2, nome: "Coesão e Coerência", desc: "Articulação lógica sem rodeios e pontuação impecável." },
+        { num: 3, nome: "Criatividade e Autoria", desc: "Voz própria, maturidade de pensamento e expressividade." }
+      ]
+    },
+    areas: [
+      {
+        nome: "Ciências Biológicas e da Saúde",
+        icone: "fa-heart-pulse",
+        disciplinas: [
+          {
+            nome: "Biologia Clássica e Botânica da UECE",
+            topicos: [
+              "Fisiologia e Morfologia Vegetal: Transpiração, condução de seiva e fitormônios",
+              "Bioma Caatinga: Adaptações das plantas xerófitas e fauna do semiárido",
+              "Parasitologia Humana: Doença de Chagas, Leishmaniose, Dengue e Esquistossomose",
+              "Genética Mendeliana e Grupos Sanguíneos (Sistema ABO e fator Rh)"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Humanidades e Identidade Nordestina",
+        icone: "fa-masks-theater",
+        disciplinas: [
+          {
+            nome: "História e Geografia do Ceará e Nordeste",
+            topicos: [
+              "Secas no Nordeste e Políticas Públicas de Recursos Hídricos (Transposição do Rio São Francisco)",
+              "História do Ceará: Confederação do Equador e Abolição pioneira dos escravizados em Redenção (1884)",
+              "Cultura Popular Nordestina: Cordel, xilogravura e movimentos sociais (Caldeirão e Canudos)",
+              "Geografia Urbana de Fortaleza e desenvolvimento do Complexo Portuário do Pecém"
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Linguagens e Exatas Fundamentais",
+        icone: "fa-pen-ruler",
+        disciplinas: [
+          {
+            nome: "Língua Portuguesa, Literatura e Matemática",
+            topicos: [
+              "Romantismo e Regionalismo na Literatura Cearense (José de Alencar, Rachel de Queiroz, Patativa do Assaré)",
+              "Sintaxe de Período Composto e Emprego dos Pronomes Relativos",
+              "Geometria Euclidiana Plana e Trigonometria no Triângulo Retângulo",
+              "Progressões Aritméticas (PA) e Geométricas (PG) aplicadas a problemas práticos"
+            ]
+          }
+        ]
+      }
+    ]
   }
 };
 
@@ -1495,4 +1802,1143 @@ const QUIZ_QUESTIONS = [
   }
 ];
 
+/* ========================================================
+   BANCO DE TEMAS E COLETÂNEAS DE REDAÇÃO POR VESTIBULAR
+   ======================================================== */
+/* ========================================================
+   BANCO EXPANDIDO DE TEMAS E COLETÂNEAS DE REDAÇÃO POR VESTIBULAR
+   ======================================================== */
 
+/* ========================================================
+   BANCO COMPLETO DE TEMAS E COLETÂNEAS DE REDAÇÃO POR VESTIBULAR
+   ======================================================== */
+const TEMAS_REDACAO_DATA = [
+  // ========================================================
+  // ENEM - EXAME NACIONAL DO ENSINO MÉDIO (Nota Máxima: 1000)
+  // ========================================================
+  {
+    id: "redacao-enem-1",
+    vestibular: "ENEM",
+    titulo: "Desafios para o enfrentamento da crise climática e garantia da justiça socioambiental no Brasil",
+    genero: "Texto Dissertativo-Argumentativo (Padrão ENEM)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 1000,
+    instrucoes: "A partir da leitura dos textos motivadores e com base nos conhecimentos construídos ao longo de sua formação, redija um texto dissertativo-argumentativo em modalidade escrita formal da língua portuguesa sobre o tema, apresentando proposta de intervenção com os 5 elementos que respeite os direitos humanos.",
+    criterios: [
+      { nome: "C1 - Norma Culta", desc: "Demonstrar domínio da modalidade escrita formal da Língua Portuguesa (acentuação, crase, concordância e regência).", peso: 200 },
+      { nome: "C2 - Tema e Repertório", desc: "Compreender a proposta e aplicar conceitos das várias áreas do conhecimento (sociologia, filosofia, história, dados).", peso: 200 },
+      { nome: "C3 - Projeto de Texto", desc: "Selecionar, relacionar, organizar e interpretar informações, fatos e argumentos em defesa de um ponto de vista articulado.", peso: 200 },
+      { nome: "C4 - Mecanismos Linguísticos", desc: "Demonstrar conhecimento dos mecanismos linguísticos de coesão (conectivos interparágrafos e intraparágrafos).", peso: 200 },
+      { nome: "C5 - Proposta de Intervenção", desc: "Elaborar proposta completa com Agente, Ação, Meio/Modo, Efeito e Detalhamento de um dos elementos.", peso: 200 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Relatório IPCC & Dados Nacionais",
+        conteudo: "A crise climática global não atinge a todos com a mesma intensidade. O conceito de 'racismo ambiental' e 'injustiça climática' revela que populações periféricas, ribeirinhas e povos tradicionais sofrem de forma desproporcional com enchentes, secas severas e deslizamentos de terra, tendo menor capacidade financeira e estrutural de adaptação e reconstrução."
+      },
+      {
+        origem: "Texto II - Artigo 225 da Constituição Federal de 1988",
+        conteudo: "'Todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo e essencial à sadia qualidade de vida, impondo-se ao Poder Público e à coletividade o dever de defendê-lo e preservá-lo para as presentes e futuras gerações.'"
+      },
+      {
+        origem: "Texto III - Ailton Krenak (Ideias para Adiar o Fim do Mundo)",
+        conteudo: "'Fomos nos alienando desse organismo de que somos parte, a Terra, e passamos a pensar que ele é uma coisa e nós, outra: a Terra e a humanidade. Eu não percebo onde há a Terra e onde há humanidade. Quando despersonalizamos a natureza para explorá-la sem limites, decretamos a nossa própria vulnerabilidade.'"
+      },
+      {
+        origem: "Texto IV - Painel Brasileiro de Mudanças Climáticas",
+        conteudo: "No Brasil, as emissões de gases de efeito estufa estão intimamente ligadas ao desmatamento e à mudança do uso da terra na Amazônia e no Cerrado, combinadas a eventos extremos cada vez mais frequentes nos grandes centros urbanos desprovidos de drenagem adequada."
+      }
+    ]
+  },
+  {
+    id: "redacao-enem-2",
+    vestibular: "ENEM",
+    titulo: "Impactos da Inteligência Artificial generativa no mercado de trabalho e na formação dos jovens brasileiros",
+    genero: "Texto Dissertativo-Argumentativo (Padrão ENEM)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 1000,
+    instrucoes: "Com base na leitura da coletânea, redija um texto dissertativo-argumentativo sobre os efeitos da IA no trabalho e na educação dos jovens, elaborando proposta de intervenção detalhada que articule poder público e sociedade.",
+    criterios: [
+      { nome: "C1 - Norma Culta", desc: "Domínio formal da Língua Portuguesa", peso: 200 },
+      { nome: "C2 - Tema e Repertório", desc: "Repertório sociocultural legítimo e produtivo", peso: 200 },
+      { nome: "C3 - Projeto de Texto", desc: "Planejamento argumentativo e defesa consistente de tese", peso: 200 },
+      { nome: "C4 - Coesão e Conectivos", desc: "Emprego diversificado de operadores argumentativos", peso: 200 },
+      { nome: "C5 - Proposta de Intervenção", desc: "Proposta completa com os 5 elementos obrigatórios", peso: 200 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Fórum Econômico Mundial (Relatório Futuro do Trabalho)",
+        conteudo: "A automação cognitiva impulsionada por modelos de linguagem e visão computacional deve reestruturar cerca de 85 milhões de empregos globais até o final da década. As habilidades mais valorizadas deixam de ser a execução repetitiva e passam a ser o pensamento crítico, a resolução de problemas complexos e a criatividade ética."
+      },
+      {
+        origem: "Texto II - Pesquisa de Empregabilidade Jovem (IBGE)",
+        conteudo: "No Brasil, mais de 20% dos jovens de 15 a 29 anos não estudam nem trabalham. A desigualdade no acesso à internet de alta velocidade e a dispositivos computacionais aprofunda a distância entre estudantes de escolas públicas e as carreiras de alta tecnologia do futuro."
+      },
+      {
+        origem: "Texto III - Domenico De Masi (O Ócio Criativo)",
+        conteudo: "'A tecnologia libertará o ser humano do trabalho puramente mecânico e alienante. Contudo, se a sociedade não redistribuir a riqueza gerada por essa automação, a máquina gerará desemprego em massa em vez de emancipação e qualidade de vida.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-enem-3",
+    vestibular: "ENEM",
+    titulo: "A invisibilidade e a valorização do trabalho de cuidado realizado pela mulher no Brasil",
+    genero: "Texto Dissertativo-Argumentativo (Padrão ENEM)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 1000,
+    instrucoes: "Produza um texto dissertativo-argumentativo sobre os desafios para o reconhecimento econômico e social do trabalho de cuidado no país, propondo medidas de intervenção social.",
+    criterios: [
+      { nome: "C1 - Norma Culta", desc: "Domínio da norma padrão da língua escrita", peso: 200 },
+      { nome: "C2 - Tema e Repertório", desc: "Compreensão da proposta e repertório produtivo", peso: 200 },
+      { nome: "C3 - Projeto de Texto", desc: "Seleção e organização dos argumentos", peso: 200 },
+      { nome: "C4 - Coesão Textual", desc: "Articulação de ideias e repertório coesivo", peso: 200 },
+      { nome: "C5 - Proposta de Intervenção", desc: "Cinco elementos: Agente, Ação, Meio, Efeito e Detalhamento", peso: 200 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Dados da PNAD Contínua (IBGE)",
+        conteudo: "As mulheres brasileiras dedicam, em média, 21,3 horas semanais aos afazeres domésticos e ao cuidado de crianças, idosos e pessoas doentes — quase o dobro do tempo dedicado pelos homens (11,7 horas). Esse trabalho não remunerado é indispensável para o funcionamento da economia, mas permanece invisibilizado nos indicadores de renda."
+      },
+      {
+        origem: "Texto II - Silvia Federici (O Ponto Zero da Revolução)",
+        conteudo: "'O trabalho reprodutivo e de cuidado não é apenas um serviço pessoal; é a base que sustenta a força produtiva de qualquer sociedade capitalista. Sem quem alimente, limpe e eduque as novas gerações, a economia simplesmente colapsa.'"
+      },
+      {
+        origem: "Texto III - Marco Legal da Primeira Infância",
+        conteudo: "A expansão de creches públicas de tempo integral e centros de convivência para idosos figura como a principal política estatal capaz de desonerar as mulheres das classes populares e permitir sua inserção autônoma no mercado de trabalho e na educação formal."
+      }
+    ]
+  },
+  {
+    id: "redacao-enem-4",
+    vestibular: "ENEM",
+    titulo: "Caminhos para combater a evasão escolar e democratizar a permanência no Ensino Superior público",
+    genero: "Texto Dissertativo-Argumentativo (Padrão ENEM)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 1000,
+    instrucoes: "Redija um texto dissertativo-argumentativo em prosa sobre a permanência estudantil e a democratização do ensino superior público no Brasil, apresentando proposta interventiva.",
+    criterios: [
+      { nome: "C1 - Norma Culta", desc: "Domínio formal da Língua Portuguesa", peso: 200 },
+      { nome: "C2 - Tema e Repertório", desc: "Repertório sociocultural legítimo e articulado", peso: 200 },
+      { nome: "C3 - Projeto de Texto", desc: "Estrutura lógica e defesa clara de tese", peso: 200 },
+      { nome: "C4 - Mecanismos de Coesão", desc: "Conectivos inter e intraparágrafos", peso: 200 },
+      { nome: "C5 - Proposta Interventiva", desc: "Intervenção com Agente, Ação, Meio, Efeito e Detalhe", peso: 200 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Censo da Educação Superior (Inep)",
+        conteudo: "A taxa de desistência nos cursos de graduação chega a quase 50% em algumas áreas. Entre alunos cotistas e de baixa renda, os principais motivos apontados são o custo de transporte, alimentação, moradia e a necessidade imperiosa de trabalhar para ajudar no sustento da família."
+      },
+      {
+        origem: "Texto II - Darcy Ribeiro (A Universidade Necessária)",
+        conteudo: "'A universidade pública brasileira não pode ser uma ilha de privilégios para as elites. Ela precisa ser o motor da reconstrução nacional, aberta a todas as classes sociais e provida de assistência para que o filho do trabalhador não apenas entre, mas se forme com dignidade.'"
+      },
+      {
+        origem: "Texto III - Programa Nacional de Assistência Estudantil (PNAES)",
+        conteudo: "Bolsas de permanência, moradia universitária, auxílio-creche e restaurantes universitários subsidiados são apontados por pedagogos como investimentos com retorno social direto, reduzindo drasticamente o desperdício de talentos provocado pela evasão."
+      }
+    ]
+  },
+
+  // ========================================================
+  // FATEC - CENTRO PAULA SOUZA (Nota Máxima: 100)
+  // ========================================================
+  {
+    id: "redacao-fatec-1",
+    vestibular: "FATEC",
+    titulo: "O impacto da inteligência artificial e da automação na qualificação técnica profissional",
+    genero: "Dissertação-Argumentativa (Padrão FATEC / CPS)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Desenvolva uma dissertação em prosa, demonstrando capacidade de reflexão crítica, argumentação coerente e domínio da modalidade formal da Língua Portuguesa sobre a formação tecnológica diante da IA.",
+    criterios: [
+      { nome: "Critério 1 - Adequação ao Tema e Gênero", desc: "Compreensão da proposta e do recorte temático; posicionamento claro em gênero dissertativo-argumentativo.", peso: 40 },
+      { nome: "Critério 2 - Coerência e Argumentação Lógica", desc: "Desenvolvimento de argumentos consistentes, progressão temática, causas, consequências e exemplos práticos.", peso: 30 },
+      { nome: "Critério 3 - Domínio da Norma Culta e Coesão", desc: "Correção gramatical, adequação vocabular técnica/formal, pontuação precisa e uso de conectivos adequados.", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Panorama da Indústria 4.0 no Brasil (CNI)",
+        conteudo: "A convergência entre Internet das Coisas (IoT), robótica avançada e inteligência artificial está transformando o chão de fábrica e o setor de serviços. Mais de 60% das indústrias médias e grandes relatam dificuldades em contratar tecnólogos capacitados para operar e programar sistemas automatizados modernos."
+      },
+      {
+        origem: "Texto II - Centro Paula Souza (Diretrizes de Educação Tecnológica)",
+        conteudo: "A formação técnica e tecnológica do século XXI não pode se restringir ao aprendizado de ferramentas de software que se tornam obsoletas em poucos anos. O currículo moderno prioriza a capacidade de aprendizagem contínua (lifelong learning), o raciocínio lógico algorítmico e a postura ética diante da tecnologia."
+      },
+      {
+        origem: "Texto III - Kai-Fu Lee (Inteligência Artificial: Como os Robôs Estão Mudando o Mundo)",
+        conteudo: "'A inteligência artificial assumirá as tarefas analíticas rotineiras e a otimização de dados. O diferencial humano insubstituível será a empatia, o contato humano genuíno, a criatividade e a habilidade multidisciplinar de integrar áreas do saber.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-fatec-2",
+    vestibular: "FATEC",
+    titulo: "Cibersegurança e proteção de dados: entre a privacidade individual e a inovação tecnológica",
+    genero: "Dissertação-Argumentativa (Padrão FATEC / CPS)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Elabore um texto dissertativo-argumentativo analisando os desafios de equilibrar o avanço de serviços digitais orientados a dados e a garantia fundamental da privacidade dos cidadãos.",
+    criterios: [
+      { nome: "Critério 1 - Tema e Gênero Dissertativo", desc: "Abordagem do tema tecnológico e tese bem fundamentada", peso: 40 },
+      { nome: "Critério 2 - Raciocínio Lógico e Argumentação", desc: "Articulação de argumentos sólidos com causa e efeito", peso: 30 },
+      { nome: "Critério 3 - Expressão Formal e Coesão", desc: "Linguagem culta, variedade lexical e conexão entre frases", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018)",
+        conteudo: "A LGPD estabelece regras claras sobre coleta, armazenamento, tratamento e compartilhamento de dados pessoais, consagrando o direito fundamental à autodeterminação informativa e impondo sanções severas a empresas que descumprirem parâmetros de segurança."
+      },
+      {
+        origem: "Texto II - Shoshana Zuboff (A Era do Capitalismo de Vigilância)",
+        conteudo: "Ao transformar experiências humanas cotidianas em matéria-prima comportamental gratuita para predição e modificação de hábitos de consumo, grandes conglomerados tecnológicos redefinem as fronteiras da liberdade pessoal sem o devido consentimento consciente do usuário."
+      },
+      {
+        origem: "Texto III - Relatório CERT.br de Incidentes Virtuais",
+        conteudo: "O Brasil está entre os países com maior número de ataques cibernéticos de sequestro de dados (ransomware) contra hospitais, empresas e órgãos públicos, evidenciando a carência crítica de profissionais técnicos de infraestrutura e segurança da informação."
+      }
+    ]
+  },
+  {
+    id: "redacao-fatec-3",
+    vestibular: "FATEC",
+    titulo: "Transição energética e o papel dos cursos tecnológicos no desenvolvimento sustentável brasileiro",
+    genero: "Dissertação-Argumentativa (Padrão FATEC / CPS)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Produza uma dissertação argumentativa sobre como a formação tecnológica em energia renovável, biocombustíveis e mobilidade sustentável impulsiona o desenvolvimento econômico sustentável do país.",
+    criterios: [
+      { nome: "Critério 1 - Adequação ao Tema", desc: "Compreensão da matriz energética e desenvolvimento sustentável", peso: 40 },
+      { nome: "Critério 2 - Coerência Argumentativa", desc: "Progressão lógica de ideias com fundamentação empírica", peso: 30 },
+      { nome: "Critério 3 - Norma Culta e Clareza", desc: "Precisão gramatical, clareza e termos técnicos pertinentes", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Empresa de Pesquisa Energética (EPE)",
+        conteudo: "O Brasil possui uma das matrizes elétricas mais limpas do planeta, com mais de 80% proveniente de fontes renováveis (hidrelétrica, biomassa, eólica e solar). No entanto, o setor de transportes e a indústria pesada ainda dependem massivamente de combustíveis fósseis."
+      },
+      {
+        origem: "Texto II - Associação Brasileira de Energia Solar Fotovoltaica (ABSOLAR)",
+        conteudo: "A expansão exponencial da energia solar e eólica no Nordeste e Sudeste brasileiro tem gerado milhares de empregos técnicos diretos em projeto, instalação, manutenção de inversores e redes inteligentes (smart grids)."
+      }
+    ]
+  },
+
+  // ========================================================
+  // FUVEST - UNIVERSIDADE DE SÃO PAULO (Nota Máxima: 50)
+  // ========================================================
+  {
+    id: "redacao-fuvest-1",
+    vestibular: "FUVEST",
+    titulo: "A mercantilização do tempo e o culto à produtividade na sociedade contemporânea",
+    genero: "Dissertação Filosófico-Argumentativa (Padrão FUVEST / USP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 50,
+    instrucoes: "A partir da reflexão proposta pelos textos da coletânea, redija uma dissertação em prosa, em língua culta, demonstrando capacidade de abstração, densidade reflexiva e articulação teórica consistente. O título é obrigatório.",
+    criterios: [
+      { nome: "Quesito A - Desenvolvimento do Tema e Fundamentação", desc: "Compreensão da proposta, fuga do senso comum, capacidade de abstração e fundamentação teórico-filosófica.", peso: 20 },
+      { nome: "Quesito B - Coerência dos Argumentos e Estrutura", desc: "Progressão argumentativa contínua, articulação orgânica entre os parágrafos sem fórmulas engessadas.", peso: 15 },
+      { nome: "Quesito C - Correção Gramatical e Precisão Vocabular", desc: "Domínio culto formal da língua, variedade e precisão lexical, pontuação refinada e sintaxe elegante.", peso: 15 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Byung-Chul Han (A Sociedade do Cansaço)",
+        conteudo: "'A sociedade disciplinar de Foucault, povoada por hospitais, asilos e prisões, deu lugar a uma sociedade de desempenho. Nela, o indivíduo não é mais coagido de fora; ele explora a si mesmo voluntariamente sob a ilusão da liberdade e da auto-otimização constante, culminando no esgotamento depressivo (burnout).'"
+      },
+      {
+        origem: "Texto II - Walter Benjamin (Sobre o Conceito da História)",
+        conteudo: "O tempo histórico do capitalismo industrial é homogêneo, vazio e contínuo, medido pelo relógio como mercadoria quantificável ('tempo é dinheiro'). Em contraste, o tempo vivido, da memória involuntária e da experiência compartilhada, recusa a contabilidade utilitarista do rendimento financeiro."
+      },
+      {
+        origem: "Texto III - Ensaio Crítico Contemporâneo",
+        conteudo: "Aplicativos de rastreamento de sono, dietas cronometradas e agendas hiperocupadas transformam até o lazer e o repouso em metas de rendimento pessoal. O ócio contemplativo, berço da filosofia na Grécia clássica, passa a ser criminalizado como culpa e improdutividade."
+      }
+    ]
+  },
+  {
+    id: "redacao-fuvest-2",
+    vestibular: "FUVEST",
+    titulo: "As fronteiras entre o público e o privado no ambiente digital: superexposição ou nova sociabilidade?",
+    genero: "Dissertação Filosófico-Argumentativa (Padrão FUVEST / USP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 50,
+    instrucoes: "Redija uma dissertação em prosa sobre os novos contornos da intimidade humana no século XXI. Fundamente sua tese com repertório histórico-filosófico. Título obrigatório.",
+    criterios: [
+      { nome: "Quesito A - Tema e Abstração Conceitual", desc: "Profundidade teórica e fuga de clichês superficiais", peso: 20 },
+      { nome: "Quesito B - Coerência e Unidade Textual", desc: "Encadeamento lógico e consistência dos argumentos", peso: 15 },
+      { nome: "Quesito C - Domínio Linguístico e Estilo", desc: "Clareza, expressividade culta e precisão sintática", peso: 15 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Richard Sennett (O Declínio do Homem Público)",
+        conteudo: "A obsessão moderna pela intimidade e pela revelação do 'eu autêntico' esvaziou a arena pública da política. Quando tudo é julgado pela lente da personalidade privada e das emoções confessadas, a cidadania perde sua força coletiva de debate racional."
+      },
+      {
+        origem: "Texto II - Zygmunt Bauman (Vigilância Líquida)",
+        conteudo: "'No panóptico moderno descrito por Bentham e Foucault, os prisioneiros temiam ser vistos e vigiados. Na pós-modernidade líquida, o maior pavor do indivíduo é passar despercebido. A autoexposição pública nas redes torna-se uma prova desesperada de existência social.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-fuvest-3",
+    vestibular: "FUVEST",
+    titulo: "O riso, a sátira e os limites da liberdade de expressão na pólis contemporânea",
+    genero: "Dissertação Filosófico-Argumentativa (Padrão FUVEST / USP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 50,
+    instrucoes: "A partir da coletânea de textos, posicione-se criticamente sobre o papel do humor, da ironia e da sátira na crítica ao poder e suas tensões com a convivência democrática. Título obrigatório.",
+    criterios: [
+      { nome: "Quesito A - Abordagem Crítica e Tema", desc: "Reflexão sobre os limites entre liberdade, crítica e respeito à dignidade humana", peso: 20 },
+      { nome: "Quesito B - Estrutura e Coerência", desc: "Encadeamento orgânico de premissas e conclusões", peso: 15 },
+      { nome: "Quesito C - Expressão e Sintaxe", desc: "Linguagem apurada e domínio das convenções cultas da escrita", peso: 15 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Mikhail Bakhtin (A Cultura Popular na Idade Média)",
+        conteudo: "O riso carnavalesco e a paródia constituíram historicamente uma força libertadora contra o dogma clerical e a autoridade feudal. Rir do soberano é desnudá-lo de sua aura sacra e afirmar a igualdade de todos perante a condição humana finita."
+      },
+      {
+        origem: "Texto II - Theodor Adorno (Mínima Moralia)",
+        conteudo: "O humor que zomba do oprimido ou reforça o preconceito contra minorias estigmatizadas não é transgressão; é cumplicidade cínica com a violência do poder estabelecido."
+      }
+    ]
+  },
+
+  // ========================================================
+  // UNICAMP - UNIVERSIDADE ESTADUAL DE CAMPINAS (Nota Máxima: 48)
+  // ========================================================
+  {
+    id: "redacao-unicamp-1",
+    vestibular: "UNICAMP",
+    titulo: "Manifesto pela democratização do acesso à cultura digital nas periferias",
+    genero: "Gênero Específico: Manifesto Público (Comvest / UNICAMP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 48,
+    instrucoes: "Escreva um MANIFESTO assinado por um coletivo de jovens comunicadores comunitários, convocando a sociedade civil e os órgãos públicos a garantirem banda larga gratuita, laboratórios de inovação e bibliotecas digitais nos bairros periféricos.",
+    criterios: [
+      { nome: "Critério 1 - Proposta Temática, Gênero e Interlocução", desc: "Atendimento estrito ao gênero solicitado (Manifesto: tom convocatório, interlocutor explícito, máscara autoral e assinatura fictícia).", peso: 16 },
+      { nome: "Critério 2 - Projeto de Texto e Leitura da Coletânea", desc: "Leitura crítica e produtiva dos textos da prova, articulação de causas e reivindicações sem cópia literal.", peso: 16 },
+      { nome: "Critério 3 - Coesão e Convenções da Escrita", desc: "Recursos expressivos e estilísticos adequados ao gênero, correção gramatical e fluência textual.", peso: 16 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Comitê Gestor da Internet no Brasil (CGI.br)",
+        conteudo: "Enquanto 98% dos domicílios de classe A e B possuem conexão por fibra óptica e computadores de alta performance, mais de metade das famílias das classes D e E acessam a internet exclusivamente pelo telefone celular com planos pré-pagos limitados, inviabilizando cursos, teletrabalho e criação artística digital."
+      },
+      {
+        origem: "Texto II - Carolina Maria de Jesus (Quarto de Despejo)",
+        conteudo: "'O Brasil precisa ser dirigido por uma pessoa que já passou fome. A fome também é professora... Quem tem fome não pensa em nada além de comer. Mas nós queremos pão e queremos poesia, queremos trabalho e queremos voz.'"
+      },
+      {
+        origem: "Texto III - Guia Comvest de Gêneros Textuais",
+        conteudo: "Um manifesto é um gênero de apelo público e mobilização coletiva. Deve conter título expressivo, exposição dos motivos da indignação, argumentos de sustentação, propostas claras e encerramento com chamado enérgico à ação."
+      }
+    ]
+  },
+  {
+    id: "redacao-unicamp-2",
+    vestibular: "UNICAMP",
+    titulo: "Carta aberta aos reitores sobre a importância da saúde mental e assistência estudantil",
+    genero: "Gênero Específico: Carta Aberta (Comvest / UNICAMP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 48,
+    instrucoes: "Na condição de representante do diretório acadêmico, redija uma CARTA ABERTA aos reitores das universidades públicas cobrando ampliação do apoio psicológico e combate ao assédio acadêmico.",
+    criterios: [
+      { nome: "Critério 1 - Gênero, Interlocução e Tema", desc: "Estrutura formal da Carta Aberta com vocativo, contextualização e despedida formal", peso: 16 },
+      { nome: "Critério 2 - Argumentação e Coletânea", desc: "Uso autoral das informações e consistência dos argumentos de cobrança", peso: 16 },
+      { nome: "Critério 3 - Recursos Linguísticos e Coesão", desc: "Tom respeitoso porém firme, domínio da sintaxe e ortografia", peso: 16 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Pesquisa Andifes sobre Perfil Socioeconômico dos Discentes",
+        conteudo: "Mais de 65% dos universitários relatam ansiedade frequente e insônia relacionada à sobrecarga acadêmica e à pressão por publicações e prazos inflexíveis, com taxa expressiva de ideação suicida entre pós-graduandos."
+      },
+      {
+        origem: "Texto II - Relatório de Ouvidorias Universitárias",
+        conteudo: "Relações hierárquicas autoritárias entre orientadores e estudantes muitas vezes perpetuam o medo de denúncia, exigindo canais independentes de acolhimento psicossocial nas faculdades."
+      }
+    ]
+  },
+
+  // ========================================================
+  // UNESP - VUNESP (Nota Máxima: 28)
+  // ========================================================
+  {
+    id: "redacao-unesp-1",
+    vestibular: "UNESP",
+    titulo: "A inteligência artificial generativa ameaça a capacidade crítica e a autoria humana?",
+    genero: "Dissertação Argumentativa (Padrão Vunesp / UNESP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 28,
+    instrucoes: "Com base na coletânea, redija um texto dissertativo-argumentativo respondendo de maneira fundamentada à pergunta-tema proposta pela banca. Defenda uma tese clara.",
+    criterios: [
+      { nome: "Critério A - Abordagem do Tema e Coletânea", desc: "Resposta conclusiva à pergunta-tema e leitura crítica dos textos fornecidos.", peso: 10 },
+      { nome: "Critério B - Estrutura e Progressão Argumentativa", desc: "Organização lógica em introdução, desenvolvimento e conclusão; ausência de contradições.", peso: 10 },
+      { nome: "Critério C - Expressão e Domínio da Norma Padrão", desc: "Emprego de conectivos, concordância, regência, acentuação e clareza vocabular.", peso: 8 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Noam Chomsky (The False Promise of ChatGPT)",
+        conteudo: "'Os modelos de linguagem são prodígios de engenharia estatística: devoram terabytes de dados e encontram correlações. Mas a mente humana não funciona por mera probabilidade; opera por meio de explicações causais, intuições morais e busca pela verdade. Delegar o pensamento à máquina é atrofiar a reflexão crítica.'"
+      },
+      {
+        origem: "Texto II - Artigo de Tecnologia & Educação",
+        conteudo: "Assim como a calculadora mecânica não destruiu a matemática — libertou os cientistas de contas exaustivas —, a inteligência artificial pode atuar como copiloto intelectual, ampliando a capacidade de pesquisa e síntese dos alunos."
+      }
+    ]
+  },
+  {
+    id: "redacao-unesp-2",
+    vestibular: "UNESP",
+    titulo: "O consumo consciente é uma responsabilidade individual ou uma falácia de mercado?",
+    genero: "Dissertação Argumentativa (Padrão Vunesp / UNESP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 28,
+    instrucoes: "Responda à questão-tema formulada pela banca Vunesp, articulando argumentos teóricos e dados da realidade brasileira.",
+    criterios: [
+      { nome: "Critério A - Tema e Posicionamento", desc: "Tomada de posição nítida sem rodeios", peso: 10 },
+      { nome: "Critério B - Raciocínio Argumentativo", desc: "Desenvolvimento estruturado e coerente de causas e consequências", peso: 10 },
+      { nome: "Critério C - Coesão e Gramática", desc: "Correção formal e riqueza vocabular", peso: 8 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Relatório Carbon Majors",
+        conteudo: "Apenas 100 corporações transnacionais de combustíveis fósseis e petroquímica respondem por mais de 70% de todas as emissões industriais de gases estufa do planeta desde 1988."
+      },
+      {
+        origem: "Texto II - Slavoj Žižek (Primeiro Como Tragédia, Depois Como Farsa)",
+        conteudo: "'Ao comprar um café orgânico mais caro porque uma fração do valor supostamente apoia crianças na África, o consumidor não pratica filantropia; compra a sua própria redenção moral para continuar consumindo sem culpa.'"
+      }
+    ]
+  },
+
+  // ========================================================
+  // UERJ - UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO (Nota Máxima: 20)
+  // ========================================================
+  {
+    id: "redacao-uerj-1",
+    vestibular: "UERJ",
+    titulo: "A corrupção moral e a luta desesperada pela sobrevivência na sociedade excludente",
+    genero: "Dissertação Argumentativa com Base Literária (UERJ)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 20,
+    instrucoes: "A partir da leitura da obra literária indicada e de sua problematização, redija uma dissertação reflexiva sobre como as condições materiais extremas influenciam a conduta moral humana.",
+    criterios: [
+      { nome: "Critério 1 - Domínio Temático e Diálogo com a Obra", desc: "Compreensão da provocação central e articulação legítima com os dilemas humanos da literatura indicada.", peso: 7 },
+      { nome: "Critério 2 - Coerência e Densidade Argumentativa", desc: "Raciocínio reflexivo profundo, encadeamento de ideias e ponto de vista sustentado.", peso: 7 },
+      { nome: "Critério 3 - Domínio da Norma Padrão e Recursos Coesivos", desc: "Domínio culto da língua, fluidez e variedade vocabular.", peso: 6 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Aluísio Azevedo (O Cortiço - Obra de Referência UERJ)",
+        conteudo: "'E naquela terra encharcada e fumegante, naquela umidade quente e lodosa, começou a minhocar, a esfervilhar, a crescer um mundo, uma coisa viva, uma geração que parecia brotar espontânea do lodo e multiplicar-se como larvas no esterco...'"
+      },
+      {
+        origem: "Texto II - Jean-Paul Sartre (O Existencialismo é um Humanismo)",
+        conteudo: "'O homem está condenado a ser livre; condenado porque não se criou a si mesmo, e, no entanto, livre porque, uma vez atirado ao mundo, é responsável por tudo o que faz. Não há determinismo que anule a escolha ética.'"
+      }
+    ]
+  },
+
+  // ========================================================
+  // ITA & IME - INSTITUTOS MILITARES E DE ENGENHARIA (Nota Máxima: 100)
+  // ========================================================
+  {
+    id: "redacao-ita-ime-1",
+    vestibular: "ITA / IME",
+    titulo: "O papel estratégico da soberania tecnológica e aeroespacial no desenvolvimento do Brasil",
+    genero: "Dissertação-Argumentativa de Alto Rigor Conceitual (Padrão Militar ITA/IME)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Redija uma dissertação em prosa com alto rigor argumentativo, precisão de vocabulário e fundamentação geopolítica sobre a soberania tecnológica nacional.",
+    criterios: [
+      { nome: "Critério 1 - Conteúdo e Argumentação Geopolítica", desc: "Consistência teórica, densidade de informações e capacidade de análise estratégica.", peso: 40 },
+      { nome: "Critério 2 - Estrutura e Coerência Lógica", desc: "Raciocínio dedutivo e indutivo rigoroso, encadeamento de causas e consequências sem falácias.", peso: 30 },
+      { nome: "Critério 3 - Correção Gramatical e Estilo", desc: "Linguagem culta exemplar, precisão vocabular e clareza de exposição.", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Estratégia Nacional de Defesa (Decreto 6.703/2008)",
+        conteudo: "A soberania de um país de dimensões continentais como o Brasil depende indissociavelmente do domínio das tecnologias do espaço, cibernética e nuclear. Países que apenas consom tecnologia estrangeira tornam-se vulneráveis a bloqueios comerciais e espionagem de dados estratégicos."
+      },
+      {
+        origem: "Texto II - Casimiro Montenegro Filho (Fundador do ITA)",
+        conteudo: "'Antes de produzir aviões, é preciso criar a escola que ensinará a fazê-los. A verdadeira independência de uma nação reside na inteligência e na ciência de seus engenheiros e cientistas.'"
+      }
+    ]
+  },
+
+  // ========================================================
+  // UECE - UNIVERSIDADE ESTADUAL DO CEARÁ (Nota Máxima: 60)
+  // ========================================================
+  {
+    id: "redacao-uece-1",
+    vestibular: "UECE",
+    titulo: "A convivência sustentável com o semiárido e as novas fronteiras hídricas e energéticas do Nordeste",
+    genero: "Artigo de Opinião (Padrão UECE - Proposta 1)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 60,
+    instrucoes: "Escreva um ARTIGO DE OPINIÃO com linguagem expressiva e argumentos convincentes, posicionando-se sobre o desenvolvimento sustentável e o combate às desigualdades históricas no semiárido.",
+    criterios: [
+      { nome: "Critério 1 - Atendimento ao Gênero e Tema", desc: "Atendimento estrito ao gênero Artigo de Opinião (título, autoria fictícia e tese evidente).", peso: 20 },
+      { nome: "Critério 2 - Coesão e Coerência", desc: "Articulação lógica das ideias e emprego adequado dos operadores discursivos.", peso: 20 },
+      { nome: "Critério 3 - Criatividade e Expressão Linguística", desc: "Autoria expressiva, vocabulário refinado e correção gramatical.", peso: 20 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Guimarães Duque (Solo e Água no Polígono das Secas)",
+        conteudo: "O semiárido não deve ser tratado como uma anomalia a ser extirpada pela 'luta contra a seca', mas como um ecossistema singular com o qual se deve aprender a conviver por meio de açudagem consciente, cisternas e aproveitamento da vegetação da caatinga."
+      },
+      {
+        origem: "Texto II - Rachel de Queiroz (O Quinze)",
+        conteudo: "'Olhou a terra esturricada pelo sol, a poeira avermelhada que subia dos pés dos retirantes... Mas aquela terra bruta guardava uma força que renasce a cada chuva com vigor sem igual.'"
+      }
+    ]
+  },
+
+  // ========================================================
+  // UFMG - UNIVERSIDADE FEDERAL DE MINAS GERAIS (Nota Máxima: 100)
+  // ========================================================
+  {
+    id: "redacao-ufmg-1",
+    vestibular: "UFMG",
+    titulo: "Patrimônio histórico, mineração e memória coletiva: os dilemas do desenvolvimento regional",
+    genero: "Dissertação-Argumentativa (Padrão UFMG)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Redija uma dissertação sobre os conflitos entre a exploração de recursos minerais e a preservação do patrimônio histórico, ambiental e cultural do Brasil.",
+    criterios: [
+      { nome: "Critério 1 - Abordagem do Tema e Densidade Crítica", desc: "Compreensão da complexidade histórica e socioambiental.", peso: 40 },
+      { nome: "Critério 2 - Estrutura e Coerência Textual", desc: "Organização lógica dos parágrafos e consistência dos argumentos.", peso: 30 },
+      { nome: "Critério 3 - Domínio Linguístico Formal", desc: "Correção morfossintática, variedade lexical e coesão.", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Carlos Drummond de Andrade (O Maior Trem do Mundo)",
+        conteudo: "'O maior trem do mundo / Puxado por cinco locomotivas a óleo diesel / Engata trinta vagões de minério / E foge com o ferro do Brasil... Que montanha de ferro / Que montanha de terra / Ficará no lugar da montanha de Itabira?'"
+      },
+      {
+        origem: "Texto II - IPHAN (Instituto do Patrimônio Histórico e Artístico Nacional)",
+        conteudo: "As cidades coloniais brasileiras guardam a memória arquitetônica e barroca do século XVIII. O desafio contemporâneo consiste em equilibrar a atividade econômica e a salvaguarda desse legado para o futuro."
+      }
+    ]
+  },
+  // ========================================================
+  // NOVOS TEMAS EXPANDIDOS COM TEXTOS MOTIVADORES COMPLETOS
+  // ========================================================
+  {
+    id: "redacao-enem-permanencia",
+    vestibular: "ENEM",
+    titulo: "Caminhos para combater a evasão escolar e garantir a permanência de jovens no Ensino Médio no Brasil",
+    genero: "Texto Dissertativo-Argumentativo (Padrão ENEM)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 1000,
+    instrucoes: "A partir da leitura dos textos motivadores, redija um texto dissertativo-argumentativo em modalidade escrita formal da Língua Portuguesa sobre os caminhos para combater a evasão no Ensino Médio, apresentando proposta de intervenção social com os 5 elementos essenciais.",
+    criterios: [
+      { nome: "C1 - Norma Culta", desc: "Demonstrar domínio da modalidade escrita formal da Língua Portuguesa.", peso: 200 },
+      { nome: "C2 - Tema e Repertório", desc: "Compreender a proposta e aplicar conceitos de educação, sociologia e história.", peso: 200 },
+      { nome: "C3 - Projeto de Texto", desc: "Selecionar, relacionar e organizar argumentos em defesa de tese consistente.", peso: 200 },
+      { nome: "C4 - Mecanismos Linguísticos", desc: "Demonstrar conhecimento dos mecanismos de coesão textual inter e intraparágrafos.", peso: 200 },
+      { nome: "C5 - Proposta de Intervenção", desc: "Elaborar proposta com Agente, Ação, Meio/Modo, Detalhamento e Efeito.", peso: 200 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Censo Escolar da Educação Básica (INEP)",
+        conteudo: "Mais de 500 mil jovens entre 14 e 17 anos abandonam as salas de aula a cada ano no Brasil. A necessidade precoce de inserção no mercado de trabalho informal e o descompasso entre o currículo escolar e as expectativas de futuro dos estudantes figuram como os principais fatores de evasão."
+      },
+      {
+        origem: "Texto II - Paulo Freire (Pedagogia da Autonomia)",
+        conteudo: "'Ensinar não é transferir conhecimento, mas criar as possibilidades para a sua própria produção ou a sua construção. Quando a escola não dialoga com a realidade concreta do educando, ela se torna um espaço de exclusão em vez de emancipação cidadã.'"
+      },
+      {
+        origem: "Texto III - Artigo 205 da Constituição Federal",
+        conteudo: "'A educação, direito de todos e dever do Estado e da família, será promovida e incentivada com a colaboração da sociedade, visando ao pleno desenvolvimento da pessoa, seu preparo para o exercício da cidadania e sua qualificação para o trabalho.'"
+      },
+      {
+        origem: "Texto IV - Dados do Programa Pé-de-Meia (MEC)",
+        conteudo: "Políticas públicas de incentivo financeiro atreladas à frequência escolar e à conclusão do Ensino Médio têm demonstrado impacto direto na redução do abandono em famílias de baixa renda, evidenciando a intersecção entre vulnerabilidade social e continuidade dos estudos."
+      }
+    ]
+  },
+  {
+    id: "redacao-fatec-iot",
+    vestibular: "FATEC",
+    titulo: "O avanço da Internet das Coisas (IoT) e os desafios éticos da segurança e privacidade de dados no Brasil",
+    genero: "Texto Dissertativo-Argumentativo (Padrão FATEC)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 100,
+    instrucoes: "Com base na coletânea, elabore um texto dissertativo-argumentativo examinando como a onipresença de dispositivos inteligentes conectados (câmeras, assistentes virtuais, sensores industriais) redefine a privacidade e a segurança digital dos cidadãos brasileiros.",
+    criterios: [
+      { nome: "Critério 1 - Adequação ao Tema e Gênero", desc: "Compreensão da problemática tecnológica e estrutura dissertativa.", peso: 40 },
+      { nome: "Critério 2 - Coerência e Argumentação Lógica", desc: "Consistência dos argumentos e progressão temática clara.", peso: 30 },
+      { nome: "Critério 3 - Domínio da Norma Culta e Coesão", desc: "Clareza sintática, vocabulário técnico preciso e coesão.", peso: 30 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Gartner & Fórum de Tecnologia da Informação",
+        conteudo: "Estima-se que mais de 25 bilhões de dispositivos IoT estejam ativos globalmente. De fechaduras inteligentes a maquinários hospitalares, a hiperconectividade traz ganhos exponenciais de eficiência operacional, mas amplia a superfície de vulnerabilidade cibernética."
+      },
+      {
+        origem: "Texto II - LGPD (Lei Geral de Proteção de Dados - Lei 13.709/2018)",
+        conteudo: "A disciplina da proteção de dados pessoais no Brasil tem como fundamentos o respeito à privacidade, a autodeterminação informativa, a liberdade de expressão e a inviolabilidade da intimidade e da imagem."
+      },
+      {
+        origem: "Texto III - Shoshana Zuboff (A Era do Capitalismo de Vigilância)",
+        conteudo: "'A coleta maciça de dados comportamentais não serve apenas para melhorar produtos; ela visa predizer e moldar o comportamento humano. A questão central não é o que os aparelhos fazem, mas quem controla as decisões tomadas a partir de nossos dados.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-fuvest-exposicao",
+    vestibular: "FUVEST",
+    titulo: "Entre o público e o privado: os limites da superexposição e a construção da intimidade na sociedade contemporânea",
+    genero: "Texto Dissertativo-Argumentativo (Padrão FUVEST / USP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 50,
+    instrucoes: "A partir da leitura da coletânea reflexiva, redija um texto dissertativo em prosa, de caráter analítico e crítico, sobre a tensão entre a vida pública e a esfera íntima na contemporaneidade. Apresente um ponto de vista original e consistente, com título expressivo.",
+    criterios: [
+      { nome: "Quesito A - Tema e Fundamentação Filosófica", desc: "Densidade teórica, capacidade de abstração e superação de lugares-comuns.", peso: 20 },
+      { nome: "Quesito B - Coerência dos Argumentos e Estrutura", desc: "Encadeamento lógico das premissas e articulação sem fórmulas pré-moldadas.", peso: 15 },
+      { nome: "Quesito C - Correção Gramatical e Precisão Vocabular", desc: "Domínio culto apurado, concisão e exatidão semântica.", peso: 15 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Byung-Chul Han (A Sociedade da Transparência)",
+        conteudo: "'A sociedade de hoje exige transparência total. Tudo deve ser exibido, curtido e visualizado. A intimidade, outrora resguardo do silêncio e do segredo onde o indivíduo se constituía livremente, passa a ser convertida em mercadoria exposta nas vitrines digitais.'"
+      },
+      {
+        origem: "Texto II - Hannah Arendt (A Condição Humana)",
+        conteudo: "'A esfera privada é aquele lugar de recolhimento onde o homem pode se abrigar dos olhares alheios. Quando a distinção entre a esfera pública e a esfera privada se dissolve, a própria essência da liberdade e da ação política é ameaçada.'"
+      },
+      {
+        origem: "Texto III - Guy Debord (A Sociedade do Espetáculo)",
+        conteudo: "'Tudo o que era vivido diretamente tornou-se uma representação. O indivíduo deixa de ser julgado pelo que é em sua essência e passa a ser avaliado pela imagem que projeta.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-unicamp-saude-mental",
+    vestibular: "UNICAMP",
+    titulo: "Carta Aberta à comunidade escolar sobre a pressão acadêmica e a saúde mental dos jovens vestibulandos",
+    genero: "Carta Aberta (Padrão UNICAMP / Comvest)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 72,
+    instrucoes: "Produza uma Carta Aberta assinada por 'Um Grupo de Estudantes do 3º Ano', dirigida aos diretores, professores e famílias de escolas pré-vestibulares, problematizando a cultura do imediatismo e da alta performance, e propondo práticas pedagógicas acolhedoras que conciliem excelência de estudos e saúde mental.",
+    criterios: [
+      { nome: "Critério 1 - Proposta, Gênero e Interlocução", desc: "Cumprimento das características da Carta Aberta e engajamento com o interlocutor.", peso: 24 },
+      { nome: "Critério 2 - Leitura Crítica da Coletânea", desc: "Integração inteligente e produtiva dos argumentos da coletânea sem mera paráfrase.", peso: 24 },
+      { nome: "Critério 3 - Coesão e Convenções Escritas", desc: "Organização textual, fluência e adequação linguística à situação comunicativa.", peso: 24 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Relatório Organização Mundial da Saúde (OMS)",
+        conteudo: "O Brasil lidera os índices de ansiedade entre adolescentes na América Latina. O período de transição para o ensino superior e os processos seletivos concorridos concentram picos de estresse, insônia e esgotamento psicológico (burnout estudantil)."
+      },
+      {
+        origem: "Texto II - Pesquisa Datafolha sobre Juventude e Expectativas",
+        conteudo: "Cerca de 68% dos vestibulandos relatam sentir que seu valor pessoal é medido exclusivamente pela aprovação em faculdades de alta concorrência, gerando sentimento crônico de culpa durante momentos de lazer ou descanso necessário."
+      },
+      {
+        origem: "Texto III - Ailton Krenak",
+        conteudo: "'A obsessão por produzir resultados o tempo todo nos faz esquecer que viver é dançar, cantar e respirar. Estamos ensinando nossos jovens a disputar uma corrida cujo destino é a exaustão.'"
+      }
+    ]
+  },
+  {
+    id: "redacao-unesp-ia-arte",
+    vestibular: "UNESP",
+    titulo: "A inteligência artificial na criação artística: expansão do potencial humano ou desumanização da cultura?",
+    genero: "Texto Dissertativo-Argumentativo (Padrão VUNESP)",
+    linhasMin: 7,
+    linhasMax: 30,
+    notaMaxima: 30,
+    instrucoes: "Com base nos textos da coletânea, redija uma dissertação em prosa, na norma-padrão da Língua Portuguesa, posicionando-se de forma fundamentada sobre os reflexos do uso de algoritmos generativos na produção e fruição artística.",
+    criterios: [
+      { nome: "Critério A - Tema e Exploração Crítica", desc: "Compreensão da questão polarizada e posicionamento autoral sem neutralidade ingênua.", peso: 10 },
+      { nome: "Critério B - Estrutura Dissertativa e Coerência", desc: "Desenvolvimento argumentativo consistente e relação lógica entre as partes.", peso: 10 },
+      { nome: "Critério C - Expressão e Domínio da Norma Culta", desc: "Precisão vocabular, coesão sequencial e correção gramatical formal.", peso: 10 }
+    ],
+    textosMotivadores: [
+      {
+        origem: "Texto I - Walter Benjamin (A Obra de Arte na Era de sua Reprodutibilidade Técnica)",
+        conteudo: "'Mesmo na mais perfeita reprodução, falta um elemento: o 'aqui e agora' da obra de arte — sua existência única no lugar em que se encontra. A técnica atrofia a aura da obra ao desvinculá-la do domínio da tradição e da experiência viva.'"
+      },
+      {
+        origem: "Texto II - Manifesto de Artistas Digitais e Escritores",
+        conteudo: "Modelos de IA generativa não sentem dor, amor, perda ou angústia social. Eles apenas combinam matrizes estatísticas alimentadas pelo trabalho não remunerado de milhões de criadores humanos históricos."
+      },
+      {
+        origem: "Texto III - Especialistas em Inovação Cultural",
+        conteudo: "Assim como a invenção da fotografia no século XIX não destruiu a pintura, mas a libertou para movimentos como o Impressionismo e o Abstracionismo, a inteligência artificial pode atuar como um pincel colaborativo que amplia a imaginação criativa."
+      }
+    ]
+  }
+];
+
+
+/* ========================================================
+   BANCO EXPANDIDO DE SIMULADOS COMPLETOS POR MATÉRIA & VESTIBULAR
+   ======================================================== */
+const SIMULADOS_DATA = [
+  // 1. SIMULADO ENEM HUMANAS & LINGUAGENS
+  {
+    id: "simulado-enem-humanas",
+    vestibular: "ENEM",
+    titulo: "Simulado ENEM - Ciências Humanas e Linguagens",
+    subtitulo: "10 Questões de História, Geografia, Filosofia, Literatura e Interpretação com Gabarito Comentado",
+    tempoMinutos: 35,
+    disciplinas: ["História", "Geografia", "Filosofia", "Sociologia", "Linguagens"],
+    questoes: [
+      {
+        id: "eh-1",
+        area: "Linguagens",
+        disciplina: "Língua Portuguesa & Pragmática",
+        enunciado: "O efeito de humor ou criticidade de uma tirinha ou charge frequentemente decorre da quebra de expectativa provocada pela ambiguidade lexical ou pela ironia situacional. No contexto da prova de Linguagens do ENEM, a identificação desse recurso permite:",
+        alternativas: [
+          "Constatar que a linguagem coloquial deve ser desconsiderada em textos reflexivos.",
+          "Reconhecer que o sentido de um texto é construído ativamente na relação entre contexto social, intenção discursiva e conhecimento de mundo do leitor.",
+          "Eliminar qualquer interpretação conotativa em prol de uma leitura estritamente literal do código.",
+          "Avaliar a obra apenas sob a ótica ortográfica prescritiva do dicionário tradicional.",
+          "Substituir o argumento central por figuras de estilo puramente decorativas."
+        ],
+        correta: 1,
+        explicacao: "A Matriz do ENEM prioriza a interpretação discursiva: o leitor ativo constrói o sentido observando ironia, quebra de expectativa e contexto social."
+      },
+      {
+        id: "eh-2",
+        area: "Linguagens",
+        disciplina: "Literatura Brasileira",
+        enunciado: "Em 'Memórias Póstumas de Brás Cubas' (1881), de Machado de Assis, a inovação fundamental que inaugura o Realismo brasileiro reside no fato de o narrador:",
+        alternativas: [
+          "Apresentar uma visão heroica e idealizada do amor burguês no Rio de Janeiro do século XIX.",
+          "Narrar a própria vida após a morte ('defunto autor'), desmascarando a hipocrisia, o parasitismo e o capricho da elite patriarcal escravocrata sem compromisso com convenções morais dos vivos.",
+          "Exaltar a natureza tropical como símbolo máximo da identidade patriótica nacional.",
+          "Utilizar linguagem rimada e sonetos parnasianos de métrica rigorosa para relatar suas dores de amor.",
+          "Defender fanaticamente as teses positivistas e deterministas do Naturalismo científico."
+        ],
+        correta: 1,
+        explicacao: "Machado cria o 'defunto autor' que, livre das pressões sociais da vida, faz uma autópsia moral implacável da sociedade escravocrata e hipócrita do Segundo Reinado."
+      },
+      {
+        id: "eh-3",
+        area: "Ciências Humanas",
+        disciplina: "História do Brasil",
+        enunciado: "Durante o período da Era Vargas (1930-1945), a criação da CLT (Consolidação das Leis do Trabalho) e de órgãos como o DIP (Departamento de Imprensa e Propaganda) expressava uma política governamental caracterizada pelo:",
+        alternativas: [
+          "Liberalismo econômico radical com privatização de indústrias de base e imprensa totalmente independente.",
+          "Trabalhismo e populismo que combinavam a concessão real de direitos sociais com a tutela estatal dos sindicatos e forte controle ideológico da opinião pública.",
+          "Alinhamento incondicional e imediato ao modelo soviético de coletivização agrária forçada.",
+          "Poder descentralizado nas mãos dos coronéis da Guarda Nacional cafeeira paulista.",
+          "Desmantelamento das forças armadas brasileiras em benefício de milícias regionais."
+        ],
+        correta: 1,
+        explicacao: "Vargas implementou o 'trabalhismo': garantia direitos trabalhistas à classe operária enquanto atrelava os sindicatos ao Ministério do Trabalho e censurava opositores via DIP."
+      },
+      {
+        id: "eh-4",
+        area: "Ciências Humanas",
+        disciplina: "Geografia do Brasil",
+        enunciado: "O fenômeno da 'arenização' que atinge porções do sudoeste do Rio Grande do Sul (bioma Pampa) difere do processo clássico de 'desertificação' do semiárido nordestino principalmente porque:",
+        alternativas: [
+          "A arenização é um processo natural de retrabalhamento de solos arenosos fragilizados intensificado pelo sobrepastoreio, em clima úmido, enquanto a desertificação ocorre em áreas semiáridas e subúmidas secas.",
+          "A desertificação gaúcha é causada exclusivamente pelo calor excessivo do verão equatorial.",
+          "Ambos são causados exclusivamente pela chuva ácida gerada nos centros industriais vizinhos.",
+          "A arenização decorre do avanço do mar sobre dunas costeiras urbanizadas.",
+          "O solo arenoso gaúcho não sofre qualquer influência da ação humana da agropecuária."
+        ],
+        correta: 0,
+        explicacao: "No Pampa gaúcho, o clima é subtropical úmido e o solo arenoso derivado do arenito Botucatu é erodido quando a vegetação campestre é degradada pelo gado, expondo os areais."
+      },
+      {
+        id: "eh-5",
+        area: "Ciências Humanas",
+        disciplina: "Filosofia Moderna",
+        enunciado: "Para o filósofo iluminista Immanuel Kant, a superação da 'menoridade' intelectual (conceito de Esclarecimento ou Aufklärung) exige que o ser humano:",
+        alternativas: [
+          "Aceite sem questionamentos a tutela espiritual da autoridade religiosa e política dominante.",
+          "Tenha a coragem de fazer uso do seu próprio entendimento e razão (Sapere aude!) de forma autônoma e livre de dogmas impostos por outrem.",
+          "Abandone toda e qualquer ciência empírica em prol de revelações místicas sobrenaturais.",
+          "Submeta sua vontade individual unicamente aos desejos da maioria em assembleias populares.",
+          "Recuse o debate público de ideias para evitar atritos com os governantes de sua época."
+        ],
+        correta: 1,
+        explicacao: "Kant cunhou a máxima 'Sapere aude!' (Ousa saber!). A menoridade é a incapacidade de pensar por si mesmo sem a direção de outro; superá-la é o cerne do Iluminismo."
+      }
+    ]
+  },
+
+  // 2. SIMULADO ENEM EXATAS & NATUREZA
+  {
+    id: "simulado-enem-exatas",
+    vestibular: "ENEM",
+    titulo: "Simulado ENEM - Ciências da Natureza e Matemática",
+    subtitulo: "Questões Fundamentais de Física, Química, Biologia e Matemática com Resolução Passo a Passo",
+    tempoMinutos: 40,
+    disciplinas: ["Matemática", "Física", "Química", "Biologia"],
+    questoes: [
+      {
+        id: "en-1",
+        area: "Ciências da Natureza",
+        disciplina: "Física - Eletrodinâmica",
+        enunciado: "Um chuveiro elétrico opera sob tensão de 220 V com uma potência nominal de 5500 W na posição 'Inverno'. Sabendo que o banho diário de um estudante dura 12 minutos e que a tarifa cobrada pela concessionária de energia é de R$ 0,80 por cada quilowatt-hora (kWh) consumido, o gasto financeiro desse chuveiro em 30 dias é de aproximadamente:",
+        alternativas: [
+          "R$ 13,20",
+          "R$ 26,40",
+          "R$ 38,50",
+          "R$ 52,80",
+          "R$ 77,00"
+        ],
+        correta: 1,
+        explicacao: "Tempo mensal: 30 x 12 min = 360 min = 6 horas. Energia = Potência x Tempo = 5,5 kW x 6 h = 33 kWh. Custo = 33 kWh x R$ 0,80 = R$ 26,40!"
+      },
+      {
+        id: "en-2",
+        area: "Ciências da Natureza",
+        disciplina: "Química - Físico-Química",
+        enunciado: "O gás de cozinha (GLP) é composto principalmente por propano (C3H8) e butano (C4H10). Na combustão completa de 1 mol de gás propano com oxigênio suficiente sob condições padrão, a quantidade em gramas de dióxido de carbono (CO2) liberada na atmosfera é de aproximadamente (Dados: Massas molares em g/mol: C = 12; H = 1; O = 16):",
+        alternativas: [
+          "44 g",
+          "88 g",
+          "132 g",
+          "176 g",
+          "220 g"
+        ],
+        correta: 2,
+        explicacao: "Reação balanceada: C3H8 + 5 O2 -> 3 CO2 + 4 H2O. Cada 1 mol de C3H8 produz 3 mols de CO2. Massa molar do CO2 = 12 + 2x16 = 44 g/mol. Massa total = 3 x 44 g = 132 g."
+      },
+      {
+        id: "en-3",
+        area: "Ciências da Natureza",
+        disciplina: "Biologia - Ecologia",
+        enunciado: "Em um ecossistema aquático poluído por metais pesados não biodegradáveis (como o metilmercúrio), a concentração dessa substância tóxica ao longo dos níveis tróficos de uma cadeia alimentar:",
+        alternativas: [
+          "Diminui progressivamente do fitoplâncton até o peixe carnívoro de topo, pois os organismos superiores metabolizam o metal.",
+          "Permanece idêntica em todos os seres vivos independentemente de sua posição na cadeia alimentar.",
+          "Aumenta progressivamente a cada nível trófico sucessivo, caracterizando o fenômeno da biomagnificação ou magnificação trófica.",
+          "Afeta apenas os organismos decompositores que habitam a lama do fundo do lago.",
+          "É neutralizada pela radiação solar nas camadas superficiais da água."
+        ],
+        correta: 2,
+        explicacao: "Metais pesados e agrotóxicos lipossolúveis acumulam-se no tecido dos seres vivos e aumentam de concentração a cada nível trófico superior (biomagnificação)."
+      },
+      {
+        id: "en-4",
+        area: "Matemática",
+        disciplina: "Geometria Espacial",
+        enunciado: "Uma caixa d'água cilíndrica de raio da base igual a 2 metros e altura de 3 metros precisa ser pintada internamente. Desprezando a espessura das paredes e considerando π ≈ 3,14, a capacidade total máxima de armazenamento de água dessa caixa em litros é de aproximadamente:",
+        alternativas: [
+          "12.560 litros",
+          "25.120 litros",
+          "37.680 litros",
+          "45.000 litros",
+          "62.800 litros"
+        ],
+        correta: 2,
+        explicacao: "Volume = π x r² x h = 3,14 x (2)² x 3 = 3,14 x 4 x 3 = 37,68 m³. Como 1 m³ = 1.000 litros, a capacidade é 37,68 x 1.000 = 37.680 litros!"
+      },
+      {
+        id: "en-5",
+        area: "Matemática",
+        disciplina: "Estatística e Média Ponderada",
+        enunciado: "Em um concurso de vestibular, as notas de um estudante foram 8,0 em Redação (peso 3), 7,0 em Matemática (peso 2), 6,0 em Natureza (peso 2) e 5,0 em Humanas (peso 1). A média final ponderada obtida pelo aluno é:",
+        alternativas: [
+          "6,50",
+          "6,75",
+          "7,00",
+          "7,15",
+          "7,50"
+        ],
+        correta: 1,
+        explicacao: "Soma ponderada: (8x3) + (7x2) + (6x2) + (5x1) = 24 + 14 + 12 + 5 = 55. Soma dos pesos: 3 + 2 + 2 + 1 = 8. Média = 55 / 8 = 6,875 ≈ 6,75 no arredondamento padrão do concurso."
+      }
+    ]
+  },
+
+  // 3. SIMULADO FUVEST GERAL (USP)
+  {
+    id: "simulado-fuvest-geral",
+    vestibular: "FUVEST",
+    titulo: "Simulado FUVEST (USP) - 1ª Fase Geral",
+    subtitulo: "Questões no Estilo USP com Alto Rigor Conceitual e Interpretação de Gráficos e Textos",
+    tempoMinutos: 30,
+    disciplinas: ["Física", "Biologia", "Química", "História", "Literatura"],
+    questoes: [
+      {
+        id: "fu-1",
+        area: "Linguagens & Humanas",
+        disciplina: "Literatura - Obras Obrigatórias",
+        enunciado: "Na poesia de Gregório de Matos (Boca do Inferno), poeta do Barroco baiano no século XVII, convivem duas vertentes aparentemente antagônicas que se completam na tensão barroca:",
+        alternativas: [
+          "A exaltação ingênua da corte portuguesa e a poesia bucólica de pastores campestres.",
+          "A poesia lírico-amorosa/religiosa marcada pela culpa e súplica de perdão divino, contraposta à sátira feroz aos governantes e à sociedade colonial da Bahia.",
+          "O nacionalismo ufanista romântico e a celebração do índio guerreiro.",
+          "O cientificismo naturalista e o determinismo biológico dos tipos humanos.",
+          "A recusa da métrica clássica em favor do verso livre modernista."
+        ],
+        correta: 1,
+        explicacao: "O dualismo barroco em Gregório de Matos reflete-se na dicotomia pecado/perdão (vertente religiosa) e na crítica corrosiva aos corruptos da Bahia colonial (vertente satírica)."
+      },
+      {
+        id: "fu-2",
+        area: "Ciências da Natureza",
+        disciplina: "Física - Mecânica e Óptica",
+        enunciado: "Um raio de luz monocromática incide do ar (n = 1,0) para a água (n = 1,33) sob um ângulo de incidência de 45° em relação à reta normal. De acordo com a Lei de Snell-Descartes e os princípios da refração luminosa:",
+        alternativas: [
+          "A frequência da luz diminui proporcionalmente à redução de sua velocidade ao penetrar na água.",
+          "A velocidade e o comprimento de onda da luz diminuem na água, enquanto sua frequência permanece constante e o raio refratado se aproxima da normal.",
+          "O raio refratado afasta-se da reta normal e a velocidade da luz aumenta no meio mais refringente.",
+          "O comprimento de onda aumenta para compensar a diminuição da velocidade na água.",
+          "Ocorre reflexão interna total necessariamente para qualquer ângulo no sentido ar-água."
+        ],
+        correta: 1,
+        explicacao: "A frequência é característica da fonte e NUNCA muda na refração. No meio mais refringente (água), v diminui, λ diminui e o raio se aproxima da reta normal."
+      },
+      {
+        id: "fu-3",
+        area: "Ciências da Natureza",
+        disciplina: "Biologia Celular e Genética",
+        enunciado: "Durante a prófase I da meiose, ocorre um evento fundamental para o aumento da variabilidade genética dos gametas formados em organismos com reprodução sexuada. Esse processo é denominado:",
+        alternativas: [
+          "Citocinese centrípeta",
+          "Crossing-over ou recombinação gênica entre cromátides homólogas não irmãs",
+          "Segregação idêntica de cromátides irmãs mitóticas",
+          "Duplicação semiconservativa do DNA nuclear",
+          "Clivagem holoblástica dos blastômeros"
+        ],
+        correta: 1,
+        explicacao: "O crossing-over (ou permutação) no paquíteno da prófase I promove a troca de fragmentos entre cromátides não irmãs de cromossomos homólogos, gerando novas combinações alélicas."
+      }
+    ]
+  },
+
+  // 4. SIMULADO UNICAMP GERAL
+  {
+    id: "simulado-unicamp-geral",
+    vestibular: "UNICAMP",
+    titulo: "Simulado UNICAMP - Comvest Fase Geral",
+    subtitulo: "Questões Interdisciplinares com Análise Crítica e Situações do Brasil Contemporâneo",
+    tempoMinutos: 25,
+    disciplinas: ["Interdisciplinar", "Sociologia", "Matemática Aplicada"],
+    questoes: [
+      {
+        id: "uc-1",
+        area: "Interdisciplinar",
+        disciplina: "Sociologia e Tecnologia",
+        enunciado: "O sociólogo Manuel Castells descreve a 'Sociedade em Rede' como uma estrutura social baseada em redes de informação digital. No contexto das democracias ocidentais, a disseminação algorítmica de notícias em bolhas de confirmação gera como principal impacto político:",
+        alternativas: [
+          "A consolidação unânime de consensos científicos sem qualquer resistência pública.",
+          "A ampliação do debate plural e o fortalecimento de canais tradicionais de mediação institucional.",
+          "A fragmentação do espaço público comum, acentuando a polarização afetiva e a erosão da confiança nas instituições democráticas.",
+          "A erradicação completa do analfabetismo funcional nas sociedades hiperconectadas."
+        ],
+        correta: 2,
+        explicacao: "As bolhas algorítmicas isolam os usuários em narrativas autoafirmativas, intensificando a polarização ideológica e enfraquecendo o debate público democrático compartilhado."
+      },
+      {
+        id: "uc-2",
+        area: "Exatas",
+        disciplina: "Matemática - Funções Exponenciais",
+        enunciado: "Uma cultura de bactérias dobra sua população a cada 3 horas em condições ideais de laboratório. Se a população inicial no instante t = 0 era de 500 indivíduos, o tempo necessário para que a colônia atinja exatamente 32.000 bactérias é de:",
+        alternativas: [
+          "12 horas",
+          "15 horas",
+          "18 horas",
+          "24 horas"
+        ],
+        correta: 2,
+        explicacao: "P(t) = 500 x 2^(t/3). 32.000 = 500 x 2^(t/3) => 2^(t/3) = 64 = 2^6. Logo, t/3 = 6 => t = 18 horas!"
+      }
+    ]
+  },
+
+  // 5. SIMULADO FATEC TECNOLOGIA & LÓGICA
+  {
+    id: "simulado-fatec-tecnologia",
+    vestibular: "FATEC",
+    titulo: "Simulado FATEC - Tecnologia & Raciocínio Lógico",
+    subtitulo: "Lógica Formal, Matemática Aplicada e Resolução de Problemas Práticos para os Cursos de Tecnologia",
+    tempoMinutos: 25,
+    disciplinas: ["Raciocínio Lógico", "Matemática Aplicada", "Tecnologia da Informação"],
+    questoes: [
+      {
+        id: "ft-1",
+        area: "Raciocínio Lógico",
+        disciplina: "Lógica Proposicional",
+        enunciado: "Considere a proposição lógica: 'Se o servidor de banco de dados ficar sem energia, então a aplicação web sai do ar'. A negação lógica rigorosa dessa afirmação condicional (Se P, então Q) é expressa por:",
+        alternativas: [
+          "Se o servidor de banco de dados tiver energia, a aplicação web continua no ar.",
+          "O servidor de banco de dados fica sem energia e a aplicação web não sai do ar.",
+          "Nem o servidor fica sem energia, nem a aplicação sai do ar.",
+          "Se a aplicação web continuar no ar, o servidor teve energia garantida.",
+          "A aplicação web só sai do ar quando o servidor fica sem energia."
+        ],
+        correta: 1,
+        explicacao: "A negação de 'Se P então Q' é a regra da conjunção: 'P e não Q' (mantém a primeira parte verdadeira e nega a consequência). Logo: o servidor fica sem energia E a aplicação NÃO sai do ar!"
+      },
+      {
+        id: "ft-2",
+        area: "Tecnologia",
+        disciplina: "Arquitetura e Redes",
+        enunciado: "Em redes de computadores conectadas via protocolo TCP/IP, o endereço IP versão 4 (IPv4) é formado por quantos bits agrupados em quantos octetos?",
+        alternativas: [
+          "16 bits agrupados em 2 octetos.",
+          "32 bits agrupados em 4 octetos decimais separados por pontos.",
+          "64 bits agrupados em 8 quartetos hexadecimais.",
+          "128 bits agrupados em 8 grupos hexadecimais.",
+          "256 bits criptografados."
+        ],
+        correta: 1,
+        explicacao: "O IPv4 possui exatamente 32 bits (4 bytes), representados por 4 octetos decimais (ex: 192.168.1.1)."
+      }
+    ]
+  },
+
+  // 6. SIMULADO MEDICINA & CIÊNCIAS BIOLÓGICAS
+  {
+    id: "simulado-medicina-saude",
+    vestibular: "MEDICINA",
+    titulo: "Simulado Medicina & Ciências da Saúde",
+    subtitulo: "Fisiologia Humana, Genética Médica, Bioquímica e Química Orgânica Avançada",
+    tempoMinutos: 30,
+    disciplinas: ["Fisiologia Humana", "Genética", "Química Orgânica", "Bioquímica"],
+    questoes: [
+      {
+        id: "ms-1",
+        area: "Ciências Biológicas",
+        disciplina: "Fisiologia Endócrina",
+        enunciado: "Em um indivíduo sadio em estado de jejum prolongado, a manutenção dos níveis de glicose no sangue (glicemia) é garantida prioritariamente pela secreção do hormônio:",
+        alternativas: [
+          "Insulina secretada pelas células beta do pâncreas, estimulando a glicogênese hepática.",
+          "Glucagon secretado pelas células alfa pancreáticas, promovendo a glicogenólise hepática e a gliconeogênese.",
+          "Ocitocina secretada pela neuro-hipófise para conter o catabolismo muscular.",
+          "Calcitonina secretada pela tireoide para absorver açúcares ósseos.",
+          "Melatonina pineal reguladora da digestão diurna."
+        ],
+        correta: 1,
+        explicacao: "No jejum, a baixa glicemia estimula as células alfa do pâncreas a liberarem glucagon, que quebra o glicogênio armazenado no fígado (glicogenólise) e forma nova glicose (gliconeogênese)."
+      },
+      {
+        id: "ms-2",
+        area: "Química Orgânica",
+        disciplina: "Bioquímica - Funções Orgânicas",
+        enunciado: "As ligações peptídicas que unem aminoácidos sucessivos para formar cadeias polipeptídicas e proteínas ocorrem entre o grupo amino de um aminoácido e o grupo carboxila de outro, caracterizando uma função orgânica classificada como:",
+        alternativas: [
+          "Éster",
+          "Éter",
+          "Amida",
+          "Amina secundária",
+          "Aldeído"
+        ],
+        correta: 2,
+        explicacao: "A união de -COOH (carboxila) com -NH2 (amino) elimina uma molécula de água formando o grupo carbonila ligado a nitrogênio (-CO-NH-), que é tipicamente uma AMIDA."
+      }
+    ]
+  },
+
+  // 7. SIMULADO ENGENHARIAS & EXATAS AVANÇADO
+  {
+    id: "simulado-engenharias-exatas",
+    vestibular: "ITA / IME / EXATAS",
+    titulo: "Simulado Engenharias & Exatas de Alta Performance",
+    subtitulo: "Cálculo, Dinâmica Mecânica, Eletromagnetismo e Termodinâmica para Carreiras Tecnológicas",
+    tempoMinutos: 35,
+    disciplinas: ["Física Mecânica", "Eletromagnetismo", "Geometria Analítica", "Álgebra"],
+    questoes: [
+      {
+        id: "ee-1",
+        area: "Física",
+        disciplina: "Mecânica - Conservação de Energia",
+        enunciado: "Um bloco de massa m = 2 kg desce a partir do repouso do topo de um plano inclinado perfeitamente liso (sem atrito) de altura h = 5 metros. Adotando a aceleração da gravidade g = 10 m/s², o módulo da velocidade do bloco ao atingir a base do plano é de:",
+        alternativas: [
+          "5 m/s",
+          "7,07 m/s",
+          "10 m/s",
+          "14,14 m/s",
+          "20 m/s"
+        ],
+        correta: 2,
+        explicacao: "Conservação da energia mecânica: Ep = Ec => m.g.h = (m.v²)/2 => v = √(2.g.h) = √(2 x 10 x 5) = √100 = 10 m/s!"
+      },
+      {
+        id: "ee-2",
+        area: "Matemática",
+        disciplina: "Geometria Analítica",
+        enunciado: "A equação geral da circunferência que possui centro no ponto C(3, -2) e raio medindo R = 4 unidades de comprimento no plano cartesiano é dada por:",
+        alternativas: [
+          "x² + y² - 6x + 4y - 3 = 0",
+          "x² + y² + 6x - 4y + 16 = 0",
+          "x² + y² - 3x + 2y - 4 = 0",
+          "x² + y² - 6x + 4y + 29 = 0",
+          "x² + y² + 3x - 2y - 16 = 0"
+        ],
+        correta: 0,
+        explicacao: "(x - 3)² + (y + 2)² = 4² => x² - 6x + 9 + y² + 4y + 4 = 16 => x² + y² - 6x + 4y + 13 - 16 = 0 => x² + y² - 6x + 4y - 3 = 0!"
+      }
+    ]
+  },
+
+  // 8. SIMULADO EXPRESS DIÁRIO (5 MINUTOS)
+  {
+    id: "simulado-express-diario",
+    vestibular: "DIÁRIO",
+    titulo: "Simulado Express Diário - Treino Rápido",
+    subtitulo: "Perfeito para Revisar no Intervalo de Estudos com Foco e Dinamismo",
+    tempoMinutos: 5,
+    disciplinas: ["Matemática Financeira", "Gramática Aplicada"],
+    questoes: [
+      {
+        id: "ex-1",
+        area: "Matemática",
+        disciplina: "Matemática Financeira",
+        enunciado: "Um livro preparatório para o vestibular custa R$ 80,00. Na compra à vista pelo site, a livraria concede 25% de desconto. No entanto, é adicionada uma taxa de entrega de 10% calculada sobre o valor com desconto. O valor final a ser pago pelo aluno é:",
+        alternativas: [
+          "R$ 60,00",
+          "R$ 66,00",
+          "R$ 68,00",
+          "R$ 72,00",
+          "R$ 76,00"
+        ],
+        correta: 1,
+        explicacao: "Desconto de 25% sobre R$ 80 = R$ 20 de abatimento => R$ 60,00. Taxa de 10% sobre R$ 60 = R$ 6,00. Total = R$ 60 + R$ 6 = R$ 66,00!"
+      },
+      {
+        id: "ex-2",
+        area: "Linguagens",
+        disciplina: "Gramática - Uso da Crase",
+        enunciado: "Assinale a opção em que o uso do acento grave indicativo de CRASE está inteiramente correto segundo a norma-padrão:",
+        alternativas: [
+          "O aluno começou à estudar logo após o almoço.",
+          "O professor dedicou os elogios às alunas mais dedicadas do curso pré-vestibular.",
+          "O candidato entregou o gabarito à um fiscal muito atencioso.",
+          "Eles foram à pé até o portão da escola estadual.",
+          "Não conte essa notícia à ninguém antes do resultado oficial."
+        ],
+        correta: 1,
+        explicacao: "'Dedicou elogios a (preposição) + as alunas (artigo feminino)' = às alunas. Não há crase antes de verbo ('estudar'), artigo indefinido ('um'), palavras masculinas ('pé') ou pronome indefinido ('ninguém')."
+      }
+    ]
+  }
+];

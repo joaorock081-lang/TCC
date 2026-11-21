@@ -5,26 +5,38 @@
       <stop offset="50%" stop-color="#0c1d3b"/>
       <stop offset="100%" stop-color="#1e4585"/>
     </linearGradient>
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8"/>
-      <stop offset="100%" stop-color="#2563eb"/>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
-  <!-- Caderno / Livro -->
-  <path d="M128 140 C128 120 144 104 164 104 L384 104 C395 104 404 113 404 124 L404 380 C404 391 395 400 384 400 L164 400 C144 400 128 384 128 364 Z" fill="#ffffff" opacity="0.95"/>
-  <rect x="144" y="104" width="32" height="296" fill="url(#accentGrad)" rx="8"/>
-  <!-- Linhas pautadas -->
-  <rect x="204" y="160" width="160" height="12" rx="6" fill="#93c5fd"/>
-  <rect x="204" y="200" width="160" height="12" rx="6" fill="#bfdbfe"/>
-  <rect x="204" y="240" width="160" height="12" rx="6" fill="#bfdbfe"/>
-  <rect x="204" y="280" width="120" height="12" rx="6" fill="#bfdbfe"/>
-  <!-- Lápis Dourado -->
-  <g transform="translate(330, 240) rotate(-35)">
-    <rect x="0" y="0" width="28" height="130" rx="6" fill="#f59e0b"/>
-    <polygon points="0,130 28,130 14,165" fill="#fde68a"/>
-    <polygon points="9,150 19,150 14,165" fill="#1e293b"/>
-    <rect x="0" y="0" width="28" height="24" rx="4" fill="#f43f5e"/>
-    <rect x="0" y="22" width="28" height="8" fill="#e2e8f0"/>
+  <!-- Fundo circular -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+  <!-- Anel externo dourado -->
+  <circle cx="256" cy="256" r="236" fill="none" stroke="#f59e0b" stroke-width="6"/>
+  <circle cx="256" cy="256" r="222" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <!-- Livro aberto central -->
+  <path d="M160 200 C160 188 170 180 182 180 L256 180 L256 340 L182 340 C170 340 160 332 160 320 Z" fill="#ffffff" opacity="0.95"/>
+  <path d="M352 200 C352 188 342 180 330 180 L256 180 L256 340 L330 340 C342 340 352 332 352 320 Z" fill="#f0f4ff" opacity="0.9"/>
+  <!-- Lombada central dourada -->
+  <rect x="248" y="176" width="16" height="168" rx="4" fill="url(#goldGrad)"/>
+  <!-- Linhas pautadas esquerda -->
+  <rect x="176" y="215" width="64" height="8" rx="4" fill="#93c5fd"/>
+  <rect x="176" y="235" width="64" height="8" rx="4" fill="#bfdbfe"/>
+  <rect x="176" y="255" width="64" height="8" rx="4" fill="#bfdbfe"/>
+  <rect x="176" y="275" width="48" height="8" rx="4" fill="#bfdbfe"/>
+  <!-- Linhas pautadas direita -->
+  <rect x="272" y="215" width="64" height="8" rx="4" fill="#dbeafe"/>
+  <rect x="272" y="235" width="64" height="8" rx="4" fill="#dbeafe"/>
+  <rect x="272" y="255" width="64" height="8" rx="4" fill="#e0f2fe"/>
+  <rect x="272" y="275" width="48" height="8" rx="4" fill="#e0f2fe"/>
+  <!-- Pena / Caneta no centro-topo do livro -->
+  <g transform="translate(243, 162) rotate(-15)">
+    <ellipse cx="13" cy="6" rx="10" ry="6" fill="#f59e0b"/>
+    <polygon points="3,12 23,12 13,36" fill="#fbbf24"/>
+    <polygon points="9,26 17,26 13,36" fill="#1e293b"/>
   </g>
+  <!-- Texto "E M" em baixo do círculo interno -->
+  <text x="256" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#f59e0b" letter-spacing="4">Estuda Mais</text>
+  <text x="256" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#93c5fd" letter-spacing="2">EST. 2026</text>
 </svg>

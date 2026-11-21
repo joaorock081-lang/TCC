@@ -1,0 +1,1899 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>EstudaMais • Portal do Vestibulando | Projeto de TCC</title>
+  <meta name="description" content="Plataforma de apoio aos vestibulandos com matérias mais cobradas nos 10 maiores vestibulares do Brasil, bloco de notas integrado e dicas de estudos.">
+  
+  <!-- Configurações PWA e Mobile Android -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0c1d3b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EstudaMais">
+
+  <!-- Favicon com Imagem Oficial Estuda Mais -->
+  <link rel="icon" type="image/jpeg" href="assets/logo_estudamais.jpg">
+  <link rel="shortcut icon" href="assets/logo_estudamais.jpg">
+  <link rel="apple-touch-icon" href="assets/logo_estudamais.jpg">
+
+  <!-- Fontes do Google: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Prevenção de FOUC: aplica tema e paleta imediatamente antes de renderizar -->
+  <script>
+    (function() {
+      try {
+        var m = localStorage.getItem('estudamais_theme_mode') || 'light';
+        var a = localStorage.getItem('estudamais_theme_accent') || 'azul-marinho';
+        document.documentElement.setAttribute('data-theme', m);
+        document.documentElement.setAttribute('data-accent', a);
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Estilos Customizados -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========================================================
+       CABEÇALHO & BARRA DE NAVEGAÇÃO
+       ======================================================== -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-logo" onclick="mudarAba('inicio')">
+        <!-- Logo Oficial Estuda Mais -->
+        <div class="logo-icon-box logo-img-box">
+          <img src="assets/logo_estudamais.jpg" alt="Estuda Mais" class="logo-img-header" width="58" height="58">
+        </div>
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <span class="brand-name">Estuda <span class="brand-accent">Mais</span></span>
+            <span class="brand-sparkle">✨</span>
+          </div>
+          <span class="brand-tagline">Portal do Vestibulando • TCC 🎓</span>
+        </div>
+      </div>
+
+      <!-- Barra de Navegação Horizontal Dinâmica & Animada com Rolagem Fluida -->
+      <div class="nav-carousel-wrapper">
+        <button class="nav-scroll-btn prev" id="nav-btn-prev" onclick="rolarMenuNav(-180)" title="Rolar abas para a esquerda" aria-label="Rolar abas para a esquerda">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <nav class="nav-scroll-container" id="nav-scroll-container">
+          <ul class="nav-menu" id="nav-menu-list">
+            <li>
+              <button class="nav-btn active" data-tab="inicio">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="vestibulares">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Vestibulares</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="simulados">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Simulados</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="redacao">
+                <i class="fa-solid fa-feather-pointed"></i>
+                <span class="nav-clean-2lines">Redação<br>& IA</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="quiz">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Quiz</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="notas">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span class="nav-clean-2lines">Bloco de<br>Notas</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="ferramentas">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Foco</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="dicas">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span>Dicas</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-btn" data-tab="perfil">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span class="nav-clean-2lines">Meu Perfil<br>& Carreira</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <button class="nav-scroll-btn next" id="nav-btn-next" onclick="rolarMenuNav(180)" title="Rolar abas para a direita" aria-label="Rolar abas para a direita">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <!-- Alternador Rápido Claro / Escuro -->
+        <button class="btn-header-theme-toggle" id="btn-theme-toggle" onclick="alternarModoEscuro()" title="Alternar Modo Claro / Escuro" aria-label="Modo Claro ou Escuro">
+          <i class="fa-solid fa-moon" id="icon-theme-toggle"></i>
+        </button>
+
+        <!-- Seletor de Cores do Tema -->
+        <button class="btn-header-palette" onclick="abrirModalCores()" title="Personalizar Cores do Tema" aria-label="Cores do Tema">
+          <i class="fa-solid fa-palette"></i>
+          <span>Cores</span>
+        </button>
+
+        <button class="btn-header-scratchpad" onclick="alternarLousaRascunho()" title="Abrir Lousa para Rabiscar e Fazer Contas">
+          <i class="fa-solid fa-pen-ruler"></i>
+          <span>Lousa de Contas</span>
+        </button>
+        <button class="btn-header-cta" onclick="abrirModalNovaNota()">
+          <i class="fa-solid fa-plus"></i>
+          <span>Nova Nota</span>
+        </button>
+
+        <!-- Área de Usuário / Login / Cadastro -->
+        <div class="header-user-area" id="header-user-area">
+          <button class="btn-header-auth" onclick="abrirModalAuth('login')" title="Entrar ou criar conta">
+            <i class="fa-solid fa-user-lock"></i>
+            <span>Entrar / Cadastrar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       CONTEÚDO PRINCIPAL (ABAS DINÂMICAS)
+       ======================================================== -->
+  <main class="main-wrapper">
+
+    <!-- ========================================================
+         ABA 1: INÍCIO / DASHBOARD DO ESTUDANTE
+         ======================================================== -->
+    <section id="tab-inicio" class="tab-content active">
+      
+      <!-- Hero Banner Aconchegante -->
+      <div class="hero-cozy-card">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Projeto de TCC • Seu Cantinho de Estudos</span>
+          </div>
+          <h1 class="hero-title">
+            Conquiste sua aprovação com <span class="highlight">organização, foco e calma</span>.
+          </h1>
+          <p class="hero-subtitle">
+            Reunimos os conteúdos que mais caem no <strong>ENEM</strong>, <strong>FUVEST</strong>, <strong>FATEC</strong> e <strong>UNICAMP</strong>, acompanhados de um bloco de notas digital, técnicas de estudo comprovadas e ferramentas de concentração em um ambiente acolhedor.
+          </p>
+          <div class="hero-actions">
+            <button class="btn-hero-primary" data-goto="vestibulares">
+              <i class="fa-solid fa-compass"></i>
+              <span>Explorar Matérias dos Vestibulares</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="simulados">
+              <i class="fa-solid fa-file-signature"></i>
+              <span>Fazer Simulado Oficial</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="redacao">
+              <i class="fa-solid fa-feather-pointed"></i>
+              <span>Escrever Redação & IA</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="quiz">
+              <i class="fa-solid fa-gamepad"></i>
+              <span>Quiz & Exercícios</span>
+            </button>
+          </div>
+        </div>
+        <!-- Emblema Decorativo no Hero -->
+        <div class="hero-illustration">
+          <img src="assets/logo_estudamais.jpg" alt="Estuda Mais" class="hero-logo-deco" width="140" height="140" style="width: 140px; height: 140px; max-width: 140px; max-height: 140px; object-fit: contain; background: #ffffff; padding: 8px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 2px solid var(--primary-accent); display: block;" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Barra de Pesquisa Rápida Global -->
+      <div class="search-bar-wrapper">
+        <div class="search-box-inner">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="busca-materias" placeholder="Pesquise por qualquer conteúdo ou assunto (ex: Ecologia, Era Vargas, Funções, Redação, Leis de Newton)..." autocomplete="off">
+        </div>
+        <!-- Resultados da Busca Flutuante -->
+        <div id="resultados-busca" class="resultados-busca-dropdown"></div>
+      </div>
+
+      <!-- Frase Motivacional Diária -->
+      <div id="frase-motivacional" class="card-frase-dia"></div>
+
+      <!-- Estatísticas & Progresso Geral do Aluno -->
+      <div class="dashboard-grid-stats">
+        <div class="stat-card">
+          <div class="stat-icon azul">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div class="stat-data">
+            <span class="stat-num" id="stat-progresso-total">0%</span>
+            <span class="stat-label">Progresso Geral nos Estudos</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon verde">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="stat-data">
+            <span class="stat-num" id="stat-topicos-concluidos">0/0</span>
+            <span class="stat-label">Tópicos do Edital Estudados</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon amarelo">
+            <i class="fa-regular fa-note-sticky"></i>
+          </div>
+          <div class="stat-data">
+            <span class="stat-num" id="stat-total-notas">0</span>
+            <span class="stat-label">Anotações no Caderno</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon roxo">
+            <i class="fa-solid fa-hourglass-half"></i>
+          </div>
+          <div class="stat-data">
+            <span class="stat-num" id="stat-pomodoros-feitos">0</span>
+            <span class="stat-label">Ciclos de Foco Concluídos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Progresso Geral Banner -->
+      <div class="progresso-geral-banner">
+        <div class="progresso-header-line">
+          <span class="progresso-titulo"><i class="fa-solid fa-bullseye"></i> Sua Jornada de Aprendizado</span>
+          <span class="progresso-subtitulo" style="font-size: 0.85rem; color: var(--text-muted);">Marque os conteúdos na aba Vestibulares para acompanhar sua evolução</span>
+        </div>
+        <div class="progresso-trilho">
+          <div id="barra-progresso-geral" class="progresso-preenchimento" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Preview dos 4 Grandes Vestibulares -->
+      <div class="secao-titulo-bloco">
+        <h2><i class="fa-solid fa-graduation-cap"></i> Os Principais Vestibulares</h2>
+        <p>Acesse o mapa completo de conteúdos que mais caem em cada instituição:</p>
+      </div>
+
+      <div class="vestibulares-preview-grid">
+        <!-- Card Preview ENEM -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Exame Nacional</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-award"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">ENEM</h3>
+          <p class="vest-preview-desc">180 questões + Redação com Teoria de Resposta ao Item (TRI). Linguagens, Humanas, Natureza e Matemática Básica.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('enem')">
+            <span>Ver Matérias do ENEM</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview FUVEST -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">USP • 1ª e 2ª Fase</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-building-columns"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">FUVEST</h3>
+          <p class="vest-preview-desc">Prova tradicional da USP com 80 questões na 1ª fase, 2ª fase dissertativa e lista oficial de 9 autoras consagradas.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('fuvest')">
+            <span>Ver Matérias da FUVEST</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview FATEC -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Fase Única • 60 Questões</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-microchip"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">FATEC</h3>
+          <p class="vest-preview-desc">Foco em raciocínio lógico, situações-problema do cotidiano, mercado de trabalho e pesos específicos para cada curso.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('fatec')">
+            <span>Ver Matérias da FATEC</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UNICAMP -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Comvest • 72 Questões</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UNICAMP</h3>
+          <p class="vest-preview-desc">Prova reflexiva e socialmente engajada com redação de gêneros variados e lista de obras que inclui álbuns musicais.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('unicamp')">
+            <span>Ver Matérias da UNICAMP</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UNESP -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Vunesp • 1ª e 2ª Fase</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-sun"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UNESP</h3>
+          <p class="vest-preview-desc">90 questões na 1ª fase, 2ª fase dissertativa e redação com tema reflexivo. Campus em todo o estado de SP.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('unesp')">
+            <span>Ver Matérias da UNESP</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview ITA -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Aeroespacial • Alto Nível</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-jet-fighter"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">ITA</h3>
+          <p class="vest-preview-desc">Focado em engenharia de ponta, um dos mais difíceis do Brasil. Máximo rigor em Matemática, Física e Química.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ita')">
+            <span>Ver Matérias do ITA</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UnB -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Cebraspe • Centro-Oeste</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-landmark-flag"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UnB</h3>
+          <p class="vest-preview-desc">Principal vestibular do Centro-Oeste com itens Certo/Errado (fator de penalização), foco social e bioma Cerrado.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('unb')">
+            <span>Ver Matérias da UnB</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UERJ -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Qualificação & Discursivo</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UERJ</h3>
+          <p class="vest-preview-desc">Tradicional do Rio de Janeiro com Exame de Qualificação e Discursivo, forte tradição literária e pioneirismo em cotas.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('uerj')">
+            <span>Ver Matérias da UERJ</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UFPR -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Federal do Paraná</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-tree"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UFPR</h3>
+          <p class="vest-preview-desc">90 questões gerais na 1ª fase e 2ª fase focada em Compreensão e Produção de múltiplos gêneros textuais.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ufpr')">
+            <span>Ver Matérias da UFPR</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UFRGS -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Federal Gaúcha</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-compass"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UFRGS</h3>
+          <p class="vest-preview-desc">Modelo clássico com 15 questões por disciplina em dois dias, leituras obrigatórias renomadas e redação reflexiva.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ufrgs')">
+            <span>Ver Matérias da UFRGS</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UFMG -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Federal de Minas Gerais</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-landmark"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UFMG</h3>
+          <p class="vest-preview-desc">Uma das maiores e melhores federais do país. Acesso via SiSU com pesos diferenciados por curso e alto corte para Medicina.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ufmg')">
+            <span>Ver Matérias da UFMG</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UFSC -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Federal de Santa Catarina</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-compass"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UFSC</h3>
+          <p class="vest-preview-desc">Vestibular unificado UFSC/IFSC com questões somatórias de proposições múltiplas e gêneros textuais variados na redação.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ufsc')">
+            <span>Ver Matérias da UFSC</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview IME -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Instituto Militar de Engenharia</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">IME</h3>
+          <p class="vest-preview-desc">Rigor extremo e excelência em Engenharia militar e civil. Provas aprofundadas de Matemática, Física e Química.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('ime')">
+            <span>Ver Matérias do IME</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview UECE -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Estadual do Ceará</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-sun"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">UECE</h3>
+          <p class="vest-preview-desc">Principal vestibular estadual cearense, com 2 fases, forte concorrência em Medicina e abordagem profunda do Nordeste.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('uece')">
+            <span>Ver Matérias da UECE</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA 2: VESTIBULARES (DETALHAMENTO, OBRAS & CHECKLIST)
+         ======================================================== -->
+    <section id="tab-vestibulares" class="tab-content">
+      
+      <!-- Seletor de Vestibular -->
+      <div class="vest-nav-switcher" id="vestibulares-tabs"></div>
+
+      <!-- Área de Renderização Dinâmica do Vestibular -->
+      <div id="vestibular-conteudo-detalhado"></div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA 3: DICAS DE ESTUDO & METODOLOGIAS
+         ======================================================== */ -->
+    <section id="tab-dicas" class="tab-content">
+      
+      <div class="dicas-intro-card">
+        <h2><i class="fa-solid fa-brain"></i> Guia Pedagógico de Dicas de Estudo</h2>
+        <p>
+          Estudar com inteligência e estratégia é muito mais eficiente do que passar horas cansativas sem retenção. Conheça as técnicas cientificamente comprovadas para vestibulandos:
+        </p>
+      </div>
+
+      <div class="dicas-grid" id="dicas-estudo-grid"></div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA 4: BLOCO DE NOTAS INTEGRADO (CADERNO DO ALUNO)
+         ======================================================== -->
+    <section id="tab-notas" class="tab-content">
+      
+      <div class="bloco-header-area">
+        <div class="bloco-info">
+          <h2><i class="fa-solid fa-book-bookmark"></i> Meu Caderno Digital</h2>
+          <p>Faça suas anotações, guarde fórmulas, repertórios de redação e resumos. Tudo salvo automaticamente no seu navegador!</p>
+        </div>
+        <div class="bloco-controles">
+          <div class="search-notas-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="busca-notas-input" placeholder="Filtrar anotações...">
+          </div>
+          <button class="btn-nova-nota" onclick="abrirModalNovaNota()">
+            <i class="fa-solid fa-plus"></i>
+            <span>Nova Anotação</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid de Notas -->
+      <div class="notas-grid" id="lista-notas"></div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA 5: FOCO, POMODORO & METAS DIÁRIAS
+         ======================================================== -->
+    <section id="tab-ferramentas" class="tab-content">
+      
+      <div class="secao-titulo-bloco">
+        <h2><i class="fa-solid fa-sliders"></i> Espaço de Concentração & Foco</h2>
+        <p>Aumente sua produtividade nos estudos combinando o cronômetro Pomodoro, som ambiente relaxante e lista de metas diárias:</p>
+      </div>
+
+      <div class="ferramentas-grid">
+        
+        <!-- Bloco do Pomodoro Timer -->
+        <div class="pomodoro-card-cozy">
+          <div class="pomodoro-modes-nav" id="pomodoro-modes-nav">
+            <button class="pomodoro-mode-btn active" data-mode="foco" title="25 minutos de concentração clássica">Foco (25m)</button>
+            <button class="pomodoro-mode-btn" data-mode="estendido" title="50 minutos de estudo aprofundado">Estendido (50m)</button>
+            <button class="pomodoro-mode-btn" data-mode="maratona" title="90 minutos para simulados ou redação">Maratona (90m)</button>
+            <button class="pomodoro-mode-btn" data-mode="curta" title="5 minutos para relaxar">Pausa Curta (5m)</button>
+            <button class="pomodoro-mode-btn" data-mode="longa" title="15 minutos para lanche">Pausa Longa (15m)</button>
+            <button class="pomodoro-mode-btn btn-mode-custom" data-mode="custom" id="btn-toggle-custom-pomodoro" onclick="togglePainelTempoPersonalizado()" title="Ajustar horas, minutos e segundos">
+              <i class="fa-solid fa-clock-rotate-left"></i> Ajustar Tempo
+            </button>
+          </div>
+
+          <!-- Painel de Ajuste Manual de Horas, Minutos e Segundos -->
+          <div class="pomodoro-custom-time-panel" id="pomodoro-custom-time-panel" style="display: none;">
+            <div class="custom-time-header">
+              <span><i class="fa-solid fa-sliders"></i> Definir Duração Personalizada:</span>
+              <button type="button" class="btn-fechar-custom-timer" onclick="fecharPainelTempoPersonalizado()" title="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div class="custom-time-inputs-grid">
+              <!-- Horas -->
+              <div class="custom-time-field">
+                <label for="custom-timer-hours">Horas</label>
+                <div class="custom-stepper-wrapper">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-hours', -1)">-</button>
+                  <input type="number" id="custom-timer-hours" min="0" max="23" value="0" class="input-stepper" oninput="validarNumeroInput(this, 0, 23)">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-hours', 1)">+</button>
+                </div>
+              </div>
+
+              <span class="custom-time-divider">:</span>
+
+              <!-- Minutos -->
+              <div class="custom-time-field">
+                <label for="custom-timer-minutes">Minutos</label>
+                <div class="custom-stepper-wrapper">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-minutes', -5)">-</button>
+                  <input type="number" id="custom-timer-minutes" min="0" max="59" value="25" class="input-stepper" oninput="validarNumeroInput(this, 0, 59)">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-minutes', 5)">+</button>
+                </div>
+              </div>
+
+              <span class="custom-time-divider">:</span>
+
+              <!-- Segundos -->
+              <div class="custom-time-field">
+                <label for="custom-timer-seconds">Segundos</label>
+                <div class="custom-stepper-wrapper">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-seconds', -10)">-</button>
+                  <input type="number" id="custom-timer-seconds" min="0" max="59" value="0" class="input-stepper" oninput="validarNumeroInput(this, 0, 59)">
+                  <button type="button" class="btn-stepper" onclick="ajustarCampoTimer('custom-timer-seconds', 10)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Atalhos Rápidos e Botão Aplicar -->
+            <div class="custom-time-actions">
+              <div class="custom-time-shortcuts">
+                <button type="button" class="btn-shortcut-timer" onclick="adicionarMinutosTimer(5)">+5m</button>
+                <button type="button" class="btn-shortcut-timer" onclick="adicionarMinutosTimer(15)">+15m</button>
+                <button type="button" class="btn-shortcut-timer" onclick="adicionarMinutosTimer(30)">+30m</button>
+                <button type="button" class="btn-shortcut-timer" onclick="zerarTempoCustomTimer()">Zerar</button>
+              </div>
+              <button type="button" class="btn-aplicar-custom-timer" onclick="aplicarTempoPersonalizado()">
+                <i class="fa-solid fa-check"></i> Aplicar ao Cronômetro
+              </button>
+            </div>
+          </div>
+
+          <div class="pomodoro-timer-circle" id="pomodoro-timer-circle">
+            <span id="pomodoro-timer-display">25:00</span>
+            <small id="pomodoro-mode-label">Foco Ativo</small>
+          </div>
+
+          <div class="pomodoro-controls">
+            <button class="btn-pomodoro-start" id="pomodoro-btn-start">
+              <i class="fa-solid fa-play"></i> Iniciar Foco
+            </button>
+            <button class="btn-pomodoro-reset" id="pomodoro-btn-reset">
+              <i class="fa-solid fa-rotate-left"></i> Reiniciar
+            </button>
+          </div>
+
+          <!-- Gerador de Som Ambiente de Chuva -->
+          <div class="ambient-sound-box">
+            <button class="btn-som-chuva" id="btn-som-ambiente">
+              <i class="fa-solid fa-cloud-rain"></i>
+              <span>Ativar Som de Chuva Suave</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bloco do Checklist de Metas do Dia -->
+        <div class="tarefas-card-cozy">
+          <div class="tarefas-header">
+            <h3><i class="fa-solid fa-list-check"></i> Minhas Metas de Estudo de Hoje</h3>
+            <p>Defina de 3 a 5 objetivos claros para o seu dia e marque conforme for concluindo:</p>
+          </div>
+
+          <div class="tarefas-input-box">
+            <input type="text" id="input-nova-tarefa" placeholder="Ex: Resolver 10 questões de Genética..." onkeydown="if(event.key==='Enter') adicionarNovaTarefa()">
+            <button class="btn-add-tarefa" onclick="adicionarNovaTarefa()">
+              <i class="fa-solid fa-plus"></i> Adicionar
+            </button>
+          </div>
+
+          <ul class="tarefas-lista" id="lista-tarefas-diarias"></ul>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA 6: QUIZ & DESAFIOS (ARENA DE ESTUDOS COM EXATAS)
+         ======================================================== -->
+    <section id="tab-quiz" class="tab-content">
+      
+      <div class="quiz-hero-card">
+        <div class="quiz-hero-info">
+          <span class="quiz-badge-tag"><i class="fa-solid fa-gamepad"></i> Gamificação & Treino Ativo</span>
+          <h2>Arena de Exercícios & Simulado dos Vestibulares</h2>
+          <p>
+            Resolva questões selecionadas do <strong>ENEM</strong>, <strong>FUVEST</strong>, <strong>FATEC</strong> e <strong>UNICAMP</strong>.
+            Precisa fazer cálculos em Matemática, Física ou Química? Ative a <strong>Lousa de Rascunho</strong> para rabiscar na tela como se fosse seu caderno!
+          </p>
+        </div>
+        <div class="quiz-hero-action">
+          <button class="btn-abrir-lousa-hero" onclick="alternarLousaRascunho()">
+            <i class="fa-solid fa-pen-ruler"></i>
+            <span>Abrir Lousa para Contas</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros de Matérias do Quiz -->
+      <div class="quiz-filtros-bar" id="quiz-filtros-container">
+        <button class="quiz-filtro-btn active" data-cat="todas">
+          <i class="fa-solid fa-layer-group"></i> Todas as Matérias
+        </button>
+        <button class="quiz-filtro-btn" data-cat="Exatas">
+          <i class="fa-solid fa-square-root-variable"></i> Exatas (Contas & Fórmulas)
+        </button>
+        <button class="quiz-filtro-btn" data-cat="Natureza">
+          <i class="fa-solid fa-dna"></i> Ciências da Natureza
+        </button>
+        <button class="quiz-filtro-btn" data-cat="Humanas">
+          <i class="fa-solid fa-landmark"></i> Ciências Humanas
+        </button>
+        <button class="quiz-filtro-btn" data-cat="Linguagens">
+          <i class="fa-solid fa-book-open"></i> Linguagens & Literatura
+        </button>
+      </div>
+
+      <!-- Placar e Status do Aluno -->
+      <div class="quiz-status-board">
+        <div class="quiz-status-item">
+          <i class="fa-solid fa-trophy status-icon-ouro"></i>
+          <div>
+            <span class="status-val" id="quiz-pontos">0 XP</span>
+            <span class="status-label">Pontos de Foco</span>
+          </div>
+        </div>
+        <div class="quiz-status-item">
+          <i class="fa-solid fa-fire status-icon-fogo"></i>
+          <div>
+            <span class="status-val" id="quiz-streak">0 🔥</span>
+            <span class="status-label">Sequência de Acertos</span>
+          </div>
+        </div>
+        <div class="quiz-status-item">
+          <i class="fa-solid fa-bullseye status-icon-azul"></i>
+          <div>
+            <span class="status-val" id="quiz-contador-questao">Questão 1 de 10</span>
+            <span class="status-label">Progresso da Rodada</span>
+          </div>
+        </div>
+        <div class="quiz-status-item">
+          <i class="fa-solid fa-chart-pie status-icon-verde"></i>
+          <div>
+            <span class="status-val" id="quiz-taxa-acerto">100%</span>
+            <span class="status-label">Taxa de Precisão</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container da Questão Ativa -->
+      <div id="quiz-questao-container" class="quiz-questao-card">
+        <!-- Renderizado dinamicamente pelo JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA: LABORATÓRIO DE REDAÇÃO & CORRETOR IA
+         ======================================================== -->
+    <section id="tab-redacao" class="tab-content">
+      
+      <!-- Cabeçalho da Seção de Redação -->
+      <div class="secao-titulo-bloco">
+        <div class="secao-badge"><i class="fa-solid fa-feather-pointed"></i> Laboratório de Redação Oficial</div>
+        <h2>Treino de Redação & Corretor Inteligente com IA</h2>
+        <p>Pratique temas oficiais dos maiores vestibulares do Brasil (ENEM, FUVEST, UNICAMP, UNESP e FATEC) em folha pautada de 30 linhas com contagem de palavras e receba nota por competências e correção pedagógica detalhada com Inteligência Artificial.</p>
+      </div>
+
+      <!-- Seletor e Informações do Tema Selecionado -->
+      <div class="redacao-controle-card">
+        <div class="redacao-seletor-row">
+          <label for="redacao-select-tema" class="redacao-select-label">
+            <i class="fa-solid fa-bookmark"></i> Escolha a Proposta de Redação:
+          </label>
+          <div class="redacao-select-wrapper">
+            <select id="redacao-select-tema" class="form-select redacao-select">
+              <!-- Preenchido via app.js -->
+            </select>
+          </div>
+        </div>
+
+        <div class="redacao-tema-info-card">
+          <div class="tema-tags-bar">
+            <span class="tema-badge-vest" id="redacao-tema-vestibular">ENEM</span>
+            <span class="tema-badge-genero"><i class="fa-solid fa-file-lines"></i> Gênero: <strong id="redacao-tema-genero">Dissertativo-Argumentativo</strong></span>
+            <span class="tema-badge-extensao"><i class="fa-solid fa-ruler-vertical"></i> Folha Oficial: 30 linhas</span>
+          </div>
+          <h2 class="tema-titulo-destaque" id="redacao-tema-titulo">Tema da Redação</h2>
+          <p class="tema-instrucoes-texto" id="redacao-tema-instrucoes">Instruções para desenvolvimento da redação.</p>
+        </div>
+
+        <!-- Critérios da Banca -->
+        <div class="redacao-criterios-wrapper">
+          <h4 class="criterios-titulo"><i class="fa-solid fa-scale-balanced"></i> Critérios de Avaliação da Banca Oficial:</h4>
+          <div class="criterios-badges-lista" id="redacao-criterios-lista">
+            <!-- Preenchido via app.js -->
+          </div>
+        </div>
+
+        <!-- Textos Motivadores (Coletânea) -->
+        <div class="textos-motivadores-wrapper">
+          <h4 class="textos-mot-titulo"><i class="fa-solid fa-quote-left"></i> Coletânea de Textos Motivadores da Prova:</h4>
+          <div class="textos-motivadores-grid" id="redacao-textos-motivadores">
+            <!-- Preenchido via app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Folha de Redação e Ferramentas de Produção -->
+      <div class="redacao-workspace-card">
+        <div class="redacao-workspace-header">
+          <div class="redacao-header-left">
+            <h3><i class="fa-solid fa-pen-nib"></i> Folha de Redação Pautada Oficial</h3>
+            <span class="redacao-header-sub">Simulação fiel da folha de resposta dos vestibulares</span>
+          </div>
+          
+          <div class="redacao-header-actions">
+            <!-- Cronômetro de Redação -->
+            <div class="redacao-timer-pill">
+              <i class="fa-regular fa-clock"></i>
+              <span id="redacao-timer-tempo">60:00</span>
+              <button class="btn-timer-toggle" id="btn-timer-redacao" onclick="alternarTimerRedacao()" title="Cronometrar 1 hora de produção">
+                <i class="fa-solid fa-play"></i> Iniciar Cronômetro
+              </button>
+            </div>
+            <button class="btn-redacao-sec" onclick="salvarRascunhoRedacao()" title="Salvar rascunho no navegador">
+              <i class="fa-solid fa-floppy-disk"></i> Salvar Rascunho
+            </button>
+            <button class="btn-redacao-sec" onclick="exportarRedacao()" title="Baixar redação em formato texto">
+              <i class="fa-solid fa-download"></i> Exportar (.txt)
+            </button>
+            <button class="btn-redacao-danger" onclick="limparFolhaRedacao()" title="Limpar folha e recomeçar">
+              <i class="fa-solid fa-trash-can"></i> Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Estatísticas em Tempo Real -->
+        <div class="redacao-status-bar">
+          <div class="status-metric">
+            <span class="metric-label">Linhas:</span>
+            <span class="metric-val" id="redacao-cont-linhas">0/30</span>
+          </div>
+          <div class="status-metric">
+            <span class="metric-label">Palavras:</span>
+            <span class="metric-val" id="redacao-cont-palavras">0</span>
+          </div>
+          <div class="status-metric">
+            <span class="metric-label">Caracteres:</span>
+            <span class="metric-val" id="redacao-cont-caracteres">0</span>
+          </div>
+          <div class="status-metric-pill">
+            <span id="redacao-status-linhas" class="redacao-status-pill neutro">Folha em branco</span>
+          </div>
+        </div>
+
+        <!-- Cabeçalho Oficial de Prova Impressa de Redação -->
+        <div class="folha-oficial-cabecalho">
+          <div class="folha-oficial-topo-grid">
+            <div class="folha-oficial-brasao">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <div class="brasao-textos">
+                <span class="brasao-org">SISTEMA OFICIAL DE VESTIBULARES • ESTUDAMAIS</span>
+                <span class="brasao-doc">FOLHA DEFINITIVA DE RESPOSTA DA REDAÇÃO</span>
+              </div>
+            </div>
+            <div class="folha-oficial-meta-box">
+              <div class="meta-item-box">
+                <span class="meta-k">BANCA:</span>
+                <span class="meta-v" id="folha-meta-vestibular">ENEM</span>
+              </div>
+              <div class="meta-item-box">
+                <span class="meta-k">EXTENSÃO:</span>
+                <span class="meta-v">Mín. 7 | Máx. 30 Linhas</span>
+              </div>
+            </div>
+          </div>
+          <div class="folha-oficial-linha-titulo">
+            <label for="redacao-titulo-input"><i class="fa-solid fa-heading"></i> TÍTULO:</label>
+            <input type="text" id="redacao-titulo-input" class="folha-titulo-input" placeholder="(Opcional no ENEM • Recomendado na FUVEST, UNICAMP, FATEC e UNESP)" maxlength="120">
+          </div>
+          <div class="folha-oficial-aviso-faixa">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Instruções: Escreva de forma legível. Textos desconexos, ininteligíveis ou com até 7 linhas receberão <strong>NOTA ZERO</strong>.</span>
+          </div>
+        </div>
+
+        <!-- Área de Escrita Pautada -->
+        <div class="redacao-folha-container">
+          <div class="redacao-linhas-numeros" id="redacao-linhas-numeros">
+            <!-- 01 a 30 gerados via app.js -->
+          </div>
+          <div class="redacao-folha-wrapper">
+            <div class="redacao-margem-guia"></div>
+            <textarea id="redacao-textarea" class="redacao-textarea-pautada" placeholder="Comece seu texto aqui respeitando a introdução, desenvolvimento e conclusão...&#10;&#10;Dica: Não salte linhas entre parágrafos, utilize o recuo de parágrafo e atente-se às margens da folha oficial." spellcheck="true"></textarea>
+          </div>
+        </div>
+
+        <!-- Rodapé da Folha com Botão de Correção IA e Conexão Gemini -->
+        <div class="redacao-folha-footer">
+          <div class="redacao-dica-ia">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--primary-accent);"></i>
+            <span>Quando terminar sua redação, clique no botão para que o <strong>Google Gemini AI</strong> avalie seu texto com nota sincera de acordo com as competências oficiais da banca.</span>
+          </div>
+          <div class="redacao-footer-actions">
+            <button type="button" class="btn-gemini-config" id="btn-gemini-config" onclick="abrirModalConfigGemini()" title="Configurar chave da API do Google Gemini">
+              <i class="fa-brands fa-google"></i>
+              <span id="gemini-status-label">Google Gemini API</span>
+              <span class="gemini-pill-tag" id="gemini-pill-tag">Configurar</span>
+            </button>
+            <button class="btn-corrigir-ia" id="btn-corrigir-ia" onclick="corrigirRedacaoIA()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ Avaliar Redação com Gemini
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel de Resultado da Correção IA -->
+      <div id="redacao-resultado-ia" class="redacao-resultado-painel">
+        <!-- Preenchido dinamicamente via app.js -->
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA: SIMULADOS DOS VESTIBULARES COM TEMPO & GABARITO
+         ======================================================== -->
+    <section id="tab-simulados" class="tab-content">
+      
+      <!-- PAINEL 1: SELEÇÃO DE SIMULADOS -->
+      <div id="simulados-selecao-painel">
+        <div class="secao-titulo-bloco">
+          <div class="secao-badge"><i class="fa-solid fa-file-signature"></i> Provas Oficiais & Simulação Real</div>
+          <h2>Simulados dos Maiores Vestibulares do Brasil</h2>
+          <p>Treine em condições reais de prova com cronômetro oficial regressivo, cartão-resposta eletrônico, pontuação por área do saber e gabarito comentado questão por questão.</p>
+        </div>
+
+        <!-- Grid de Cards de Simulados Disponíveis -->
+        <div class="simulados-grid-cards" id="simulados-lista-cards">
+          <!-- Renderizado via app.js inicializarSimulados() -->
+        </div>
+      </div>
+
+      <!-- PAINEL 2: PROVA EM ANDAMENTO (INICIALMENTE OCULTO) -->
+      <div id="simulado-prova-painel" style="display: none;">
+        
+        <!-- Barra de Status Superior da Prova -->
+        <div class="simulado-prova-topbar">
+          <div class="simulado-topbar-info">
+            <span class="simulado-topbar-vest" id="simulado-q-area">Área</span>
+            <span class="simulado-topbar-disc" id="simulado-q-disc">Disciplina</span>
+            <span class="simulado-topbar-prog">Questão <strong id="simulado-q-num">1</strong> de <strong id="simulado-q-total">10</strong></span>
+          </div>
+
+          <div class="simulado-topbar-controls">
+            <!-- Timer Regressivo da Prova -->
+            <div class="simulado-timer-badge">
+              <i class="fa-solid fa-stopwatch"></i>
+              <span id="simulado-timer-display">00:00</span>
+            </div>
+            <!-- Botão Entregar Prova -->
+            <button class="btn-entregar-simulado" onclick="confirmarFinalizarSimulado()">
+              <i class="fa-solid fa-circle-check"></i> Entregar Simulado
+            </button>
+          </div>
+        </div>
+
+        <!-- Layout Central: Questão + Cartão de Respostas Lateral -->
+        <div class="simulado-layout-grid">
+          
+          <!-- Coluna Principal da Questão -->
+          <div class="simulado-questao-coluna">
+            <div class="simulado-questao-card">
+              <div class="simulado-q-card-header">
+                <span class="simulado-q-badge">Questão de Exame</span>
+                <button class="btn-marcar-revisar" id="btn-simulado-revisar" onclick="alternarRevisaoQuestao()">
+                  <i class="fa-regular fa-flag"></i> Marcar p/ Revisar
+                </button>
+              </div>
+
+              <!-- Enunciado -->
+              <div class="simulado-enunciado-corpo" id="simulado-q-enunciado">
+                Carregando enunciado da questão...
+              </div>
+
+              <!-- Alternativas -->
+              <div class="simulado-alternativas-wrapper" id="simulado-q-alternativas">
+                <!-- Alternativas geradas via app.js -->
+              </div>
+
+              <!-- Navegação Anterior / Próxima -->
+              <div class="simulado-navegacao-botoes">
+                <button class="btn-sim-nav" id="btn-simulado-anterior" onclick="simuladoQuestaoAnterior()">
+                  <i class="fa-solid fa-arrow-left"></i> Questão Anterior
+                </button>
+                <button class="btn-sim-nav primary" id="btn-simulado-proximo" onclick="simuladoQuestaoProxima()">
+                  Próxima Questão <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna Lateral: Cartão-Resposta Eletrônico -->
+          <aside class="simulado-cartao-coluna">
+            <div class="simulado-cartao-card">
+              <div class="simulado-cartao-header">
+                <h4><i class="fa-solid fa-table-cells"></i> Cartão-Resposta</h4>
+                <p>Navegue diretamente pelas questões:</p>
+              </div>
+
+              <!-- Legenda do Cartão -->
+              <div class="simulado-cartao-legenda">
+                <div class="legenda-item"><span class="bolinha-amostra respondida"></span> Respondida</div>
+                <div class="legenda-item"><span class="bolinha-amostra revisao"></span> Para Revisar</div>
+                <div class="legenda-item"><span class="bolinha-amostra"></span> Em Branco</div>
+              </div>
+
+              <!-- Grade das Bolinhas -->
+              <div class="simulado-cartao-grid" id="simulado-cartao-respostas">
+                <!-- Gerado via app.js -->
+              </div>
+
+              <div class="simulado-cartao-footer">
+                <button class="btn-finalizar-lateral" onclick="confirmarFinalizarSimulado()">
+                  <i class="fa-solid fa-flag-checkered"></i> Finalizar e Ver Gabarito
+                </button>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+
+      </div>
+
+      <!-- PAINEL 3: RESULTADO FINAL DO SIMULADO (INICIALMENTE OCULTO) -->
+      <div id="simulado-resultado-painel" style="display: none;">
+        <!-- Renderizado dinamicamente via app.js finalizarSimulado() -->
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA: MEU PERFIL & CARREIRA DO VESTIBULANDO
+         ======================================================== -->
+    <section id="tab-perfil" class="tab-content">
+
+      <!-- Header do Perfil & Carreira -->
+      <div class="perfil-hero-card">
+        <div class="perfil-hero-main">
+          <div class="perfil-avatar-wrapper">
+            <div class="perfil-avatar-circle" id="perfil-aba-avatar-circle">
+              <i id="perfil-aba-avatar-icon" class="fa-solid fa-user-graduate"></i>
+            </div>
+            <button class="btn-avatar-trocar" onclick="abrirModalEditarPerfil()" title="Alterar Avatar ou Dados">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <div class="perfil-hero-info">
+            <div class="perfil-nome-badge-row">
+              <h2 id="perfil-aba-nome" class="perfil-aba-nome">Estudante EstudaMais</h2>
+              <span class="perfil-nivel-pill" id="perfil-aba-nivel-badge"><i class="fa-solid fa-crown"></i> Nível 1 • Calouro Promissor</span>
+            </div>
+            <p id="perfil-aba-email" class="perfil-aba-email"><i class="fa-solid fa-envelope"></i> email@exemplo.com</p>
+            <div class="perfil-tags-carreira">
+              <span class="perfil-tag-item vest"><i class="fa-solid fa-graduation-cap"></i> Foco: <strong id="perfil-aba-vestibular">ENEM</strong></span>
+              <span class="perfil-tag-item curso"><i class="fa-solid fa-book-bookmark"></i> Curso: <strong id="perfil-aba-curso">Medicina</strong></span>
+              <span class="perfil-tag-item tempo"><i class="fa-solid fa-fire"></i> <strong id="perfil-aba-dias-foco">1º dia</strong> de foco</span>
+              <span class="perfil-tag-item data"><i class="fa-solid fa-calendar-days"></i> Membro desde: <span id="perfil-aba-data-cadastro">Novembro/2026</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="perfil-hero-actions">
+          <button class="btn-perfil-editar" onclick="abrirModalEditarPerfil()">
+            <i class="fa-solid fa-user-pen"></i>
+            <span>Editar Perfil</span>
+          </button>
+          <button class="btn-perfil-logout" onclick="executarLogoutConta()">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Sair da Conta</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Progresso de Carreira & Gamificação (XP) -->
+      <div class="carreira-xp-card">
+        <div class="carreira-xp-header">
+          <div class="carreira-xp-title-box">
+            <div class="carreira-xp-icon">
+              <i class="fa-solid fa-bolt-lightning"></i>
+            </div>
+            <div>
+              <h3>Jornada de Aprovação & Nível de Experiência</h3>
+              <p>Acumule XP estudando conteúdos, praticando redações e realizando simulados</p>
+            </div>
+          </div>
+          <div class="carreira-xp-numeros">
+            <span class="carreira-xp-val" id="carreira-xp-atual">0</span>
+            <span class="carreira-xp-meta" id="carreira-xp-proximo">/ 200 XP</span>
+          </div>
+        </div>
+
+        <div class="carreira-xp-bar-outer">
+          <div class="carreira-xp-bar-inner" id="carreira-xp-progresso-bar" style="width: 10%;"></div>
+        </div>
+
+        <div class="carreira-niveis-indicador">
+          <span class="nivel-step active" id="step-nivel-1"><i class="fa-solid fa-seedling"></i> Calouro</span>
+          <span class="nivel-step" id="step-nivel-2"><i class="fa-solid fa-book-open"></i> Focado</span>
+          <span class="nivel-step" id="step-nivel-3"><i class="fa-solid fa-brain"></i> Dedicado</span>
+          <span class="nivel-step" id="step-nivel-4"><i class="fa-solid fa-medal"></i> Mestre</span>
+          <span class="nivel-step" id="step-nivel-5"><i class="fa-solid fa-trophy"></i> Olímpico</span>
+        </div>
+      </div>
+
+      <!-- Grid de Estatísticas Gerais da Carreira -->
+      <div class="perfil-stats-dashboard">
+        <div class="perfil-stat-box azul">
+          <div class="stat-box-icon"><i class="fa-solid fa-list-check"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-topicos-total">0</span>
+            <span class="stat-box-label">Tópicos do Edital Estudados</span>
+          </div>
+        </div>
+
+        <div class="perfil-stat-box roxo">
+          <div class="stat-box-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-redacoes-total">0</span>
+            <span class="stat-box-label">Redações Avaliadas por IA</span>
+          </div>
+        </div>
+
+        <div class="perfil-stat-box verde">
+          <div class="stat-box-icon"><i class="fa-solid fa-file-signature"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-simulados-total">0</span>
+            <span class="stat-box-label">Simulados Completados</span>
+          </div>
+        </div>
+
+        <div class="perfil-stat-box laranja">
+          <div class="stat-box-icon"><i class="fa-solid fa-stopwatch"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-pomodoros-total">0</span>
+            <span class="stat-box-label">Ciclos Pomodoro de Foco</span>
+          </div>
+        </div>
+
+        <div class="perfil-stat-box ciano">
+          <div class="stat-box-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-notas-total">0</span>
+            <span class="stat-box-label">Anotações no Caderno</span>
+          </div>
+        </div>
+
+        <div class="perfil-stat-box amarelo">
+          <div class="stat-box-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <div class="stat-box-data">
+            <span class="stat-box-num" id="perfil-stat-quiz-total">0%</span>
+            <span class="stat-box-label">Taxa de Acertos no Quiz</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mural de Conquistas & Medalhas -->
+      <div class="perfil-conquistas-secao">
+        <div class="secao-conquistas-header">
+          <h3><i class="fa-solid fa-award"></i> Mural de Conquistas & Medalhas</h3>
+          <p>Complete metas de estudo para desbloquear medalhas e acelerar seu XP de carreira</p>
+        </div>
+
+        <div class="conquistas-grid" id="perfil-conquistas-grid">
+          <!-- Gerado dinamicamente via app.js -->
+        </div>
+      </div>
+
+      <!-- Central de Banco de Dados & Backup -->
+      <div class="perfil-database-secao">
+        <div class="db-secao-header">
+          <div class="db-secao-title">
+            <i class="fa-solid fa-database"></i>
+            <div>
+              <h3>Banco de Dados & Armazenamento da Conta</h3>
+              <p>Seus dados são salvos localmente no seu dispositivo via <strong>IndexedDB</strong> com redundância e privacidade 100% garantida.</p>
+            </div>
+          </div>
+          <span class="db-badge-secure"><i class="fa-solid fa-shield-halved"></i> 100% Offline & Gratuito</span>
+        </div>
+
+        <div class="db-actions-row">
+          <button class="btn-db-export" onclick="exportarDadosPerfil()">
+            <i class="fa-solid fa-download"></i>
+            <span>Exportar Backup Completo (.json)</span>
+          </button>
+          <label class="btn-db-import">
+            <i class="fa-solid fa-upload"></i>
+            <span>Restaurar / Importar Backup (.json)</span>
+            <input type="file" accept=".json" onchange="importarDadosPerfil(event)" style="display:none;">
+          </label>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       LOUSA DE RASCUNHO INTERATIVA (PARA RABISCAR E FAZER CONTAS)
+       ======================================================== -->
+  <aside id="lousa-rascunho" class="lousa-scratchpad">
+    <div class="lousa-header">
+      <div class="lousa-header-title">
+        <i class="fa-solid fa-pen-ruler"></i>
+        <span>Lousa de Rascunho para Cálculos</span>
+        <span class="lousa-status-tag" id="lousa-ferramenta-status">Lápis</span>
+      </div>
+      <div class="lousa-header-controls">
+        <button class="lousa-btn-control" id="btn-minimizar-lousa" onclick="alternarMinimizarLousa()" title="Minimizar / Expandir Lousa">
+          <i class="fa-solid fa-window-minimize"></i>
+        </button>
+        <button class="lousa-btn-control" onclick="alternarLousaRascunho()" title="Fechar Lousa">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de Ferramentas da Lousa -->
+    <div class="lousa-toolbar">
+      <div class="lousa-tool-group">
+        <button class="lousa-tool-btn active" id="tool-pen" onclick="setLousaFerramenta('pen')" title="Caneta / Lápis">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button class="lousa-tool-btn" id="tool-eraser" onclick="setLousaFerramenta('eraser')" title="Borracha">
+          <i class="fa-solid fa-eraser"></i>
+        </button>
+      </div>
+
+      <div class="lousa-cores-group">
+        <button class="lousa-cor-btn active" style="background: #1e293b;" onclick="setLousaCor('#1e293b')" title="Grafite Escuro"></button>
+        <button class="lousa-cor-btn" style="background: #0c1d3b;" onclick="setLousaCor('#0c1d3b')" title="Azul Marinho"></button>
+        <button class="lousa-cor-btn" style="background: #2563eb;" onclick="setLousaCor('#2563eb')" title="Azul Realce"></button>
+        <button class="lousa-cor-btn" style="background: #dc2626;" onclick="setLousaCor('#dc2626')" title="Vermelho"></button>
+        <button class="lousa-cor-btn" style="background: #16a34a;" onclick="setLousaCor('#16a34a')" title="Verde"></button>
+      </div>
+
+      <div class="lousa-espessura-group">
+        <button class="lousa-size-btn" onclick="setLousaEspessura(2)" title="Traço Fino (2px)">Fino</button>
+        <button class="lousa-size-btn active" onclick="setLousaEspessura(4)" title="Traço Médio (4px)">Médio</button>
+        <button class="lousa-size-btn" onclick="setLousaEspessura(8)" title="Traço Grosso (8px)">Grosso</button>
+      </div>
+
+      <div class="lousa-acoes-group">
+        <button class="lousa-tool-btn" onclick="desfazerLousa()" title="Desfazer último traço (Ctrl+Z)">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button class="lousa-tool-btn btn-limpar-lousa" onclick="limparLousa()" title="Limpar todo o rascunho">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela do Canvas -->
+    <div class="lousa-canvas-wrapper">
+      <canvas id="lousa-canvas"></canvas>
+      <div class="lousa-grid-hint">
+        <span><i class="fa-solid fa-lightbulb"></i> Use o mouse, caneta touch ou dedo para rabiscar contas, montar frações e desenhar esquemas!</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       MODAL: CRIAR / EDITAR ANOTAÇÃO
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-nota">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-nota-titulo">Nova Anotação de Estudos</h3>
+        <button class="modal-close-btn" onclick="fecharModalNota()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="nota-id-input">
+        
+        <div class="form-group">
+          <label for="nota-titulo-input">Título da Anotação *</label>
+          <input type="text" id="nota-titulo-input" class="form-input" placeholder="Ex: Fórmulas de Eletrodinâmica ou Repertório Redação">
+        </div>
+
+        <div class="form-group">
+          <label for="nota-categoria-input">Matéria ou Categoria</label>
+          <select id="nota-categoria-input" class="form-select">
+            <option value="Geral">Geral / Organização</option>
+            <option value="Redação">Redação & Repertórios</option>
+            <option value="Linguagens">Língua Portuguesa & Literatura</option>
+            <option value="Matemática">Matemática</option>
+            <option value="Ciências da Natureza">Biologia / Física / Química</option>
+            <option value="Ciências Humanas">História / Geografia / Filosofia</option>
+            <option value="ENEM">ENEM</option>
+            <option value="FUVEST">FUVEST</option>
+            <option value="FATEC">FATEC</option>
+            <option value="UNICAMP">UNICAMP</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nota-cor-input">Tema Visual do Card</label>
+          <select id="nota-cor-input" class="form-select">
+            <option value="azul">Azul Sereno (Padrão)</option>
+            <option value="marinho">Azul Marinho Acolhedor</option>
+            <option value="amarelo">Amarelo Post-it Suave</option>
+            <option value="verde">Verde Conquista</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nota-conteudo-input">Conteúdo da Anotação</label>
+          <textarea id="nota-conteudo-input" class="form-textarea" placeholder="Digite seu resumo, fórmulas, citações ou lembretes de estudo aqui..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" onclick="fecharModalNota()">Cancelar</button>
+        <button class="btn-modal-save" onclick="salvarNotaModal()">Salvar no Caderno</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       RODAPÉ DO SITE (CRÉDITOS DO PROJETO DE TCC)
+       ======================================================== -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>EstudaMais • Portal do Vestibulando</h4>
+        <p>
+          Projeto desenvolvido para o Trabalho de Conclusão de Curso (TCC). Uma ferramenta educacional concebida para apoiar alunos do Ensino Médio e cursos pré-vestibulares na organização dos estudos e no acesso aos principais conteúdos programáticos do país.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h5>Vestibulares Abordados</h5>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('enem')">ENEM</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('fuvest')">FUVEST (USP)</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('unicamp')">UNICAMP</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('unesp')">UNESP (Vunesp)</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('fatec')">FATEC</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('ita')">ITA</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('unb')">UnB (Cebraspe)</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('uerj')">UERJ</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('ufpr')">UFPR</a></li>
+          <li><a href="javascript:void(0)" onclick="irParaVestibular('ufrgs')">UFRGS</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Recursos do Portal</h5>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="mudarAba('quiz')">Arena de Quiz & Exercícios</a></li>
+          <li><a href="javascript:void(0)" onclick="alternarLousaRascunho()">Lousa de Cálculos</a></li>
+          <li><a href="javascript:void(0)" onclick="mudarAba('notas')">Bloco de Notas Integrado</a></li>
+          <li><a href="javascript:void(0)" onclick="mudarAba('ferramentas')">Cronômetro Pomodoro</a></li>
+          <li><a href="javascript:void(0)" onclick="mudarAba('dicas')">Técnicas e Dicas de Estudo</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom-bar">
+      <span>Projeto de TCC Escolar &copy; 2026 • Desenvolvido com carinho para vestibulandos.</span>
+      <span>Foco, constância e bons estudos! 🎓✏️</span>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       MODAL DE PERSONALIZAÇÃO DE TEMA & PALETAS DE CORES
+       ======================================================== -->
+  <div id="modal-cores" class="modal-overlay" onclick="if(event.target === this) fecharModalCores()">
+    <div class="modal-palette-box">
+      
+      <div class="modal-palette-header">
+        <div class="modal-palette-title-box">
+          <h3><i class="fa-solid fa-palette"></i> Personalizar Aparência & Cores</h3>
+          <p>Escolha o modo de estudo e sua paleta de cores favorita para uma experiência única!</p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalCores()" aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Seletor de Modo Claro / Escuro -->
+      <div>
+        <div class="palette-section-title">
+          <i class="fa-solid fa-circle-half-stroke"></i> Modo de Iluminação
+        </div>
+        <div class="palette-mode-selector">
+          <div class="mode-card active" id="mode-card-light" onclick="selecionarModoTema('light')">
+            <div class="mode-card-icon">
+              <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+            </div>
+            <div class="mode-card-info">
+              <h4>Modo Claro</h4>
+              <p>Cores nítidas e aconchegantes para o dia</p>
+            </div>
+          </div>
+          <div class="mode-card" id="mode-card-dark" onclick="selecionarModoTema('dark')">
+            <div class="mode-card-icon">
+              <i class="fa-solid fa-moon" style="color: #6366f1;"></i>
+            </div>
+            <div class="mode-card-info">
+              <h4>Modo Escuro</h4>
+              <p>Conforto visual e descanso para os olhos à noite</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seletor de Paletas de Cores -->
+      <div>
+        <div class="palette-section-title">
+          <i class="fa-solid fa-swatchbook"></i> Cor de Destaque dos Estudos
+        </div>
+
+        <!-- Abas de Famílias de Cores -->
+        <div class="palette-family-tabs">
+          <button class="palette-family-btn active" onclick="filtrarFamiliaCores('todas', this)">
+            <i class="fa-solid fa-border-all"></i> Todas
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Azul', this)">
+            <i class="fa-solid fa-droplet" style="color: #2563eb;"></i> Azul
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Amarelo', this)">
+            <i class="fa-solid fa-sun" style="color: #ca8a04;"></i> Amarelo
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Vinho', this)">
+            <i class="fa-solid fa-wine-glass" style="color: #9f1239;"></i> Vinho
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Vermelho', this)">
+            <i class="fa-solid fa-fire" style="color: #dc2626;"></i> Vermelho
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Roxo', this)">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #9333ea;"></i> Roxo
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Rosa', this)">
+            <i class="fa-solid fa-heart" style="color: #db2777;"></i> Rosa
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Verde', this)">
+            <i class="fa-solid fa-leaf" style="color: #059669;"></i> Verde
+          </button>
+        </div>
+
+        <!-- Grade Dinâmica das 21 Cores -->
+        <div class="palette-grid" id="palette-colors-grid">
+          <!-- Renderizado via JavaScript renderizarPaletasCores() -->
+        </div>
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="modal-palette-footer">
+        <button class="btn-palette-reset" onclick="restaurarTemaPadrao()">
+          <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão (Azul Marinho)
+        </button>
+        <button class="btn-palette-done" onclick="fecharModalCores()">
+          <i class="fa-solid fa-check"></i> Concluir Personalização
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: AUTENTICAÇÃO DO ESTUDANTE (LOGIN & CADASTRO)
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-auth" onclick="if(event.target === this && !window.AppState?.isAuthGate) fecharModalAuth()">
+    <div class="modal-card modal-auth-card">
+      <div class="auth-gate-banner" id="auth-gate-banner" style="display: none;">
+        <i class="fa-solid fa-lock"></i>
+        <span><strong>Identifique-se para entrar:</strong> Crie sua conta gratuita ou faça login para carregar seu plano de estudos, caderno de notas e redações com segurança!</span>
+      </div>
+      <div class="modal-header">
+        <div class="modal-header-icon auth-icon-box">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3 id="modal-auth-titulo">Central do Estudante</h3>
+          <p id="modal-auth-subtitulo">Acesse seu cantinho de estudos ou crie sua conta gratuita</p>
+        </div>
+        <button class="modal-btn-close" id="modal-auth-btn-close" onclick="fecharModalAuth()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Abas de Alternância: Login / Cadastro -->
+      <div class="auth-tabs-nav">
+        <button class="auth-tab-btn active" id="auth-tab-login" onclick="alternarAbaAuth('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Fazer Login
+        </button>
+        <button class="auth-tab-btn" id="auth-tab-cadastro" onclick="alternarAbaAuth('cadastro')">
+          <i class="fa-solid fa-user-plus"></i> Criar Minha Conta
+        </button>
+      </div>
+
+      <!-- Formulário de Login -->
+      <form id="auth-form-login" class="auth-form active" onsubmit="executarLoginConta(event)">
+        <div class="form-group">
+          <label for="login-email"><i class="fa-solid fa-envelope"></i> E-mail:</label>
+          <input type="email" id="login-email" class="form-input" placeholder="seuemail@exemplo.com" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="login-senha"><i class="fa-solid fa-lock"></i> Senha:</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="login-senha" class="form-input" placeholder="Sua senha secreta" required autocomplete="current-password">
+            <button type="button" class="btn-toggle-pwd" onclick="const p = document.getElementById('login-senha'); p.type = p.type === 'password' ? 'text' : 'password';">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="auth-form-extras">
+          <label class="remember-label">
+            <input type="checkbox" id="login-lembrar" checked>
+            <span>Manter conectado neste dispositivo</span>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="fecharModalAuth()">Cancelar</button>
+          <button type="submit" class="btn-modal-submit btn-auth-submit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar na Minha Conta
+          </button>
+        </div>
+        <div class="auth-switch-prompt">
+          <span>Ainda não tem conta no EstudaMais?</span>
+          <button type="button" class="link-btn-switch" onclick="alternarAbaAuth('cadastro')">Cadastre-se grátis agora!</button>
+        </div>
+      </form>
+
+      <!-- Formulário de Cadastro -->
+      <form id="auth-form-cadastro" class="auth-form" onsubmit="executarCadastroConta(event)">
+        <div class="form-group">
+          <label for="cad-nome"><i class="fa-solid fa-user"></i> Nome Completo:</label>
+          <input type="text" id="cad-nome" class="form-input" placeholder="Ex: Maria Eduarda Silva" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="cad-email"><i class="fa-solid fa-envelope"></i> E-mail de Contato:</label>
+          <input type="email" id="cad-email" class="form-input" placeholder="seuemail@exemplo.com" required autocomplete="email">
+        </div>
+        <div class="form-row-duplo">
+          <div class="form-group">
+            <label for="cad-senha"><i class="fa-solid fa-lock"></i> Senha (mín. 6 dígitos):</label>
+            <input type="password" id="cad-senha" class="form-input" placeholder="Crie sua senha" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="cad-senha-confirma"><i class="fa-solid fa-shield-halved"></i> Confirme a Senha:</label>
+            <input type="password" id="cad-senha-confirma" class="form-input" placeholder="Repita a senha" required minlength="6" autocomplete="new-password">
+          </div>
+        </div>
+        <div class="form-row-duplo">
+          <div class="form-group">
+            <label for="cad-vestibular"><i class="fa-solid fa-graduation-cap"></i> Vestibular Foco:</label>
+            <select id="cad-vestibular" class="form-select">
+              <option value="ENEM" selected>ENEM (Exame Nacional)</option>
+              <option value="FUVEST">FUVEST (USP)</option>
+              <option value="FATEC">FATEC (Tecnologia SP)</option>
+              <option value="UNICAMP">UNICAMP (Comvest)</option>
+              <option value="UNESP">UNESP (Vunesp)</option>
+              <option value="UERJ">UERJ (Rio de Janeiro)</option>
+              <option value="UFPR">UFPR (Paraná)</option>
+              <option value="UFRGS">UFRGS (Rio Grande do Sul)</option>
+              <option value="UFMG">UFMG (Minas Gerais)</option>
+              <option value="UFSC">UFSC (Santa Catarina)</option>
+              <option value="ITA / IME">ITA / IME (Militares)</option>
+              <option value="UECE">UECE (Ceará)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cad-curso"><i class="fa-solid fa-briefcase"></i> Curso Pretendido:</label>
+            <input type="text" id="cad-curso" class="form-input" placeholder="Ex: Medicina, ADS, Direito...">
+          </div>
+        </div>
+
+        <!-- Seletor de Avatar do Estudante -->
+        <div class="form-group">
+          <label><i class="fa-solid fa-masks-theater"></i> Escolha seu Avatar de Estudante:</label>
+          <input type="hidden" id="cad-avatar-val" value="fa-user-graduate">
+          <div class="avatar-options-grid">
+            <div class="avatar-option selected" onclick="selecionarAvatarCadastro('fa-user-graduate', this)" title="Capelo / Formando">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-brain', this)" title="Cérebro Genial">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-rocket', this)" title="Foguete / Rumo ao Topo">
+              <i class="fa-solid fa-rocket"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-book-open-reader', this)" title="Devorador de Livros">
+              <i class="fa-solid fa-book-open-reader"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-stethoscope', this)" title="Área da Saúde">
+              <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-laptop-code', this)" title="Dev / Tecnologia">
+              <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-microscope', this)" title="Pesquisador / Ciências">
+              <i class="fa-solid fa-microscope"></i>
+            </div>
+            <div class="avatar-option" onclick="selecionarAvatarCadastro('fa-pencil', this)" title="Escritor / Redação 1000">
+              <i class="fa-solid fa-pencil"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="fecharModalAuth()">Cancelar</button>
+          <button type="submit" class="btn-modal-submit btn-auth-submit">
+            <i class="fa-solid fa-check"></i> Criar Minha Conta Gratuita
+          </button>
+        </div>
+        <div class="auth-switch-prompt">
+          <span>Já possui uma conta criada?</span>
+          <button type="button" class="link-btn-switch" onclick="alternarAbaAuth('login')">Faça login agora</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: PERFIL DO ESTUDANTE & CENTRAL DE DADOS
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-perfil-usuario" onclick="if(event.target === this) fecharModalPerfil()">
+    <div class="modal-card modal-perfil-card">
+      <div class="perfil-card-topo">
+        <div class="perfil-avatar-circulo">
+          <i id="perfil-avatar-icon" class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div class="perfil-identificacao">
+          <h3 id="perfil-nome">Nome do Aluno</h3>
+          <p id="perfil-email" class="perfil-email-tag">email@exemplo.com</p>
+          <div class="perfil-tags-row">
+            <span class="perfil-badge-vest"><i class="fa-solid fa-graduation-cap"></i> Foco: <strong id="perfil-vestibular">ENEM</strong></span>
+            <span class="perfil-badge-curso"><i class="fa-solid fa-book-bookmark"></i> Curso: <strong id="perfil-curso">Medicina</strong></span>
+          </div>
+          <span id="perfil-data-criacao" class="perfil-membro-desde">Membro desde 2026</span>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalPerfil()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Métricas Pessoais do Aluno -->
+      <div class="perfil-metricas-grid">
+        <div class="perfil-stat-card">
+          <i class="fa-solid fa-note-sticky text-accent"></i>
+          <span class="stat-num" id="perfil-stat-notas">0</span>
+          <span class="stat-label">Anotações Salvas</span>
+        </div>
+        <div class="perfil-stat-card">
+          <i class="fa-solid fa-circle-check text-success"></i>
+          <span class="stat-num" id="perfil-stat-topicos">0</span>
+          <span class="stat-label">Tópicos Concluídos</span>
+        </div>
+        <div class="perfil-stat-card">
+          <i class="fa-solid fa-stopwatch text-warning"></i>
+          <span class="stat-num" id="perfil-stat-pomodoro">0</span>
+          <span class="stat-label">Foco Pomodoro</span>
+        </div>
+      </div>
+
+      <!-- Backup e Gerenciamento de Dados -->
+      <div class="perfil-secao-dados">
+        <div class="secao-dados-header">
+          <h4><i class="fa-solid fa-database"></i> Armazenamento & Backup Pessoal</h4>
+          <span class="db-tech-badge"><i class="fa-solid fa-shield-halved"></i> Banco Local Seguro: IndexedDB</span>
+        </div>
+        <p class="secao-dados-desc">Seus dados e notas ficam armazenados com privacidade no seu navegador via IndexedDB. Você pode baixar uma cópia de segurança (backup em arquivo .json) para guardar ou transferir para outro celular/computador.</p>
+        <div class="perfil-botoes-backup">
+          <button class="btn-backup-export" onclick="exportarDadosPerfil()">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            <span>Exportar Backup (.json)</span>
+          </button>
+          <label class="btn-backup-import">
+            <i class="fa-solid fa-file-arrow-up"></i>
+            <span>Restaurar Backup (.json)</span>
+            <input type="file" accept=".json" onchange="importarDadosPerfil(event)" style="display:none;">
+          </label>
+        </div>
+      </div>
+
+      <!-- Ações da Conta -->
+      <div class="perfil-acoes-footer">
+        <button class="btn-perfil-logout" onclick="executarLogoutConta()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sair da Minha Conta</span>
+        </button>
+        <button class="btn-perfil-fechar" onclick="fecharModalPerfil()">
+          <i class="fa-solid fa-check"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       BARRA DE NAVEGAÇÃO INFERIOR PARA CELULARES & TABLETS ANDROID
+       ======================================================== -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-btn active" data-tab="inicio" onclick="mudarAba('inicio')">
+      <i class="fa-solid fa-house"></i>
+      <span>Início</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="vestibulares" onclick="mudarAba('vestibulares')">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>Vestibulares</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="simulados" onclick="mudarAba('simulados')">
+      <i class="fa-solid fa-file-signature"></i>
+      <span>Simulados</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="redacao" onclick="mudarAba('redacao')">
+      <i class="fa-solid fa-feather-pointed"></i>
+      <span>Redação</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="quiz" onclick="mudarAba('quiz')">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Quiz</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="notas" onclick="mudarAba('notas')">
+      <i class="fa-solid fa-pen-to-square"></i>
+      <span>Notas</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="ferramentas" onclick="mudarAba('ferramentas')">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span>Foco</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="perfil" onclick="mudarAba('perfil')">
+      <i class="fa-solid fa-user-graduate"></i>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <!-- ========================================================
+       MODAL: EDITAR MEU PERFIL DO ESTUDANTE
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-editar-perfil" onclick="if(event.target === this) fecharModalEditarPerfil()">
+    <div class="modal-card modal-auth-card">
+      <div class="modal-header">
+        <div class="modal-header-icon auth-icon-box">
+          <i class="fa-solid fa-user-pen"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Editar Meu Perfil</h3>
+          <p>Atualize seus dados, vestibular foco e avatar</p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalEditarPerfil()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-editar-perfil" onsubmit="salvarEdicaoPerfil(event)">
+        <div class="form-group">
+          <label for="edit-perfil-nome"><i class="fa-solid fa-user"></i> Nome Completo:</label>
+          <input type="text" id="edit-perfil-nome" class="form-input" required>
+        </div>
+        <div class="form-row-duplo">
+          <div class="form-group">
+            <label for="edit-perfil-vestibular"><i class="fa-solid fa-graduation-cap"></i> Vestibular Foco:</label>
+            <select id="edit-perfil-vestibular" class="form-select">
+              <option value="ENEM">ENEM (Exame Nacional)</option>
+              <option value="FUVEST">FUVEST (USP)</option>
+              <option value="FATEC">FATEC (Tecnologia SP)</option>
+              <option value="UNICAMP">UNICAMP (Comvest)</option>
+              <option value="UNESP">UNESP (Vunesp)</option>
+              <option value="UERJ">UERJ (Rio de Janeiro)</option>
+              <option value="UFPR">UFPR (Paraná)</option>
+              <option value="UFRGS">UFRGS (Rio Grande do Sul)</option>
+              <option value="UFMG">UFMG (Minas Gerais)</option>
+              <option value="UFSC">UFSC (Santa Catarina)</option>
+              <option value="ITA / IME">ITA / IME (Militares)</option>
+              <option value="UECE">UECE (Ceará)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-perfil-curso"><i class="fa-solid fa-book-bookmark"></i> Curso dos Sonhos:</label>
+            <input type="text" id="edit-perfil-curso" class="form-input" placeholder="Ex: Medicina, ADS, Direito...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-icons"></i> Escolha seu Avatar:</label>
+          <div class="avatar-selector-grid" id="edit-avatar-selector-grid">
+            <div class="avatar-option active" data-avatar="fa-user-graduate" onclick="selecionarAvatarEdicao('fa-user-graduate', this)">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="avatar-option" data-avatar="fa-book-open-reader" onclick="selecionarAvatarEdicao('fa-book-open-reader', this)">
+              <i class="fa-solid fa-book-open-reader"></i>
+            </div>
+            <div class="avatar-option" data-avatar="fa-stethoscope" onclick="selecionarAvatarEdicao('fa-stethoscope', this)">
+              <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <div class="avatar-option" data-avatar="fa-laptop-code" onclick="selecionarAvatarEdicao('fa-laptop-code', this)">
+              <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <div class="avatar-option" data-avatar="fa-microscope" onclick="selecionarAvatarEdicao('fa-microscope', this)">
+              <i class="fa-solid fa-microscope"></i>
+            </div>
+            <div class="avatar-option" data-avatar="fa-pencil" onclick="selecionarAvatarEdicao('fa-pencil', this)">
+              <i class="fa-solid fa-pencil"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-cancel" onclick="fecharModalEditarPerfil()">Cancelar</button>
+          <button type="submit" class="btn-modal-submit btn-auth-submit">
+            <i class="fa-solid fa-check"></i> Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: CONFIGURAÇÃO DA API DO GOOGLE GEMINI
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-config-gemini" onclick="if(event.target === this) fecharModalConfigGemini()">
+    <div class="modal-card modal-auth-card modal-gemini-card">
+      <div class="modal-header">
+        <div class="modal-header-icon gemini-icon-box">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Conectar API do Google Gemini</h3>
+          <p>Potencialize a correção de redação com o modelo mais inteligente do Google</p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalConfigGemini()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-gemini-body">
+        <div class="gemini-info-box">
+          <div class="gemini-info-topo">
+            <span class="gemini-tech-badge"><i class="fa-brands fa-google"></i> Google AI Studio</span>
+            <span class="gemini-free-badge"><i class="fa-solid fa-tag"></i> 100% Gratuito</span>
+          </div>
+          <p>O <strong>Google Gemini 1.5/2.0 Flash</strong> é a inteligência artificial de última geração desenvolvida pelo Google, capaz de analisar minuciosamente as competências de cada vestibular com notas sinceras, rigorosas e parecer pedagógico completo.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="gemini-api-key-input">
+            <i class="fa-solid fa-key"></i> Sua Chave de API do Gemini (API Key):
+          </label>
+          <div class="input-password-wrapper">
+            <input type="password" id="gemini-api-key-input" class="form-input" placeholder="Cole sua chave aqui: AIzaSy..." autocomplete="off">
+            <button type="button" class="btn-toggle-pwd" onclick="const p = document.getElementById('gemini-api-key-input'); p.type = p.type === 'password' ? 'text' : 'password';">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <span class="form-help-hint">
+            <i class="fa-solid fa-shield-halved"></i> Sua chave é salva exclusivamente no seu próprio navegador (LocalStorage) e nunca é compartilhada.
+          </span>
+        </div>
+
+        <div class="gemini-tutorial-card">
+          <h4><i class="fa-solid fa-circle-question"></i> Como obter sua chave gratuita em 30 segundos?</h4>
+          <ol class="gemini-steps-list">
+            <li>Acesse o <strong>Google AI Studio</strong> clicando no botão abaixo:</li>
+            <li class="gemini-link-step">
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="btn-obter-chave-google">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Obter Chave no Google AI Studio (Grátis)
+              </a>
+            </li>
+            <li>Faça login com sua conta Google (Gmail) e clique no botão azul <strong>"Create API Key"</strong>.</li>
+            <li>Copie a chave gerada (começa com <code>AIzaSy...</code>) e cole no campo acima!</li>
+          </ol>
+        </div>
+
+        <!-- Seletor de Modelo Gemini -->
+        <div class="form-group" style="margin-top: 1rem;">
+          <label for="gemini-model-select"><i class="fa-solid fa-microchip"></i> Versão do Modelo Gemini:</label>
+          <select id="gemini-model-select" class="form-select">
+            <option value="gemini-1.5-flash" selected>Gemini 1.5 Flash (Recomendado • Ultra Rápido & Preciso)</option>
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Nova Geração • Máxima Velocidade)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Análise Profunda & Máximo Raciocínio)</option>
+          </select>
+        </div>
+
+        <!-- Feedback de Teste -->
+        <div id="gemini-test-feedback" class="gemini-test-feedback" style="display: none;"></div>
+      </div>
+
+      <div class="modal-actions" style="margin-top: 1.2rem;">
+        <button type="button" class="btn-modal-cancel" onclick="removerChaveGemini()" id="btn-remover-chave-gemini" style="display: none;">
+          <i class="fa-solid fa-trash-can"></i> Remover Chave
+        </button>
+        <button type="button" class="btn-testar-gemini" onclick="testarChaveGemini()" id="btn-testar-gemini">
+          <i class="fa-solid fa-plug"></i> Testar Conexão
+        </button>
+        <button type="button" class="btn-modal-submit btn-auth-submit" onclick="salvarChaveGemini()">
+          <i class="fa-solid fa-check"></i> Salvar e Ativar Gemini
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js" charset="UTF-8"></script>
+  <script src="js/app.js" charset="UTF-8"></script>
+</body>
+</html>
