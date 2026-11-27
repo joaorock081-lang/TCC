@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>EstudaMais • Portal do Vestibulando | Projeto de TCC</title>
-  <meta name="description" content="Plataforma de apoio aos vestibulandos com matérias mais cobradas nos 10 maiores vestibulares do Brasil, bloco de notas integrado e dicas de estudos.">
+  <meta name="description" content="Plataforma inclusiva de apoio aos vestibulandos com conteúdos mais cobrados nos maiores vestibulares públicos e privados do Brasil (ENEM, USP, FATEC, Fundação Santo André, PUC, Mackenzie, FGV, Unicamp e mais), bloco de notas e dicas de estudos.">
   
   <!-- Configurações PWA e Mobile Android -->
   <link rel="manifest" href="manifest.json">
@@ -47,12 +48,13 @@
   <!-- ========================================================
        CABEÇALHO & BARRA DE NAVEGAÇÃO
        ======================================================== -->
-  <header class="site-header">
-    <div class="header-container">
-      <div class="brand-logo" onclick="mudarAba('inicio')">
+    <header class="site-header site-header-2-andares">
+    <!-- ANDAR 1 (SUPERIOR): Marca / Logo à esquerda | Ferramentas Rápidas, Temas e Usuário à direita -->
+    <div class="header-andar-superior">
+      <div class="brand-logo" onclick="mudarAba('inicio')" title="Página Inicial">
         <!-- Logo Oficial Estuda Mais -->
         <div class="logo-icon-box logo-img-box">
-          <img src="assets/logo_estudamais.jpg" alt="Estuda Mais" class="logo-img-header" width="58" height="58">
+          <img src="assets/logo_estudamais.jpg" alt="Estuda Mais" class="logo-img-header" width="46" height="46">
         </div>
         <div class="brand-info">
           <div class="brand-title-row">
@@ -63,78 +65,28 @@
         </div>
       </div>
 
-      <!-- Barra de Navegação Horizontal Dinâmica & Animada com Rolagem Fluida -->
-      <div class="nav-carousel-wrapper">
-        <button class="nav-scroll-btn prev" id="nav-btn-prev" onclick="rolarMenuNav(-180)" title="Rolar abas para a esquerda" aria-label="Rolar abas para a esquerda">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <nav class="nav-scroll-container" id="nav-scroll-container">
-          <ul class="nav-menu" id="nav-menu-list">
-            <li>
-              <button class="nav-btn active" data-tab="inicio">
-                <i class="fa-solid fa-house"></i>
-                <span>Início</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="vestibulares">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <span>Vestibulares</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="simulados">
-                <i class="fa-solid fa-file-signature"></i>
-                <span>Simulados</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="redacao">
-                <i class="fa-solid fa-feather-pointed"></i>
-                <span class="nav-clean-2lines">Redação<br>& IA</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="quiz">
-                <i class="fa-solid fa-gamepad"></i>
-                <span>Quiz</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="notas">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <span class="nav-clean-2lines">Bloco de<br>Notas</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="ferramentas">
-                <i class="fa-solid fa-stopwatch"></i>
-                <span>Foco</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="dicas">
-                <i class="fa-solid fa-lightbulb"></i>
-                <span>Dicas</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-btn" data-tab="perfil">
-                <i class="fa-solid fa-user-graduate"></i>
-                <span class="nav-clean-2lines">Meu Perfil<br>& Carreira</span>
-              </button>
-            </li>
-          </ul>
-        </nav>
-
-        <button class="nav-scroll-btn next" id="nav-btn-next" onclick="rolarMenuNav(180)" title="Rolar abas para a direita" aria-label="Rolar abas para a direita">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </div>
-
       <div class="header-actions">
-        <!-- Alternador Rápido Claro / Escuro -->
+        <!-- Abas Fixas Rápidas: Lousa, Notas, Tutor IA e Foco (Móveis e Flutuantes) -->
+        <button type="button" class="btn-header-quick-fixo" onclick="alternarJanelaFlutuante('lousa')" title="Abrir Lousa de Contas & Cálculos Móvel">
+          <i class="fa-solid fa-pen-ruler" style="color: #0284c7;"></i>
+          <span>Lousa</span>
+        </button>
+        <button type="button" class="btn-header-quick-fixo" onclick="alternarJanelaFlutuante('notas')" title="Abrir Bloco de Anotações Móvel">
+          <i class="fa-solid fa-pen-to-square" style="color: #7c3aed;"></i>
+          <span>Notas</span>
+        </button>
+        <button type="button" class="btn-header-quick-fixo btn-header-ia" onclick="alternarJanelaFlutuante('ia')" title="Abrir Tutor IA & Gemini Móvel">
+          <i class="fa-solid fa-robot" style="color: #3b82f6;"></i>
+          <span>Tutor IA</span>
+        </button>
+        <button type="button" class="btn-header-quick-fixo btn-header-foco" onclick="alternarJanelaFlutuante('foco')" title="Abrir Foco Pomodoro & Sons Ambientes Móvel">
+          <i class="fa-solid fa-fire" style="color: #f97316;"></i>
+          <span>Foco</span>
+        </button>
+
+        <span class="header-divider-v"></span>
+
+        <!-- Alternador Rápido Claro / Escuro / Descanso -->
         <button class="btn-header-theme-toggle" id="btn-theme-toggle" onclick="alternarModoEscuro()" title="Alternar Modo Claro / Escuro" aria-label="Modo Claro ou Escuro">
           <i class="fa-solid fa-moon" id="icon-theme-toggle"></i>
         </button>
@@ -145,15 +97,6 @@
           <span>Cores</span>
         </button>
 
-        <button class="btn-header-scratchpad" onclick="alternarLousaRascunho()" title="Abrir Lousa para Rabiscar e Fazer Contas">
-          <i class="fa-solid fa-pen-ruler"></i>
-          <span>Lousa de Contas</span>
-        </button>
-        <button class="btn-header-cta" onclick="abrirModalNovaNota()">
-          <i class="fa-solid fa-plus"></i>
-          <span>Nova Nota</span>
-        </button>
-
         <!-- Área de Usuário / Login / Cadastro -->
         <div class="header-user-area" id="header-user-area">
           <button class="btn-header-auth" onclick="abrirModalAuth('login')" title="Entrar ou criar conta">
@@ -161,6 +104,103 @@
             <span>Entrar / Cadastrar</span>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ANDAR 2 (INFERIOR): Barra de Abas Completa e Espaçosa com Rolagem -->
+    <div class="header-andar-inferior">
+      <div class="nav-grouped-wrapper">
+        <!-- Botão com as 3 Listras Clássicas (☰) em Alto Contraste & Destaque -->
+        <button type="button" class="btn-menu-hamburguer" id="btn-menu-hamburguer" onclick="alternarModalMenuAbas()" title="Ver todas as abas organizadas em grupos (☰)" aria-label="Menu de Abas">
+          <span class="icone-hamburguer-listras" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="texto-menu-hamburguer">Todas as Abas</span>
+        </button>
+
+        <!-- Seta Esquerda para Rolar Abas -->
+        <button type="button" class="nav-scroll-btn prev visible" id="nav-btn-prev" onclick="rolarMenuNav(-200)" title="Rolar abas para a esquerda" aria-label="Rolar abas para a esquerda">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <!-- Abas Principais em Linha Direta com Rolagem Ampla -->
+        <nav class="nav-scroll-container" id="nav-scroll-container">
+          <ul class="nav-menu" id="nav-menu-list">
+            <li>
+              <button type="button" class="nav-btn active" data-tab="inicio" onclick="mudarAba('inicio')">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="vestibulares" onclick="mudarAba('vestibulares')">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Vestibulares</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="videoaulas" onclick="mudarAba('videoaulas')">
+                <i class="fa-brands fa-youtube" style="color: #ef4444;"></i>
+                <span>Vídeo Aulas</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="simulados" onclick="mudarAba('simulados')">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Simulados</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="redacao" onclick="mudarAba('redacao')">
+                <i class="fa-solid fa-feather-pointed"></i>
+                <span>Redação</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="quiz" onclick="mudarAba('quiz')">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Quiz</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="cronograma" onclick="mudarAba('cronograma')">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Cronograma</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="ferramentas" onclick="mudarAba('ferramentas')">
+                <i class="fa-solid fa-fire" style="color: #f97316;"></i>
+                <span>Foco & Pomodoro</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="notas" onclick="mudarAba('notas')">
+                <i class="fa-solid fa-book"></i>
+                <span>Caderno</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="dicas" onclick="mudarAba('dicas')">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span>Dicas</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="nav-btn" data-tab="perfil" onclick="mudarAba('perfil')">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>Perfil</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Seta Direita para Rolar Abas -->
+        <button type="button" class="nav-scroll-btn next visible" id="nav-btn-next" onclick="rolarMenuNav(200)" title="Rolar abas para a direita" aria-label="Rolar abas para a direita">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
     </div>
   </header>
@@ -186,7 +226,7 @@
             Conquiste sua aprovação com <span class="highlight">organização, foco e calma</span>.
           </h1>
           <p class="hero-subtitle">
-            Reunimos os conteúdos que mais caem no <strong>ENEM</strong>, <strong>FUVEST</strong>, <strong>FATEC</strong> e <strong>UNICAMP</strong>, acompanhados de um bloco de notas digital, técnicas de estudo comprovadas e ferramentas de concentração em um ambiente acolhedor.
+            Reunimos os conteúdos que mais caem no <strong>ENEM</strong>, <strong>FUVEST</strong>, <strong>FATEC</strong>, <strong>FSA (Fundação Santo André)</strong>, <strong>PUC</strong>, <strong>UNICAMP</strong> e principais faculdades públicas e privadas, acompanhados de simulados com IA, cronograma personalizado, caderno digital e ferramentas de foco em um ambiente acolhedor.
           </p>
           <div class="hero-actions">
             <button class="btn-hero-primary" data-goto="vestibulares">
@@ -204,6 +244,18 @@
             <button class="btn-hero-secondary" data-goto="quiz">
               <i class="fa-solid fa-gamepad"></i>
               <span>Quiz & Exercícios</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="cronograma">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span>Cronograma Semanal</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="videoaulas">
+              <i class="fa-brands fa-youtube" style="color: #ef4444;"></i>
+              <span>Vídeo Aulas & Canais</span>
+            </button>
+            <button class="btn-hero-secondary" data-goto="chat-ia" style="border-color: var(--primary-accent); background: color-mix(in srgb, var(--primary-accent) 20%, transparent);">
+              <i class="fa-solid fa-robot" style="color: var(--primary-accent-light, #93c5fd);"></i>
+              <span>Tutor IA & Gemini</span>
             </button>
           </div>
         </div>
@@ -224,7 +276,11 @@
       </div>
 
       <!-- Frase Motivacional Diária -->
-      <div id="frase-motivacional" class="card-frase-dia"></div>
+      <div id="frase-motivacional" class="card-frase-dia">
+        <i class="fa-solid fa-quote-left quote-icon"></i>
+        <p class="frase-texto">"A persistência é o caminho do êxito na conquista da sua vaga."</p>
+        <span class="frase-autor">— Equipe EstudaMais</span>
+      </div>
 
       <!-- Estatísticas & Progresso Geral do Aluno -->
       <div class="dashboard-grid-stats">
@@ -243,7 +299,7 @@
             <i class="fa-solid fa-circle-check"></i>
           </div>
           <div class="stat-data">
-            <span class="stat-num" id="stat-topicos-concluidos">0/0</span>
+            <span class="stat-num" id="stat-topicos-concluidos">0/350</span>
             <span class="stat-label">Tópicos do Edital Estudados</span>
           </div>
         </div>
@@ -482,6 +538,76 @@
             <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
+
+        <!-- Card Preview FSA (Fundação Santo André) -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Comunitária • ABC Paulista</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-building-columns"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">FSA</h3>
+          <p class="vest-preview-desc">Centro Universitário Fundação Santo André. Polo tradicional do ABC Paulista em Engenharia, Psicologia, Direito, Computação e Arquitetura.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('fsa')">
+            <span>Ver Matérias da FSA</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview PUC -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Privada de Excelência</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-monument"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">PUC</h3>
+          <p class="vest-preview-desc">Pontifícia Universidade Católica (PUC-SP / Campinas). Tradição nacional em Direito, Medicina, Economia e Relações Internacionais.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('puc')">
+            <span>Ver Matérias da PUC</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview Mackenzie -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Privada Histórica</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-award"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">Mackenzie</h3>
+          <p class="vest-preview-desc">Universidade Presbiteriana Mackenzie. Destaque em Direito, Engenharia, Arquitetura e Negócios com prova ágil e direta.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('mackenzie')">
+            <span>Ver Matérias do Mackenzie</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview FGV -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Elite em Finanças</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-chart-line"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">FGV</h3>
+          <p class="vest-preview-desc">Fundação Getulio Vargas. Líder em Administração, Economia, Finanças e Direito, com vestibular analítico de alto rigor.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('fgv')">
+            <span>Ver Matérias da FGV</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Card Preview USCS -->
+        <div class="vest-card-preview">
+          <div class="vest-preview-topo">
+            <span class="vest-badge-mini">Municipal & Medicina</span>
+            <div class="vest-preview-icon"><i class="fa-solid fa-user-doctor"></i></div>
+          </div>
+          <h3 class="vest-preview-nome">USCS</h3>
+          <p class="vest-preview-desc">Universidade Municipal de São Caetano do Sul. Grande polo de Medicina e Saúde com vestibulares prestigiados pela Fundação Vunesp.</p>
+          <button class="btn-acessar-vest" onclick="irParaVestibular('uscs')">
+            <span>Ver Matérias da USCS</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
 
     </section>
@@ -639,12 +765,47 @@
             </button>
           </div>
 
-          <!-- Gerador de Som Ambiente de Chuva -->
-          <div class="ambient-sound-box">
-            <button class="btn-som-chuva" id="btn-som-ambiente">
-              <i class="fa-solid fa-cloud-rain"></i>
-              <span>Ativar Som de Chuva Suave</span>
-            </button>
+          <!-- Gerador Completo de Sons Ambientes de Foco & Relaxamento -->
+          <div class="ambient-sound-station">
+            <div class="sound-station-header">
+              <i class="fa-solid fa-headphones"></i>
+              <h4>Sons Ambientes de Foco & Relaxamento Profundo</h4>
+            </div>
+            <p class="sound-station-desc">Bloqueie conversas e ruídos externos para acelerar sua memorização com ondas sonoras sintetizadas:</p>
+            <div class="sound-station-chips-grid">
+              <button type="button" class="btn-som-chip" data-som="brown" onclick="selecionarSomAmbiente('brown')">
+                <i class="fa-solid fa-water"></i> Ruído Marrom
+              </button>
+              <button type="button" class="btn-som-chip" data-som="rain" onclick="selecionarSomAmbiente('rain')">
+                <i class="fa-solid fa-cloud-rain"></i> Chuva Suave
+              </button>
+              <button type="button" class="btn-som-chip" data-som="thunder" onclick="selecionarSomAmbiente('thunder')">
+                <i class="fa-solid fa-cloud-bolt"></i> Tempestade
+              </button>
+              <button type="button" class="btn-som-chip" data-som="alpha" onclick="selecionarSomAmbiente('alpha')">
+                <i class="fa-solid fa-brain"></i> Ondas Alfa (10Hz)
+              </button>
+              <button type="button" class="btn-som-chip" data-som="lofi" onclick="selecionarSomAmbiente('lofi')">
+                <i class="fa-solid fa-music"></i> Sintetizador Lo-Fi
+              </button>
+              <button type="button" class="btn-som-chip" data-som="white" onclick="selecionarSomAmbiente('white')">
+                <i class="fa-solid fa-wind"></i> Ruído Branco
+              </button>
+            </div>
+
+            <!-- Controle de Volume com Slider e Botão Parar -->
+            <div class="sound-station-volume-bar">
+              <div class="volume-control-group">
+                <button type="button" class="btn-volume-icon" onclick="alternarMudoSomAmbiente()" title="Mutar / Desmutar Áudio">
+                  <i class="fa-solid fa-volume-high" id="icone-foco-volume-tab"></i>
+                </button>
+                <input type="range" class="foco-slider-volume" id="foco-slider-volume-tab" min="0" max="100" value="70" oninput="ajustarVolumeSomAmbiente(this.value)">
+                <span class="volume-val-badge" id="foco-volume-percent-tab">70%</span>
+              </div>
+              <button type="button" class="btn-som-stop-global" onclick="pararTodosSonsAmbientes()">
+                <i class="fa-solid fa-stop"></i> Parar Som
+              </button>
+            </div>
           </div>
         </div>
 
@@ -763,15 +924,27 @@
 
       <!-- Seletor e Informações do Tema Selecionado -->
       <div class="redacao-controle-card">
-        <div class="redacao-seletor-row">
-          <label for="redacao-select-tema" class="redacao-select-label">
-            <i class="fa-solid fa-bookmark"></i> Escolha a Proposta de Redação:
-          </label>
-          <div class="redacao-select-wrapper">
-            <select id="redacao-select-tema" class="form-select redacao-select">
-              <!-- Preenchido via app.js -->
-            </select>
+        <!-- Barra Moderna de Escolha de Tema & Criação com IA -->
+        <div class="redacao-seletor-moderno">
+          <div class="redacao-seletor-top-row">
+            <div class="redacao-seletor-info-box">
+              <span class="redacao-kicker"><i class="fa-solid fa-bookmark"></i> Proposta Atual Selecionada:</span>
+              <span class="redacao-tema-atual-nome" id="redacao-tema-selecionado-texto">Carregando tema oficial...</span>
+            </div>
+            <div class="redacao-seletor-botoes-acao">
+              <button type="button" class="btn-abrir-catalogo-temas" onclick="abrirCatalogoTemasRedacao()" title="Navegar e pesquisar todos os temas disponíveis">
+                <i class="fa-solid fa-layer-group"></i> <span>Explorar & Trocar Tema</span>
+              </button>
+              <button type="button" class="btn-criar-tema-gemini" onclick="abrirModalCriarTemaRedacao()" title="Criar um tema personalizado e gerar textos motivadores com Gemini">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Criar Tema com IA (Gemini)</span>
+              </button>
+            </div>
           </div>
+
+          <!-- Select nativo mantido oculto para sincronia completa de scripts -->
+          <select id="redacao-select-tema" class="form-select redacao-select" style="display: none;">
+            <!-- Preenchido via app.js -->
+          </select>
         </div>
 
         <div class="redacao-tema-info-card">
@@ -930,6 +1103,89 @@
           <p>Treine em condições reais de prova com cronômetro oficial regressivo, cartão-resposta eletrônico, pontuação por área do saber e gabarito comentado questão por questão.</p>
         </div>
 
+        <!-- Abas de Alternância: Simulados das Bancas vs Gerador por Tema -->
+        <div class="simulado-nav-tabs-wrapper">
+          <button class="simulado-nav-pill active" id="pill-simulados-bancas" onclick="alternarModoVisualizacaoSimulados('bancas')">
+            <i class="fa-solid fa-graduation-cap"></i> Simulados das Bancas Oficiais
+          </button>
+          <button class="simulado-nav-pill" id="pill-simulados-custom" onclick="alternarModoVisualizacaoSimulados('custom')">
+            <i class="fa-solid fa-sliders"></i> Gerador Sob Medida por Tema (Novo!)
+          </button>
+        </div>
+
+        <!-- PAINEL GERADOR SOB MEDIDA POR DISCIPLINA E TEMA -->
+        <div class="simulado-custom-builder-card" id="simulado-custom-builder-card" style="display: none;">
+          <div class="custom-builder-header">
+            <div class="custom-builder-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <div>
+              <h3>Monte seu Simulado Personalizado por Disciplina e Tema</h3>
+              <p>Escolha a matéria, o tema específico e o vestibular de preferência para gerar uma prova sob medida focada nos seus estudos:</p>
+            </div>
+          </div>
+
+          <div class="custom-builder-grid">
+            <!-- 1. Vestibular -->
+            <div class="custom-builder-field">
+              <label for="builder-vestibular"><i class="fa-solid fa-landmark"></i> Vestibular Alvo:</label>
+              <select id="builder-vestibular" class="form-select builder-select">
+                <option value="todos">Todos os Vestibulares (Multidisciplinar)</option>
+                <option value="ENEM">ENEM (Exame Nacional do Ensino Médio)</option>
+                <option value="FSA">FSA (Fundação Santo André)</option>
+                <option value="FUVEST">FUVEST / USP</option>
+                <option value="UNICAMP">UNICAMP (Comvest)</option>
+                <option value="UNESP">UNESP (VUNESP)</option>
+                <option value="FATEC">FATEC (Centro Paula Souza)</option>
+                <option value="PUC">PUC (Pontifícia Universidade Católica)</option>
+                <option value="Mackenzie">Mackenzie (Tradição e Conteúdo)</option>
+                <option value="FGV">FGV (Economia & Raciocínio Analítico)</option>
+                <option value="USCS">USCS / Medicina (VUNESP)</option>
+                <option value="ITA">ITA & IME (Militares / Exatas Avançadas)</option>
+              </select>
+            </div>
+
+            <!-- 2. Disciplina -->
+            <div class="custom-builder-field">
+              <label for="builder-disciplina"><i class="fa-solid fa-book"></i> Disciplina Principal:</label>
+              <select id="builder-disciplina" class="form-select builder-select" onchange="atualizarOpcoesTemasSimulado()">
+                <option value="Matemática">Matemática</option>
+                <option value="Física">Física</option>
+                <option value="Química">Química</option>
+                <option value="Biologia">Biologia</option>
+                <option value="História">História</option>
+                <option value="Geografia">Geografia</option>
+                <option value="Língua Portuguesa">Língua Portuguesa</option>
+                <option value="Literatura">Literatura</option>
+                <option value="Filosofia & Sociologia">Filosofia & Sociologia</option>
+                <option value="Inglês">Inglês</option>
+              </select>
+            </div>
+
+            <!-- 3. Tema Específico -->
+            <div class="custom-builder-field">
+              <label for="builder-tema"><i class="fa-solid fa-list-check"></i> Tema Específico:</label>
+              <select id="builder-tema" class="form-select builder-select">
+                <!-- Populado dinamicamente via atualizarOpcoesTemasSimulado() -->
+              </select>
+            </div>
+
+            <!-- 4. Quantidade de Questões -->
+            <div class="custom-builder-field">
+              <label for="builder-qtd-questoes"><i class="fa-solid fa-hashtag"></i> Quantidade de Questões:</label>
+              <select id="builder-qtd-questoes" class="form-select builder-select">
+                <option value="5">5 Questões (Simulado Rápido • ~15 min)</option>
+                <option value="10" selected>10 Questões (Padrão Oficial • ~30 min)</option>
+                <option value="15">15 Questões (Treino Intensivo • ~45 min)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="custom-builder-footer">
+            <button class="btn-gerar-simulado-custom" onclick="gerarSimuladoCustomizadoPorTema()">
+              <i class="fa-solid fa-bolt"></i> Criar & Iniciar Simulado por Tema Agora
+            </button>
+          </div>
+        </div>
+
         <!-- Grid de Cards de Simulados Disponíveis -->
         <div class="simulados-grid-cards" id="simulados-lista-cards">
           <!-- Renderizado via app.js inicializarSimulados() -->
@@ -1066,6 +1322,10 @@
         </div>
 
         <div class="perfil-hero-actions">
+          <button class="btn-perfil-tour" onclick="abrirTourSlides(true)" title="Ver Apresentação e Tour das Funções">
+            <i class="fa-solid fa-play"></i>
+            <span>Tour do Site (Slides)</span>
+          </button>
           <button class="btn-perfil-editar" onclick="abrirModalEditarPerfil()">
             <i class="fa-solid fa-user-pen"></i>
             <span>Editar Perfil</span>
@@ -1171,27 +1431,37 @@
         </div>
       </div>
 
-      <!-- Central de Banco de Dados & Backup -->
+      <!-- Central de Banco de Dados & Sincronização em Nuvem -->
       <div class="perfil-database-secao">
         <div class="db-secao-header">
           <div class="db-secao-title">
-            <i class="fa-solid fa-database"></i>
+            <i class="fa-solid fa-cloud-arrow-up" style="color: #0284c7;"></i>
             <div>
-              <h3>Banco de Dados & Armazenamento da Conta</h3>
-              <p>Seus dados são salvos localmente no seu dispositivo via <strong>IndexedDB</strong> com redundância e privacidade 100% garantida.</p>
+              <h3>Banco de Dados em Nuvem & Multi-Dispositivos</h3>
+              <p>Seus estudos (progresso, notas, cronograma, redações e metas) são salvos de forma segura no <strong>IndexedDB local</strong> e sincronizados na <strong>Nuvem EstudaMais</strong> para você acessá-los em qualquer computador, celular ou tablet através do seu login!</p>
             </div>
           </div>
-          <span class="db-badge-secure"><i class="fa-solid fa-shield-halved"></i> 100% Offline & Gratuito</span>
+          <span class="db-badge-secure cloud-sync-badge" id="cloud-sync-status-badge">
+            <i class="fa-solid fa-cloud-arrow-up" style="color: #0284c7;"></i> Nuvem Ativa
+          </span>
         </div>
 
         <div class="db-actions-row">
-          <button class="btn-db-export" onclick="exportarDadosPerfil()">
-            <i class="fa-solid fa-download"></i>
-            <span>Exportar Backup Completo (.json)</span>
+          <button type="button" class="btn-db-cloud" onclick="sincronizarManualmenteNuvem()" id="btn-sync-nuvem" title="Salvar dados atuais na nuvem">
+            <i class="fa-solid fa-rotate"></i>
+            <span>Sincronizar Agora com a Nuvem</span>
           </button>
-          <label class="btn-db-import">
+          <button type="button" class="btn-db-devices" onclick="abrirModalConectarDispositivo()" title="Acessar seus dados em outro celular ou PC">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>Acessar em Outro Dispositivo</span>
+          </button>
+          <button class="btn-db-export" onclick="exportarDadosPerfil()" title="Baixar arquivo de backup local">
+            <i class="fa-solid fa-download"></i>
+            <span>Exportar Backup (.json)</span>
+          </button>
+          <label class="btn-db-import" title="Carregar arquivo de backup">
             <i class="fa-solid fa-upload"></i>
-            <span>Restaurar / Importar Backup (.json)</span>
+            <span>Restaurar Backup (.json)</span>
             <input type="file" accept=".json" onchange="importarDadosPerfil(event)" style="display:none;">
           </label>
         </div>
@@ -1199,23 +1469,387 @@
 
     </section>
 
-  </main>
+
+    <!-- ========================================================
+         ABA: CHAT IA - TUTOR VIRTUAL DO ESTUDANTE (GOOGLE GEMINI)
+         ======================================================== -->
+    <section id="tab-chat-ia" class="tab-content">
+      
+      <div class="chat-ia-header-card">
+        <div class="chat-ia-header-info">
+          <div class="chat-ia-badge">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Google Gemini Neural Engine • Disponível 24/7 Sem Limite</span>
+          </div>
+          <h2><i class="fa-solid fa-robot"></i> Tutor de Inteligência Artificial</h2>
+          <p>Tire dúvidas, peça explicações pedagógicas passo a passo, resoluções de questões difíceis e monte planos de estudo sob medida para o seu vestibular foco.</p>
+        </div>
+        <div class="chat-ia-header-actions">
+          <button type="button" class="btn-chat-limpar" onclick="limparHistoricoChatIA()" title="Reiniciar Conversa">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Nova Conversa</span>
+          </button>
+          <button type="button" class="btn-chat-config-gemini" onclick="abrirModalConfigGemini()" title="Gerenciar API Key do Gemini">
+            <i class="fa-solid fa-key"></i>
+            <span>Configurar Chave</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modos de Personalidade da IA -->
+      <div class="chat-ia-modos-bar">
+        <button type="button" class="chat-ia-modo-pill active" data-modo="tutor" onclick="alternarModoChatIA('tutor')">
+          <i class="fa-solid fa-graduation-cap"></i> <span>Tutor Focado</span>
+        </button>
+        <button type="button" class="chat-ia-modo-pill" data-modo="desafio" onclick="alternarModoChatIA('desafio')">
+          <i class="fa-solid fa-bolt"></i> <span>⚡ Desafio / Quiz IA</span>
+        </button>
+        <button type="button" class="chat-ia-modo-pill" data-modo="zen" onclick="alternarModoChatIA('zen')">
+          <i class="fa-solid fa-spa"></i> <span>🧘 Mentor Zen & Calma</span>
+        </button>
+        <button type="button" class="chat-ia-modo-pill" data-modo="cronograma" onclick="alternarModoChatIA('cronograma')">
+          <i class="fa-solid fa-calendar-days"></i> <span>📅 Foco em Cronograma</span>
+        </button>
+      </div>
+
+      <!-- Sugestões Rápidas de Perguntas -->
+      <div class="chat-ia-sugestoes-grid">
+        <button class="chat-ia-sugestao-chip" onclick="perguntarRapidoChatIA('Crie um cronograma de estudos para o ENEM focando em 4 horas por dia.')">
+          <i class="fa-solid fa-calendar-plus"></i> Montar Cronograma de Estudos
+        </button>
+        <button class="chat-ia-sugestao-chip" onclick="perguntarRapidoChatIA('Me explique o Teorema de Pitágoras e Trigonometria básica com exemplos.')">
+          <i class="fa-solid fa-square-root-variable"></i> Matemática Passo a Passo
+        </button>
+        <button class="chat-ia-sugestao-chip" onclick="perguntarRapidoChatIA('Quais são os temas e alusões mais cotados para a Redação este ano?')">
+          <i class="fa-solid fa-feather-pointed"></i> Dicas de Redação & Repertório
+        </button>
+        <button class="chat-ia-sugestao-chip" onclick="perguntarRapidoChatIA('Explique as Leis de Newton e como elas caem nos vestibulares.')">
+          <i class="fa-solid fa-atom"></i> Física nos Vestibulares
+        </button>
+      </div>
+
+      <!-- Janela de Conversa Interativa -->
+      <div class="chat-ia-box">
+        <div class="chat-ia-mensagens-container" id="chat-ia-mensagens-container">
+          <!-- Mensagens renderizadas via app.js -->
+        </div>
+
+        <!-- Formulário de Envio -->
+        <form class="chat-ia-form" id="chat-ia-form" onsubmit="event.preventDefault(); enviarMensagemChatIA();">
+          <div class="chat-ia-input-wrapper">
+            <textarea id="chat-ia-input" class="chat-ia-textarea" placeholder="Digite sua dúvida, peça uma explicação ou solicite um cronograma... (Pressione Enter para enviar)" rows="2"></textarea>
+            <button type="submit" class="btn-chat-ia-enviar" id="chat-ia-btn-enviar" title="Enviar Mensagem">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+          <div class="chat-ia-form-footer">
+            <span><i class="fa-solid fa-shield-check"></i> Inteligência Artificial pedagógica treinada nas bancas do ENEM, Fuvest, Unesp, Unicamp e particulares.</span>
+            <button type="button" class="btn-chat-atalho-cronograma" onclick="mudarAba('cronograma')">
+              <i class="fa-solid fa-arrow-right"></i> Ver Minha Grade de Cronograma
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- ========================================================
+         ABA: CRONOGRAMA DE ESTUDOS INTELIGENTE
+         ======================================================== -->
+    <section id="tab-cronograma" class="tab-content">
+      
+      <div class="cronograma-hero-card">
+        <div class="cronograma-hero-topo">
+          <div class="cronograma-hero-badges">
+            <span class="cronograma-badge-item"><i class="fa-solid fa-graduation-cap"></i> Vestibular: <strong id="cronograma-badge-vestibular">ENEM</strong></span>
+            <span class="cronograma-badge-item"><i class="fa-solid fa-book-bookmark"></i> Curso: <strong id="cronograma-badge-curso">Medicina</strong></span>
+            <span class="cronograma-badge-item cronograma-badge-xp"><i class="fa-solid fa-bolt"></i> <strong id="cronograma-badge-xp">0 XP</strong></span>
+            <span class="cronograma-badge-item cronograma-badge-streak"><i class="fa-solid fa-fire"></i> <strong id="cronograma-badge-streak">1 Dia Seguido</strong></span>
+            <span class="cronograma-badge-item cronograma-badge-ia"><i class="fa-solid fa-brain"></i> Criador com IA Integrado</span>
+          </div>
+          <div class="cronograma-hero-acoes">
+            <button type="button" class="btn-gerar-cronograma-ia" onclick="abrirModalGerarCronogramaIA()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Gerar Cronograma por IA</span>
+            </button>
+            <button type="button" class="btn-cronograma-reiniciar-semana" onclick="imprimirCronogramaEstudos()" title="Imprimir Grade ou Salvar em PDF">
+              <i class="fa-solid fa-print"></i>
+              <span>Imprimir / PDF</span>
+            </button>
+            <button type="button" class="btn-cronograma-reiniciar-semana" onclick="reiniciarSemanaCronograma()" title="Desmarcar metas para recomeçar a semana">
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Nova Semana</span>
+            </button>
+          </div>
+        </div>
+
+        <h2 class="cronograma-hero-titulo">
+          Seu Cronograma Semanal de <span class="highlight">Alta Performance</span>
+        </h2>
+        <p class="cronograma-hero-desc">
+          Organize seus blocos de estudo por dia da semana, acompanhe metas diárias e deixe a IA calcular a distribuição ideal de disciplinas de acordo com as suas horas disponíveis!
+        </p>
+
+        <!-- Barra de Progresso Semanal -->
+        <div class="cronograma-progresso-wrapper">
+          <div class="cronograma-progresso-topo">
+            <span class="cronograma-progresso-rotulo"><i class="fa-solid fa-bullseye"></i> Metas Concluídas Esta Semana:</span>
+            <span class="cronograma-progresso-valor" id="cronograma-percentual-texto">0% Concluído</span>
+            <span class="cronograma-contador-rotulo" id="cronograma-contador-tarefas">0/0 metas semanais</span>
+          </div>
+          <div class="cronograma-progresso-trilho">
+            <div class="cronograma-progresso-preenchimento" id="cronograma-barra-progresso" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controlador Interativo de Semanas com Matérias Dinâmicas -->
+      <div class="cronograma-semana-controller">
+        <div class="cronograma-semana-info">
+          <span class="cronograma-semana-tag" id="cronograma-tag-semana"><i class="fa-solid fa-calendar-week"></i> Semana 1 de 12</span>
+          <span class="cronograma-semana-tema" id="cronograma-tema-semana">Fase 1: Fundamentos & Diagnóstico Inicial</span>
+        </div>
+        <div class="cronograma-semana-acoes">
+          <button type="button" class="btn-semana-nav" id="btn-semana-anterior" onclick="mudarSemanaCronograma(-1)" title="Ir para a semana anterior">
+            <i class="fa-solid fa-chevron-left"></i> Semana Anterior
+          </button>
+          <button type="button" class="btn-semana-nav" id="btn-semana-proxima" onclick="mudarSemanaCronograma(1)" title="Ir para a próxima semana com novas matérias">
+            Próxima Semana <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grade dos Dias da Semana -->
+      <div class="cronograma-semanal-grid" id="cronograma-semanal-grid">
+        <!-- Renderizado dinamicamente via app.js -->
+      </div>
+
+    </section>
+
+
+      <!-- ========================================================
+         SEÇÃO 12: VÍDEO AULAS DO YOUTUBE & MELHORES CANAIS
+         ======================================================== -->
+    <section id="tab-videoaulas" class="tab-content">
+
+      <!-- ========================================================
+           PLAYER DE VIDEOAULAS NO TOPO: ASSISTIR AULA AQUI
+           ======================================================== -->
+      <div class="videoaulas-player-container-topo" id="secao-assistir-aula-aqui">
+        <div class="player-topo-header">
+          <div class="player-topo-badge">
+            <i class="fa-solid fa-circle-play" style="color: #ef4444;"></i>
+            <span>Ambiente Focado de Estudo</span>
+          </div>
+          <h3>🎬 Assistir Aula Aqui & Estudar</h3>
+          <p>Cole o link ou URL de qualquer vídeo do YouTube que deseja assistir. Ao carregar o vídeo, a área de anotações no caderno e a lousa de contas serão ativadas logo abaixo!</p>
+        </div>
+
+        <!-- Barra de Entrada da URL do YouTube -->
+        <div class="player-url-input-bar">
+          <div class="player-input-wrapper">
+            <i class="fa-brands fa-youtube player-input-icon"></i>
+            <input type="text" id="input-video-url-topo" placeholder="Cole o link do YouTube aqui (ex: https://www.youtube.com/watch?v=... ou https://youtu.be/...)" onkeydown="if(event.key==='Enter') carregarVideoPersonalizadoTopo()" oninput="document.getElementById('btn-limpar-url-topo').style.display = this.value ? 'flex' : 'none'">
+            <button type="button" class="btn-limpar-url" id="btn-limpar-url-topo" onclick="limparInputVideoTopo()" style="display: none;" title="Limpar campo">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <button type="button" class="btn-carregar-video-topo" onclick="carregarVideoPersonalizadoTopo()">
+            <i class="fa-solid fa-play"></i>
+            <span>Assistir Aula Aqui</span>
+          </button>
+        </div>
+
+        <!-- Área do Vídeo & Ferramentas Integradas (Habilitada após carregar) -->
+        <div class="player-video-ativa-area" id="area-video-ativa-topo" style="display: none;">
+          <!-- Iframe do Vídeo com Referrer Policy para Evitar Erro 153 -->
+          <div class="video-player-wrapper-topo">
+            <iframe id="iframe-video-player-topo" src="" title="Videoaula do YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <!-- Barra de Controle do Vídeo Ativo -->
+          <div class="player-video-acoes-bar">
+            <div class="player-video-status">
+              <span class="video-status-dot"></span>
+              <strong id="label-video-carregado">Vídeo em Reprodução</strong>
+            </div>
+            <div class="player-video-botoes-atalho">
+              <button type="button" class="btn-video-tab-tool active" id="btn-tab-tool-notas" onclick="alternarAbaFerramentaVideo('notas')">
+                <i class="fa-solid fa-pen-to-square"></i> <span>Anotações no Caderno</span>
+              </button>
+              <button type="button" class="btn-video-tab-tool" id="btn-tab-tool-lousa" onclick="alternarAbaFerramentaVideo('lousa')">
+                <i class="fa-solid fa-pen-ruler"></i> <span>Lousa de Cálculos</span>
+              </button>
+              <a id="btn-link-externo-video-topo" href="#" target="_blank" rel="noopener noreferrer" class="btn-video-tab-tool" title="Assistir diretamente no site do YouTube">
+                <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> <span>Abrir no YouTube ↗</span>
+              </a>
+              <button type="button" class="btn-fechar-video-topo" onclick="fecharVideoPersonalizadoTopo()" title="Fechar vídeo e parar reprodução">
+                <i class="fa-solid fa-stop"></i> <span>Parar Vídeo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Painel 1: Anotações Rápidas -->
+          <div class="video-tool-painel active" id="painel-video-notas">
+            <div class="painel-notas-topo-row">
+              <label for="input-nota-video-topo"><i class="fa-solid fa-pen-to-square"></i> Anotações da Aula (Salvas no seu Caderno Digital):</label>
+              <button type="button" class="btn-salvar-nota-topo" onclick="salvarNotaVideoTopo()">
+                <i class="fa-solid fa-floppy-disk"></i> Salvar no meu Bloco de Notas
+              </button>
+            </div>
+            <textarea id="input-nota-video-topo" rows="4" placeholder="Digite pontos-chave, fórmulas ou dúvidas anotadas durante o vídeo para salvar no seu caderno..."></textarea>
+          </div>
+
+          <!-- Painel 2: Lousa de Contas Integrada ao Vídeo -->
+          <div class="video-tool-painel" id="painel-video-lousa" style="display: none;">
+            <div class="lousa-video-toolbar">
+              <div class="lousa-video-ferramentas">
+                <button type="button" class="lousa-tool-btn active" id="tool-pen-video" onclick="setLousaVideoFerramenta('pen')" title="Caneta / Lápis">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="lousa-tool-btn" id="tool-eraser-video" onclick="setLousaVideoFerramenta('eraser')" title="Borracha">
+                  <i class="fa-solid fa-eraser"></i>
+                </button>
+                <button type="button" class="lousa-tool-btn btn-limpar-lousa" onclick="limparLousaVideo()" title="Limpar Lousa">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+
+              <!-- Cores da Lousa do Vídeo -->
+              <div class="lousa-cores-group" id="lousa-video-cores-container">
+                <button class="lousa-cor-btn active" style="background: #ffffff; border-color: #cbd5e1;" onclick="setLousaVideoCor('#ffffff')" title="Giz Branco"></button>
+                <button class="lousa-cor-btn" style="background: #1e293b;" onclick="setLousaVideoCor('#1e293b')" title="Grafite"></button>
+                <button class="lousa-cor-btn" style="background: #3b82f6;" onclick="setLousaVideoCor('#3b82f6')" title="Azul Realce"></button>
+                <button class="lousa-cor-btn" style="background: #06b6d4;" onclick="setLousaVideoCor('#06b6d4')" title="Ciano"></button>
+                <button class="lousa-cor-btn" style="background: #10b981;" onclick="setLousaVideoCor('#10b981')" title="Verde"></button>
+                <button class="lousa-cor-btn" style="background: #eab308;" onclick="setLousaVideoCor('#eab308')" title="Amarelo"></button>
+                <button class="lousa-cor-btn" style="background: #f97316;" onclick="setLousaVideoCor('#f97316')" title="Laranja"></button>
+                <button class="lousa-cor-btn" style="background: #ef4444;" onclick="setLousaVideoCor('#ef4444')" title="Vermelho"></button>
+                <button class="lousa-cor-btn" style="background: #a855f7;" onclick="setLousaVideoCor('#a855f7')" title="Roxo"></button>
+                <button class="lousa-cor-btn" style="background: #ec4899;" onclick="setLousaVideoCor('#ec4899')" title="Rosa"></button>
+              </div>
+
+              <button type="button" class="btn-abrir-lousa-flutuante" onclick="alternarLousaRascunho()" title="Abrir Lousa em Janela Flutuante">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Janela Flutuante</span>
+              </button>
+            </div>
+
+            <!-- Canvas da Lousa do Vídeo com Textura Quadriculada -->
+            <div class="lousa-video-canvas-wrapper" id="lousa-video-canvas-wrapper">
+              <canvas id="lousa-video-canvas"></canvas>
+              <span class="lousa-grid-hint">Rascunhe contas e fórmulas aqui</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Hero da Seção de Vídeo Aulas -->
+      <div class="videoaulas-hero-card">
+        <div class="videoaulas-hero-topo">
+          <div class="videoaulas-hero-badges">
+            <span class="videoaulas-badge-item"><i class="fa-brands fa-youtube" style="color: #ef4444;"></i> +30 Canais Recomendados</span>
+            <span class="videoaulas-badge-item"><i class="fa-solid fa-graduation-cap"></i> 10 Disciplinas dos Vestibulares</span>
+            <span class="videoaulas-badge-item"><i class="fa-solid fa-star" style="color: #eab308;"></i> 3 Melhores por Matéria</span>
+            <span class="videoaulas-badge-item"><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> 100% Gratuitos</span>
+          </div>
+          <div class="videoaulas-hero-acoes">
+            <button type="button" class="btn-videoaulas-favoritos" id="btn-filtro-favoritos-canais" onclick="alternarFiltroFavoritosCanais(this)" title="Ver apenas canais que favoritei">
+              <i class="fa-solid fa-heart" style="color: #ec4899;"></i>
+              <span>Meus Canais Favoritos</span>
+            </button>
+          </div>
+        </div>
+
+        <h2 class="videoaulas-hero-titulo">
+          Hub de Videoaulas & <span class="highlight">Melhores Canais do YouTube</span> 🎬
+        </h2>
+        <p class="videoaulas-hero-desc">
+          Uma curadoria de excelência com os <strong>3 professores e canais mais renomados e didáticos</strong> para cada disciplina do ENEM, FUVEST, UNICAMP e vestibulares. Acesse aulas completas, resoluções de questões, macetes e maratonas de estudo gratuitas.
+        </p>
+
+        <!-- Barra de Busca Rápida de Videoaulas e Professores -->
+        <div class="videoaulas-busca-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="input-busca-videoaulas" placeholder="Pesquise por matéria, professor, canal ou assunto (ex: Ferretto, Estequiometria, Jubilut, Redação, Termodinâmica)..." oninput="buscarVideoaulas(this.value)">
+          <button type="button" id="btn-limpar-busca-videoaulas" onclick="limparBuscaVideoaulas()" style="display: none;" title="Limpar pesquisa">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros Rápidos de Disciplina em Pílulas -->
+      <div class="videoaulas-filtros-bar">
+        <div class="videoaulas-filtros-scroll">
+          <button type="button" class="videoaulas-filtro-btn active" onclick="filtrarDisciplinaVideoaulas('todas', this)">
+            <i class="fa-solid fa-border-all"></i> Todas as Matérias
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('matematica', this)">
+            <i class="fa-solid fa-calculator" style="color: #2563eb;"></i> Matemática
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('fisica', this)">
+            <i class="fa-solid fa-atom" style="color: #0284c7;"></i> Física
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('quimica', this)">
+            <i class="fa-solid fa-flask-vial" style="color: #16a34a;"></i> Química
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('biologia', this)">
+            <i class="fa-solid fa-dna" style="color: #059669;"></i> Biologia
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('historia', this)">
+            <i class="fa-solid fa-landmark" style="color: #b45309;"></i> História
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('geografia', this)">
+            <i class="fa-solid fa-earth-americas" style="color: #0284c7;"></i> Geografia
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('portugues', this)">
+            <i class="fa-solid fa-book-open" style="color: #7c3aed;"></i> Português & Literatura
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('redacao', this)">
+            <i class="fa-solid fa-feather-pointed" style="color: #be185d;"></i> Redação
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('filosofia', this)">
+            <i class="fa-solid fa-brain" style="color: #6366f1;"></i> Filosofia & Sociologia
+          </button>
+          <button type="button" class="videoaulas-filtro-btn" onclick="filtrarDisciplinaVideoaulas('idiomas', this)">
+            <i class="fa-solid fa-language" style="color: #ea580c;"></i> Idiomas
+          </button>
+        </div>
+      </div>
+
+      <!-- Dica Pedagógica de Como Estudar por Videoaulas -->
+      <div class="videoaulas-dica-banner">
+        <div class="videoaulas-dica-icon">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <div class="videoaulas-dica-texto">
+          <h4>Dica de Ouro: Como estudar por videoaulas sem ser um espectador passivo</h4>
+          <p>Não apenas assista: pause o vídeo antes da resolução dos exercícios e tente resolver por conta própria na nossa <strong>Lousa de Rascunho</strong>. Faça anotações ativas com suas próprias palavras no <strong>Bloco de Notas</strong> e resolva pelo menos 10 questões daquele assunto na nossa <strong>Arena de Quiz</strong>!</p>
+        </div>
+      </div>
+
+      <!-- Grid dos Canais de Videoaulas -->
+      <div class="videoaulas-grid" id="videoaulas-grid">
+        <!-- Renderizado dinamicamente via app.js a partir de CANAIS_YOUTUBE_DATA -->
+      </div>
+
+    </section>
+</main>
 
   <!-- ========================================================
        LOUSA DE RASCUNHO INTERATIVA (PARA RABISCAR E FAZER CONTAS)
        ======================================================== -->
   <aside id="lousa-rascunho" class="lousa-scratchpad">
-    <div class="lousa-header">
+    <div class="lousa-header janela-arrastavel-header" id="header-lousa-rascunho" title="Clique e arraste para mover a lousa pela tela">
       <div class="lousa-header-title">
         <i class="fa-solid fa-pen-ruler"></i>
-        <span>Lousa de Rascunho para Cálculos</span>
+        <span>Lousa de Rascunho Móvel</span>
         <span class="lousa-status-tag" id="lousa-ferramenta-status">Lápis</span>
       </div>
       <div class="lousa-header-controls">
         <button class="lousa-btn-control" id="btn-minimizar-lousa" onclick="alternarMinimizarLousa()" title="Minimizar / Expandir Lousa">
-          <i class="fa-solid fa-window-minimize"></i>
+          <i class="fa-solid fa-minus"></i>
         </button>
-        <button class="lousa-btn-control" onclick="alternarLousaRascunho()" title="Fechar Lousa">
+        <button class="lousa-btn-control" onclick="alternarJanelaFlutuante('lousa')" title="Fechar Lousa">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -1233,11 +1867,16 @@
       </div>
 
       <div class="lousa-cores-group">
-        <button class="lousa-cor-btn active" style="background: #1e293b;" onclick="setLousaCor('#1e293b')" title="Grafite Escuro"></button>
-        <button class="lousa-cor-btn" style="background: #0c1d3b;" onclick="setLousaCor('#0c1d3b')" title="Azul Marinho"></button>
-        <button class="lousa-cor-btn" style="background: #2563eb;" onclick="setLousaCor('#2563eb')" title="Azul Realce"></button>
-        <button class="lousa-cor-btn" style="background: #dc2626;" onclick="setLousaCor('#dc2626')" title="Vermelho"></button>
-        <button class="lousa-cor-btn" style="background: #16a34a;" onclick="setLousaCor('#16a34a')" title="Verde"></button>
+        <button class="lousa-cor-btn active" style="background: #ffffff; border-color: #cbd5e1;" onclick="setLousaCor('#ffffff')" title="Branco / Giz (Ideal no Modo Escuro)"></button>
+        <button class="lousa-cor-btn" style="background: #1e293b;" onclick="setLousaCor('#1e293b')" title="Grafite Escuro"></button>
+        <button class="lousa-cor-btn" style="background: #3b82f6;" onclick="setLousaCor('#3b82f6')" title="Azul Realce"></button>
+        <button class="lousa-cor-btn" style="background: #06b6d4;" onclick="setLousaCor('#06b6d4')" title="Ciano / Aqua"></button>
+        <button class="lousa-cor-btn" style="background: #10b981;" onclick="setLousaCor('#10b981')" title="Verde Esmeralda"></button>
+        <button class="lousa-cor-btn" style="background: #eab308;" onclick="setLousaCor('#eab308')" title="Amarelo / Destaque"></button>
+        <button class="lousa-cor-btn" style="background: #f97316;" onclick="setLousaCor('#f97316')" title="Laranja"></button>
+        <button class="lousa-cor-btn" style="background: #ef4444;" onclick="setLousaCor('#ef4444')" title="Vermelho"></button>
+        <button class="lousa-cor-btn" style="background: #a855f7;" onclick="setLousaCor('#a855f7')" title="Roxo"></button>
+        <button class="lousa-cor-btn" style="background: #ec4899;" onclick="setLousaCor('#ec4899')" title="Rosa Marca-Texto"></button>
       </div>
 
       <div class="lousa-espessura-group">
@@ -1261,6 +1900,176 @@
       <canvas id="lousa-canvas"></canvas>
       <div class="lousa-grid-hint">
         <span><i class="fa-solid fa-lightbulb"></i> Use o mouse, caneta touch ou dedo para rabiscar contas, montar frações e desenhar esquemas!</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       JANELA FLUTUANTE & MÓVEL: TUTOR IA & GEMINI
+       ======================================================== -->
+  <aside id="janela-flutuante-ia" class="janela-flutuante-widget">
+    <div class="janela-flutuante-header janela-arrastavel-header" id="header-flutuante-ia" title="Clique e arraste para mover o Tutor IA pela tela">
+      <div class="janela-flutuante-title">
+        <i class="fa-solid fa-robot" style="color: #60a5fa;"></i>
+        <span>Tutor IA & Gemini Móvel</span>
+      </div>
+      <div class="janela-flutuante-controls">
+        <button type="button" class="janela-btn-ctrl" onclick="mudarAba('chat-ia'); alternarJanelaFlutuante('ia');" title="Expandir para Aba Completa">
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="minimizarJanelaFlutuante('janela-flutuante-ia')" title="Minimizar">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="alternarJanelaFlutuante('ia')" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="janela-flutuante-body">
+      <!-- Mensagens Mini Chat -->
+      <div class="mini-chat-mensagens" id="mini-chat-mensagens">
+        <div class="mini-chat-msg ia">
+          <div class="mini-chat-avatar"><i class="fa-solid fa-robot"></i></div>
+          <div class="mini-chat-balao">Olá! Sou seu Tutor IA. Tire dúvidas sobre matérias, fórmulas, exercícios ou redação enquanto estuda! ✨</div>
+        </div>
+      </div>
+      <!-- Sugestões Rápidas -->
+      <div class="mini-chat-chips">
+        <button type="button" class="mini-chip-btn" onclick="enviarMensagemMiniChat('Explique este assunto de forma simples e direta')">💡 Explicar Simples</button>
+        <button type="button" class="mini-chip-btn" onclick="enviarMensagemMiniChat('Crie 2 questões de fixação com gabarito')">📝 Criar Questões</button>
+        <button type="button" class="mini-chip-btn" onclick="enviarMensagemMiniChat('Dê uma dica mnemônica para memorizar')">🧠 Macete/Dica</button>
+      </div>
+      <!-- Input Mini Chat -->
+      <div class="mini-chat-input-bar">
+        <input type="text" id="input-mini-chat-flutuante" placeholder="Digite sua dúvida aqui..." onkeydown="if(event.key === 'Enter') enviarMensagemMiniChat()">
+        <button type="button" id="btn-enviar-mini-chat" onclick="enviarMensagemMiniChat()" title="Enviar Pergunta">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       JANELA FLUTUANTE & MÓVEL: BLOCO DE ANOTAÇÕES RÁPIDAS
+       ======================================================== -->
+  <aside id="janela-flutuante-notas" class="janela-flutuante-widget">
+    <div class="janela-flutuante-header janela-arrastavel-header" id="header-flutuante-notas" title="Clique e arraste para mover as Anotações pela tela">
+      <div class="janela-flutuante-title">
+        <i class="fa-solid fa-pen-to-square" style="color: #a78bfa;"></i>
+        <span>Anotações Rápidas Móvel</span>
+      </div>
+      <div class="janela-flutuante-controls">
+        <button type="button" class="janela-btn-ctrl" onclick="mudarAba('notas'); alternarJanelaFlutuante('notas');" title="Ir para o Caderno Completo">
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="minimizarJanelaFlutuante('janela-flutuante-notas')" title="Minimizar">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="alternarJanelaFlutuante('notas')" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="janela-flutuante-body">
+      <div class="mini-nota-campos">
+        <input type="text" id="input-mini-nota-titulo" placeholder="Título do resumo ou fórmula..." class="mini-nota-input">
+        <div class="mini-nota-row">
+          <select id="select-mini-nota-materia" class="mini-nota-select">
+            <option value="Geral">📌 Geral</option>
+            <option value="Matemática">📐 Matemática</option>
+            <option value="Física">⚡ Física</option>
+            <option value="Química">🧪 Química</option>
+            <option value="Biologia">🧬 Biologia</option>
+            <option value="História">🏛️ História</option>
+            <option value="Geografia">🌍 Geografia</option>
+            <option value="Redação">✍️ Redação</option>
+          </select>
+          <button type="button" class="btn-mini-nota-salvar" onclick="salvarMiniNotaFlutuante()">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar no Caderno
+          </button>
+        </div>
+        <textarea id="textarea-mini-nota-conteudo" placeholder="Digite suas anotações, fórmulas ou resumos aqui enquanto assiste às aulas..." rows="5" class="mini-nota-textarea"></textarea>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       JANELA FLUTUANTE & MÓVEL: FOCO, POMODORO & SONS AMBIENTES
+       ======================================================== -->
+  <aside id="janela-flutuante-foco" class="janela-flutuante-widget">
+    <div class="janela-flutuante-header janela-arrastavel-header" id="header-flutuante-foco" title="Clique e arraste para mover o Foco pela tela">
+      <div class="janela-flutuante-title">
+        <i class="fa-solid fa-fire" style="color: #fb923c;"></i>
+        <span>Modo Foco & Sons Móvel</span>
+      </div>
+      <div class="janela-flutuante-controls">
+        <button type="button" class="janela-btn-ctrl" onclick="mudarAba('ferramentas'); alternarJanelaFlutuante('foco');" title="Ir para Aba de Foco Completa">
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="minimizarJanelaFlutuante('janela-flutuante-foco')" title="Minimizar">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <button type="button" class="janela-btn-ctrl" onclick="alternarJanelaFlutuante('foco')" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="janela-flutuante-body">
+      <!-- Timer Miniatura -->
+      <div class="mini-foco-timer-box">
+        <span class="mini-foco-tempo" id="mini-foco-timer-display">25:00</span>
+        <span class="mini-foco-mode-badge" id="mini-foco-mode-badge">Foco Ativo</span>
+      </div>
+      <div class="mini-foco-timer-presets">
+        <button type="button" class="mini-preset-btn active" onclick="ajustarTempoMiniFoco(25, 'foco')">25m Foco</button>
+        <button type="button" class="mini-preset-btn" onclick="ajustarTempoMiniFoco(50, 'foco')">50m Foco</button>
+        <button type="button" class="mini-preset-btn" onclick="ajustarTempoMiniFoco(5, 'pausa')">5m Pausa</button>
+        <button type="button" class="mini-preset-btn" onclick="ajustarTempoMiniFoco(15, 'pausa')">15m Pausa</button>
+      </div>
+      <div class="mini-foco-timer-actions">
+        <button type="button" class="btn-mini-foco-start" id="btn-mini-foco-start" onclick="alternarTimerMiniFoco()">
+          <i class="fa-solid fa-play"></i> Iniciar
+        </button>
+        <button type="button" class="btn-mini-foco-reset" onclick="resetTimerMiniFoco()">
+          <i class="fa-solid fa-rotate-left"></i> Zerar
+        </button>
+      </div>
+
+      <!-- Seletor de Sons Ambientes -->
+      <div class="mini-foco-sons-section">
+        <label class="mini-foco-section-label"><i class="fa-solid fa-headphones"></i> Sons para Relaxamento e Foco:</label>
+        <div class="mini-foco-sons-grid">
+          <button type="button" class="btn-som-chip" data-som="brown" onclick="selecionarSomAmbiente('brown')">
+            <i class="fa-solid fa-water"></i> Ruído Marrom
+          </button>
+          <button type="button" class="btn-som-chip" data-som="rain" onclick="selecionarSomAmbiente('rain')">
+            <i class="fa-solid fa-cloud-rain"></i> Chuva Suave
+          </button>
+          <button type="button" class="btn-som-chip" data-som="thunder" onclick="selecionarSomAmbiente('thunder')">
+            <i class="fa-solid fa-cloud-bolt"></i> Tempestade
+          </button>
+          <button type="button" class="btn-som-chip" data-som="alpha" onclick="selecionarSomAmbiente('alpha')">
+            <i class="fa-solid fa-brain"></i> Ondas Alfa
+          </button>
+          <button type="button" class="btn-som-chip" data-som="lofi" onclick="selecionarSomAmbiente('lofi')">
+            <i class="fa-solid fa-music"></i> Sintetizador Lo-Fi
+          </button>
+          <button type="button" class="btn-som-chip" data-som="white" onclick="selecionarSomAmbiente('white')">
+            <i class="fa-solid fa-wind"></i> Ruído Branco
+          </button>
+        </div>
+
+        <!-- Controle de Volume -->
+        <div class="mini-foco-volume-row">
+          <button type="button" class="btn-foco-mute" id="btn-foco-mute" onclick="alternarMudoSomAmbiente()" title="Mutar / Desmutar">
+            <i class="fa-solid fa-volume-high" id="icone-foco-volume"></i>
+          </button>
+          <input type="range" class="foco-slider-volume" id="foco-slider-volume" min="0" max="100" value="70" oninput="ajustarVolumeSomAmbiente(this.value)">
+          <span class="foco-volume-percent" id="foco-volume-percent">70%</span>
+          <button type="button" class="btn-som-parar" onclick="pararTodosSonsAmbientes()" title="Parar Som">
+            <i class="fa-solid fa-stop"></i> Parar
+          </button>
+        </div>
       </div>
     </div>
   </aside>
@@ -1323,6 +2132,153 @@
   <!-- ========================================================
        RODAPÉ DO SITE (CRÉDITOS DO PROJETO DE TCC)
        ======================================================== -->
+  
+  <!-- ========================================================
+       MODAL 1: GERADOR DE CRONOGRAMA POR INTELIGÊNCIA ARTIFICIAL
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-gerar-cronograma-ia" onclick="if(event.target === this) fecharModalGerarCronogramaIA()">
+    <div class="modal-card modal-cronograma-ia-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: linear-gradient(135deg, var(--primary-accent), var(--primary-base)); color: #fff;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Planejador Inteligente de Cronograma (IA)</h3>
+          <p>O Gemini monta uma grade de matérias personalizada para você</p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalGerarCronogramaIA()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-gerar-cronograma-ia" onsubmit="executarGeradorCronogramaIA(event)" class="modal-body">
+        
+        <div class="cronograma-ia-form-grid">
+          <!-- Vestibular Alvo -->
+          <div class="form-group">
+            <label for="cronograma-ia-vestibular"><i class="fa-solid fa-graduation-cap"></i> Vestibular Foco:</label>
+            <input type="text" id="cronograma-ia-vestibular" class="form-input" placeholder="Ex: ENEM, FUVEST, UNICAMP, FSA..." required>
+            <small class="form-help-hint">Puxado automaticamente da sua conta logada.</small>
+          </div>
+
+          <!-- Curso Pretendido -->
+          <div class="form-group">
+            <label for="cronograma-ia-curso"><i class="fa-solid fa-book-bookmark"></i> Curso dos Seus Sonhos:</label>
+            <input type="text" id="cronograma-ia-curso" class="form-input" placeholder="Ex: Medicina, Direito, Engenharia, Pedagogia..." required>
+            <small class="form-help-hint">A IA prioriza as matérias de maior peso para este curso.</small>
+          </div>
+
+          <!-- Quantas Horas por Dia -->
+          <div class="form-group">
+            <label for="cronograma-ia-horas"><i class="fa-solid fa-clock"></i> Horas de Estudo por Dia:</label>
+            <select id="cronograma-ia-horas" class="form-select">
+              <option value="2">2 Horas / dia (Ritmo Moderado & Trabalho)</option>
+              <option value="3">3 Horas / dia (Constância Diária)</option>
+              <option value="4" selected>4 Horas / dia (Recomendado para Vestibulares)</option>
+              <option value="6">6 Horas / dia (Intensivo Dedicado)</option>
+              <option value="8">8 Horas / dia (Maratona & Reta Final)</option>
+            </select>
+          </div>
+
+          <!-- Quantos Dias na Semana -->
+          <div class="form-group">
+            <label for="cronograma-ia-dias"><i class="fa-solid fa-calendar-days"></i> Dias Disponíveis na Semana:</label>
+            <select id="cronograma-ia-dias" class="form-select">
+              <option value="4">4 Dias (Segunda a Quinta)</option>
+              <option value="5" selected>5 Dias (Segunda a Sexta - Tradicional)</option>
+              <option value="6">6 Dias (Segunda a Sábado com revisão)</option>
+              <option value="7">7 Dias (Semana Completa)</option>
+            </select>
+          </div>
+
+          <!-- Turno Preferido -->
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="cronograma-ia-turno"><i class="fa-solid fa-cloud-sun"></i> Turno Preferencial de Estudo:</label>
+            <select id="cronograma-ia-turno" class="form-select">
+              <option value="manha">Manhã (08h às 12h)</option>
+              <option value="tarde" selected>Tarde (14h às 18h)</option>
+              <option value="noite">Noite (19h às 23h)</option>
+              <option value="flexivel">Horários Flexíveis ao Longo do Dia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cronograma-ia-dica-card">
+          <i class="fa-solid fa-lightbulb"></i>
+          <div>
+            <strong>Como a IA distribui as matérias?</strong>
+            <p>O algoritmo intercala disciplinas de exatas com humanas e biológicas para evitar fadiga cognitiva, separando blocos específicos para teoria, resolução cronometrada de questões e redação.</p>
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 1.2rem;">
+          <button type="button" class="btn-modal-cancel" onclick="fecharModalGerarCronogramaIA()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-modal-confirm" id="btn-confirmar-gerar-cronograma-ia">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Gerar Cronograma com IA</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: ADICIONAR TAREFA MANUAL NO CRONOGRAMA
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-tarefa-cronograma" onclick="if(event.target === this) fecharModalNovaTarefaCronograma()">
+    <div class="modal-card modal-auth-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: var(--primary-accent); color: #fff;">
+          <i class="fa-solid fa-calendar-plus"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Adicionar Bloco de Estudo</h3>
+          <p>Dia: <strong id="modal-tarefa-dia-texto">Segunda</strong></p>
+        </div>
+        <button class="modal-btn-close" onclick="fecharModalNovaTarefaCronograma()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="form-tarefa-cronograma" onsubmit="salvarNovaTarefaCronograma(event)" class="modal-body">
+        <input type="hidden" id="tarefa-cronograma-dia" value="Segunda">
+        
+        <div class="form-group">
+          <label for="tarefa-cronograma-materia"><i class="fa-solid fa-book"></i> Matéria / Disciplina:</label>
+          <input type="text" id="tarefa-cronograma-materia" class="form-input" placeholder="Ex: Matemática, Física, Redação, Biologia..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="tarefa-cronograma-topico"><i class="fa-solid fa-list-check"></i> Conteúdo ou Tópico:</label>
+          <input type="text" id="tarefa-cronograma-topico" class="form-input" placeholder="Ex: Teoria de Funções + 20 Exercícios da Banca">
+        </div>
+
+        <div class="form-group">
+          <label for="tarefa-cronograma-tempo"><i class="fa-solid fa-stopwatch"></i> Duração Prevista:</label>
+          <select id="tarefa-cronograma-tempo" class="form-select">
+            <option value="30 min">30 minutos (Revisão Rápida)</option>
+            <option value="60 min" selected>60 minutos (1 hora)</option>
+            <option value="90 min">90 minutos (1h30)</option>
+            <option value="120 min">120 minutos (2 horas)</option>
+          </select>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 1.2rem;">
+          <button type="button" class="btn-modal-cancel" onclick="fecharModalNovaTarefaCronograma()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-modal-confirm" id="btn-salvar-tarefa-cronograma">
+            <i class="fa-solid fa-check"></i> <span>Salvar no Cronograma</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-brand">
@@ -1331,20 +2287,33 @@
           Projeto desenvolvido para o Trabalho de Conclusão de Curso (TCC). Uma ferramenta educacional concebida para apoiar alunos do Ensino Médio e cursos pré-vestibulares na organização dos estudos e no acesso aos principais conteúdos programáticos do país.
         </p>
       </div>
-      <div class="footer-col">
-        <h5>Vestibulares Abordados</h5>
-        <ul>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('enem')">ENEM</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('fuvest')">FUVEST (USP)</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('unicamp')">UNICAMP</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('unesp')">UNESP (Vunesp)</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('fatec')">FATEC</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('ita')">ITA</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('unb')">UnB (Cebraspe)</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('uerj')">UERJ</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('ufpr')">UFPR</a></li>
-          <li><a href="javascript:void(0)" onclick="irParaVestibular('ufrgs')">UFRGS</a></li>
-        </ul>
+      <div class="footer-col" style="min-width: 260px;">
+        <h5>Vestibulares Abordados (19)</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 1.2rem;">
+          <ul style="margin: 0; padding: 0;">
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('enem')">ENEM</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('fuvest')">FUVEST (USP)</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('unicamp')">UNICAMP</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('unesp')">UNESP (Vunesp)</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('fatec')">FATEC</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ita')">ITA</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ime')">IME</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('unb')">UnB (Cebraspe)</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('uerj')">UERJ</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ufpr')">UFPR</a></li>
+          </ul>
+          <ul style="margin: 0; padding: 0;">
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ufrgs')">UFRGS</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ufmg')">UFMG</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('ufsc')">UFSC</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('uece')">UECE</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('fsa')">FSA (Sto. André)</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('puc')">PUC-SP</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('mackenzie')">Mackenzie</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('fgv')">FGV</a></li>
+            <li><a href="javascript:void(0)" onclick="irParaVestibular('uscs')">USCS</a></li>
+          </ul>
+        </div>
       </div>
       <div class="footer-col">
         <h5>Recursos do Portal</h5>
@@ -1391,7 +2360,7 @@
             </div>
             <div class="mode-card-info">
               <h4>Modo Claro</h4>
-              <p>Cores nítidas e aconchegantes para o dia</p>
+              <p>Cores nítidas e iluminadas para o dia</p>
             </div>
           </div>
           <div class="mode-card" id="mode-card-dark" onclick="selecionarModoTema('dark')">
@@ -1400,7 +2369,16 @@
             </div>
             <div class="mode-card-info">
               <h4>Modo Escuro</h4>
-              <p>Conforto visual e descanso para os olhos à noite</p>
+              <p>Conforto visual e alto contraste à noite</p>
+            </div>
+          </div>
+          <div class="mode-card" id="mode-card-warm" onclick="selecionarModoTema('warm')">
+            <div class="mode-card-icon">
+              <i class="fa-solid fa-mug-hot" style="color: #d97706;"></i>
+            </div>
+            <div class="mode-card-info">
+              <h4>Modo Descanso (Luz Amarelada)</h4>
+              <p>Filtro de luz azul, tom sépia e relaxamento para os olhos</p>
             </div>
           </div>
         </div>
@@ -1423,6 +2401,18 @@
           <button class="palette-family-btn" onclick="filtrarFamiliaCores('Amarelo', this)">
             <i class="fa-solid fa-sun" style="color: #ca8a04;"></i> Amarelo
           </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Âmbar', this)">
+            <i class="fa-solid fa-mug-hot" style="color: #b45309;"></i> Âmbar
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Turquesa', this)">
+            <i class="fa-solid fa-water" style="color: #0d9488;"></i> Turquesa
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Laranja', this)">
+            <i class="fa-solid fa-cloud-sun" style="color: #ea580c;"></i> Laranja
+          </button>
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Verde', this)">
+            <i class="fa-solid fa-leaf" style="color: #059669;"></i> Verde
+          </button>
           <button class="palette-family-btn" onclick="filtrarFamiliaCores('Vinho', this)">
             <i class="fa-solid fa-wine-glass" style="color: #9f1239;"></i> Vinho
           </button>
@@ -1435,8 +2425,8 @@
           <button class="palette-family-btn" onclick="filtrarFamiliaCores('Rosa', this)">
             <i class="fa-solid fa-heart" style="color: #db2777;"></i> Rosa
           </button>
-          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Verde', this)">
-            <i class="fa-solid fa-leaf" style="color: #059669;"></i> Verde
+          <button class="palette-family-btn" onclick="filtrarFamiliaCores('Minimalista', this)">
+            <i class="fa-solid fa-cube" style="color: #64748b;"></i> Minimalista
           </button>
         </div>
 
@@ -1557,6 +2547,11 @@
               <option value="ENEM" selected>ENEM (Exame Nacional)</option>
               <option value="FUVEST">FUVEST (USP)</option>
               <option value="FATEC">FATEC (Tecnologia SP)</option>
+              <option value="FSA">FSA (Fundação Santo André - ABC)</option>
+              <option value="PUC">PUC (Pontifícia Universidade Católica)</option>
+              <option value="MACKENZIE">Mackenzie (Presbiteriana Mackenzie)</option>
+              <option value="FGV">FGV (Fundação Getulio Vargas)</option>
+              <option value="USCS">USCS (São Caetano do Sul - Medicina/Saúde)</option>
               <option value="UNICAMP">UNICAMP (Comvest)</option>
               <option value="UNESP">UNESP (Vunesp)</option>
               <option value="UERJ">UERJ (Rio de Janeiro)</option>
@@ -1733,6 +2728,14 @@
       <i class="fa-solid fa-stopwatch"></i>
       <span>Foco</span>
     </button>
+    <button class="mobile-nav-btn" data-tab="cronograma" onclick="mudarAba('cronograma')">
+      <i class="fa-solid fa-calendar-days"></i>
+      <span>Cronograma</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="chat-ia" onclick="mudarAba('chat-ia')">
+      <i class="fa-solid fa-robot"></i>
+      <span>Tutor IA</span>
+    </button>
     <button class="mobile-nav-btn" data-tab="perfil" onclick="mudarAba('perfil')">
       <i class="fa-solid fa-user-graduate"></i>
       <span>Perfil</span>
@@ -1769,6 +2772,11 @@
               <option value="ENEM">ENEM (Exame Nacional)</option>
               <option value="FUVEST">FUVEST (USP)</option>
               <option value="FATEC">FATEC (Tecnologia SP)</option>
+              <option value="FSA">FSA (Fundação Santo André - ABC)</option>
+              <option value="PUC">PUC (Pontifícia Universidade Católica)</option>
+              <option value="MACKENZIE">Mackenzie (Presbiteriana Mackenzie)</option>
+              <option value="FGV">FGV (Fundação Getulio Vargas)</option>
+              <option value="USCS">USCS (São Caetano do Sul - Medicina/Saúde)</option>
               <option value="UNICAMP">UNICAMP (Comvest)</option>
               <option value="UNESP">UNESP (Vunesp)</option>
               <option value="UERJ">UERJ (Rio de Janeiro)</option>
@@ -1904,8 +2912,814 @@
     </div>
   </div>
 
+  <!-- ========================================================
+       MODAL: TOUR DE SLIDES DE APRESENTAÇÃO DO SITE (ONBOARDING)
+       ======================================================== -->
+  <div class="modal-overlay modal-tour-overlay" id="modal-tour-site" onclick="if(event.target === this) fecharTourSlides()">
+    <div class="modal-card modal-tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-modal-titulo">
+      
+      <!-- Barra Superior do Tour -->
+      <div class="tour-header-bar">
+        <div class="tour-header-left">
+          <span class="tour-step-pill">
+            <i class="fa-solid fa-compass"></i>
+            <span id="tour-step-counter">Slide 1 de 8</span>
+          </span>
+          <span class="tour-project-tag"><i class="fa-solid fa-graduation-cap"></i> EstudaMais • Guia Rápido</span>
+        </div>
+        <button class="modal-btn-close" onclick="fecharTourSlides()" title="Fechar Tour e ir para o site" aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Container dos Slides -->
+      <div class="tour-slides-viewport">
+        <div class="tour-slides-track" id="tour-slides-track">
+          
+          <!-- SLIDE 1: BOAS-VINDAS & O PROBLEMA DO VESTIBULANDO -->
+          <div class="tour-slide-item active" data-slide-index="1">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-blue">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Seja Muito Bem-vindo(a)! ✨</span>
+                <h2 class="tour-slide-title" id="tour-modal-titulo">Conheça o <span>EstudaMais</span></h2>
+                <p class="tour-slide-desc">A plataforma definitiva desenvolvida no 3º ano do Ensino Médio para resolver o maior desafio do vestibulando: <strong>saber exatamente o que estudar para ser aprovado!</strong></p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(37, 99, 235, 0.15); color: #3b82f6;">
+                  <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h4>O Problema Real</h4>
+                <p>Muitos conteúdos espalhados geram ansiedade e sobrecarga. Criamos um guia com foco no que é realmente cobrado.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h4>100% Autônomo & Seguro</h4>
+                <p>Sem mensalidades, sem anúncios invasivos e com seu progresso salvo com segurança diretamente no seu dispositivo.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                  <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h4>Tecnologia & IA Oficial</h4>
+                <p>Ferramentas com áudio nativo, lousa touch interativa e correção de redação com o <strong>Google Gemini</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 2: GUIA COMPLETO DE VESTIBULARES PÚBLICOS E PRIVADOS -->
+          <div class="tour-slide-item" data-slide-index="2">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-teal">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Conteúdos & Matrizes Oficiais</span>
+                <h2 class="tour-slide-title">Guia dos <span>Vestibulares Públicos & Privados</span></h2>
+                <p class="tour-slide-desc">Acesse matrizes completas de instituições <strong>Públicas, Federais, Comunitárias e Privadas</strong>: ENEM, Fuvest/USP, Fatec, <strong>FSA (Fundação Santo André)</strong>, PUC, Mackenzie, FGV, Unicamp, Unesp, ITA, USCS e muito mais!</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">
+                  <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h4>Checklist com % de Progresso</h4>
+                <p>Conforme você conclui cada matéria, marque o checkbox e veja a sua barra de avanço calculada em tempo real.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(234, 179, 8, 0.15); color: #eab308;">
+                  <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <h4>Dicas Estratégicas da Banca</h4>
+                <p>Orientações práticas para cada vestibular: tempo de prova, formato da 1ª e 2ª fase e conselhos dos avaliadores.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                  <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <h4>Obras Obrigatórias</h4>
+                <p>Livros cobrados na Fuvest e Unicamp com sinopses, autores e controle de leitura para você não esquecer nada.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 3: CRONÔMETRO POMODORO & SOM DE CHUVA -->
+          <div class="tour-slide-item" data-slide-index="3">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-amber">
+                <i class="fa-solid fa-stopwatch-20"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Estudo Ativo & Alta Performance</span>
+                <h2 class="tour-slide-title">Pomodoro Flexível & <span>Som de Chuva</span></h2>
+                <p class="tour-slide-desc">Estude com a técnica de foco e intervalos mais recomendada do mundo, com liberdade total para personalizar o seu tempo.</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h4>Ajuste de Horas, Minutos e Segundos</h4>
+                <p>Defina o tempo que quiser livremente com botões de incremento ou atalhos rápidos (25m, 50m ou 90m).</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">
+                  <i class="fa-solid fa-cloud-rain"></i>
+                </div>
+                <h4>Som de Chuva Suave</h4>
+                <p>Gerador de som de chuva sintetizado na hora via <em>Web Audio API</em>, sem propagandas, para blindar seu foco.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                  <i class="fa-solid fa-bell"></i>
+                </div>
+                <h4>Sinos Acústicos Harmônicos</h4>
+                <p>Alertas sonoros suaves ao término de cada ciclo e pausas para relaxar os olhos e a mente.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 4: QUIZ GAMIFICADO COM XP & LOUSA DE CÁLCULOS -->
+          <div class="tour-slide-item" data-slide-index="4">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-purple">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Prática & Treinamento Real</span>
+                <h2 class="tour-slide-title">Simulados Gamificados & <span>Lousa Touch</span></h2>
+                <p class="tour-slide-desc">Treine com centenas de questões reais de provas oficiais (ENEM, USP, ITA...), conquiste XP e suba de nível!</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                  <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h4>Gamificação & Níveis de XP</h4>
+                <p>Acumule pontos a cada resposta correta, desbloqueie medalhas e monitore sua sequência de vitórias.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                  <i class="fa-solid fa-pen-ruler"></i>
+                </div>
+                <h4>Lousa para Rabiscar Cálculos</h4>
+                <p>Abra o rascunho retrátil em cima da questão para resolver equações e desenhar com mouse, caneta ou touch!</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(34, 197, 94, 0.15); color: #22c55e;">
+                  <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <h4>Gabarito e Justificativa</h4>
+                <p>Feedback imediato explicando o porquê da alternativa correta para fixar o aprendizado.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 5: BLOCO DE NOTAS & CADERNO DIGITAL -->
+          <div class="tour-slide-item" data-slide-index="5">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-rose">
+                <i class="fa-solid fa-note-sticky"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Organização & Produtividade</span>
+                <h2 class="tour-slide-title">Caderno Digital & <span>Anotações Inteligentes</span></h2>
+                <p class="tour-slide-desc">Centralize resumos, fórmulas, dicas de aula e lembretes em um bloco de notas moderno, colorido e integrado.</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">
+                  <i class="fa-solid fa-palette"></i>
+                </div>
+                <h4>Cores & Destaque Visual</h4>
+                <p>Atribua cores às suas notas (amarelo, verde, azul, rosa, lilás) e fixe os avisos mais urgentes no topo.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <h4>Busca Instantânea</h4>
+                <p>Encontre qualquer anotação rapidamente digitando termos-chave na barra de pesquisa em tempo real.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                  <i class="fa-solid fa-download"></i>
+                </div>
+                <h4>Download dos Resumos</h4>
+                <p>Baixe suas notas em formato <code>.txt</code> para ler offline, levar para a escola ou imprimir quando quiser.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 6: CORREÇÃO DE REDAÇÃO COM IA GOOGLE GEMINI -->
+          <div class="tour-slide-item" data-slide-index="6">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing tour-icon-gemini">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Tecnologia de Ponta na Palma da Mão</span>
+                <h2 class="tour-slide-title">Correção com <span>Inteligência Artificial</span></h2>
+                <p class="tour-slide-desc">Treine redação com a inteligência do <strong>Google Gemini</strong> avaliando seu texto nas 5 competências oficiais do ENEM (0 a 1000 pontos)!</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(66, 133, 244, 0.15); color: #4285f4;">
+                  <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <h4>Nota Sincera & Rigorosa</h4>
+                <p>Receba notas criteriosas por competência (C1 a C5) com avaliação justa sem notas infladas artificiais.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                  <i class="fa-solid fa-spell-check"></i>
+                </div>
+                <h4>Correção Gramatical & Tese</h4>
+                <p>A IA aponta desvios de concordância, regência, crase e avalia a consistência do seu repertório sociocultural.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                  <i class="fa-solid fa-key"></i>
+                </div>
+                <h4>Conexão Fácil com sua API</h4>
+                <p>Você pode conectar sua chave gratuita do <strong>Google AI Studio</strong> para correções ilimitadas e instantâneas!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 7: JANELAS FLUTUANTES MÓVEIS (MULTITAREFA NA TELA) -->
+          <div class="tour-slide-item" data-slide-index="7">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing" style="background: rgba(59, 130, 246, 0.18); color: #3b82f6;">
+                <i class="fa-solid fa-up-down-left-right"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Nova Experiência Multitarefa ✨</span>
+                <h2 class="tour-slide-title">Janelas Flutuantes <span>Móveis na Tela</span></h2>
+                <p class="tour-slide-desc">Estude sem interrupções! Arraste a <strong>Lousa</strong>, o <strong>Tutor IA</strong>, o <strong>Bloco de Notas</strong> e o <strong>Foco Pomodoro</strong> livremente pela tela enquanto assiste a vídeo aulas ou resolve simulados.</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(2, 132, 199, 0.15); color: #0284c7;">
+                  <i class="fa-solid fa-pen-ruler"></i>
+                </div>
+                <h4>Lousa Móvel Livre</h4>
+                <p>Faça cálculos e rabiscos em cima de qualquer tela, redimensione e minimize com um clique.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(99, 102, 241, 0.15); color: #6366f1;">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <h4>Tutor IA em Janela</h4>
+                <p>Tire dúvidas pontuais sem sair da aula do YouTube ou da folha de exercícios.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(249, 115, 22, 0.15); color: #f97316;">
+                  <i class="fa-solid fa-fire"></i>
+                </div>
+                <h4>Timer de Foco Flutuante</h4>
+                <p>Acompanhe seu tempo de estudo e controle sons relaxantes direto na barra flutuante.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 8: CENTRAL DE VÍDEO AULAS & SONS DE FOCO COM VOLUME -->
+          <div class="tour-slide-item" data-slide-index="8">
+            <div class="tour-slide-hero">
+              <div class="tour-icon-glowing" style="background: rgba(239, 68, 68, 0.18); color: #ef4444;">
+                <i class="fa-solid fa-headphones"></i>
+              </div>
+              <div class="tour-hero-info">
+                <span class="tour-kicker">Aulas & Concentração Perfeita 🎧</span>
+                <h2 class="tour-slide-title">Vídeo Aulas & <span>Sons Ambientes</span></h2>
+                <p class="tour-slide-desc">Acesse os melhores canais do YouTube por matéria, cole qualquer link para assistir integrado com lousa de contas e estude ouvindo <strong>Ruído Marrom, Chuva Suave e Ondas Alfa</strong> com controle de volume!</p>
+              </div>
+            </div>
+
+            <div class="tour-cards-grid">
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+                  <i class="fa-brands fa-youtube"></i>
+                </div>
+                <h4>3 Professores por Matéria</h4>
+                <p>Recomendações dos maiores educadores do Brasil organizadas por disciplina.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">
+                  <i class="fa-solid fa-cloud-rain"></i>
+                </div>
+                <h4>Ruído Marrom & Chuva</h4>
+                <p>Áudio binaural sintetizado para anular distrações e turbinar sua retenção de conteúdo.</p>
+              </div>
+
+              <div class="tour-feature-card">
+                <div class="tour-card-icon" style="background: rgba(234, 179, 8, 0.15); color: #eab308;">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h4>Slider de Volume</h4>
+                <p>Ajuste suave de 0% a 100% ou mute com um clique na barra superior e nos widgets.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Rodapé com Navegação dos Slides -->
+      <div class="tour-footer-controls">
+        <div class="tour-footer-left">
+          <button type="button" class="btn-tour-skip" onclick="fecharTourSlides()">
+            Pular Introdução
+          </button>
+        </div>
+
+        <div class="tour-dots-pagination" id="tour-dots-pagination">
+          <button type="button" class="tour-dot active" onclick="irParaTourSlide(1)" title="Slide 1: Boas-vindas"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(2)" title="Slide 2: 10 Vestibulares"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(3)" title="Slide 3: Pomodoro & Chuva"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(4)" title="Slide 4: Quiz & Lousa"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(5)" title="Slide 5: Bloco de Notas"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(6)" title="Slide 6: Redação com IA"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(7)" title="Slide 7: Janelas Móveis"></button>
+          <button type="button" class="tour-dot" onclick="irParaTourSlide(8)" title="Slide 8: Vídeos & Sons"></button>
+        </div>
+
+        <div class="tour-footer-right">
+          <button type="button" class="btn-tour-prev" id="btn-tour-prev" onclick="tourSlideAnterior()" disabled>
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+          <button type="button" class="btn-tour-next" id="btn-tour-next" onclick="tourProximoSlide()">
+            <span>Avançar</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="js/data.js" charset="UTF-8"></script>
   <script src="js/app.js" charset="UTF-8"></script>
+
+  <!-- ========================================================
+       MODAL: PLAYER DE VÍDEO AULA EMBUTIDO COM ANOTAÇÕES
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-video-aula-player" onclick="if(event.target === this) fecharModalPlayerVideo()">
+    <div class="modal-card modal-video-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: #ef4444; color: #fff;">
+          <i class="fa-brands fa-youtube"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3 id="modal-video-titulo">Aula em Destaque</h3>
+          <p id="modal-video-subtitulo">Canal Recomendado</p>
+        </div>
+        <button type="button" class="modal-btn-close" onclick="fecharModalPlayerVideo()" title="Fechar Player">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-video-body">
+        <!-- Container do Vídeo Responsivo -->
+        <div class="video-player-wrapper">
+          <iframe id="video-aula-iframe" src="" title="Videoaula do YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+
+        <!-- Área de Ações e Anotações Rápidas -->
+        <div class="video-player-footer">
+          <div class="video-player-canal-info">
+            <span class="video-badge-canal"><i class="fa-solid fa-chalkboard-user"></i> <strong id="modal-video-prof">Professor</strong></span>
+            <a id="modal-video-link-canal" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-canal-externo">
+              <i class="fa-brands fa-youtube"></i> Acessar Canal Oficial no YouTube ↗
+            </a>
+          </div>
+
+          <div class="video-quick-notes-box">
+            <div class="notes-header-row">
+              <label for="input-nota-video-rapida"><i class="fa-solid fa-pen-to-square"></i> Anotações Rápidas desta Aula:</label>
+              <button type="button" class="btn-salvar-nota-video" onclick="salvarAnotacaoVideoNoCaderno()">
+                <i class="fa-solid fa-floppy-disk"></i> Salvar no meu Bloco de Notas
+              </button>
+            </div>
+            <textarea id="input-nota-video-rapida" rows="3" placeholder="Digite pontos-chave, fórmulas ou dúvidas anotadas durante o vídeo para salvar no seu caderno..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ========================================================
+       MODAL: CENTRAL DE ABAS AGRUPADAS (MENU COM 3 LISTRAS ☰)
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-menu-abas" onclick="if(event.target === this) fecharModalMenuAbas()">
+    <div class="modal-card modal-menu-abas-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: var(--primary-accent, #2563eb); color: #fff;">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Central de Abas & Grupos de Estudo</h3>
+          <p>Todas as ferramentas e matérias organizadas para sua preparação</p>
+        </div>
+        <button type="button" class="modal-btn-close" onclick="fecharModalMenuAbas()" title="Fechar Menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-menu-abas-body">
+        <!-- Busca rápida no menu -->
+        <div class="menu-abas-busca-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="input-busca-abas-menu" placeholder="Filtrar abas, matérias ou ferramentas (ex: Simulado, Vídeo, Lousa, Redação)..." oninput="filtrarAbasNoMenu(this.value)">
+        </div>
+
+        <!-- Grid de Grupos -->
+        <div class="menu-abas-grupos-grid" id="menu-abas-grupos-grid">
+          <!-- Grupo 1: Conteúdos & Aulas -->
+          <div class="menu-aba-grupo-bloco">
+            <div class="grupo-bloco-titulo">
+              <i class="fa-solid fa-graduation-cap" style="color: #2563eb;"></i>
+              <h4>Conteúdos & Aulas</h4>
+            </div>
+            <div class="grupo-bloco-itens">
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="inicio" onclick="mudarAba('inicio'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                  <i class="fa-solid fa-house"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Início / Dashboard</strong>
+                  <span>Visão geral do progresso, atalhos e frase do dia</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="vestibulares" onclick="mudarAba('vestibulares'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                  <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Vestibulares & Matérias</strong>
+                  <span>ENEM, FUVEST, FATEC, FSA, UNICAMP com edital completo</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="videoaulas" onclick="mudarAba('videoaulas'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">
+                  <i class="fa-brands fa-youtube"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Vídeo Aulas & Melhores Canais</strong>
+                  <span>3 professores recomendados por matéria + player embutido</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="dicas" onclick="mudarAba('dicas'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(234, 179, 8, 0.12); color: #eab308;">
+                  <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Dicas & Métodos de Estudo</strong>
+                  <span>Técnicas de memorização, revisão espaçada e rotina</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grupo 2: Prática & Simulados -->
+          <div class="menu-aba-grupo-bloco">
+            <div class="grupo-bloco-titulo">
+              <i class="fa-solid fa-pencil" style="color: #be185d;"></i>
+              <h4>Prática & Treino</h4>
+            </div>
+            <div class="grupo-bloco-itens">
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="simulados" onclick="mudarAba('simulados'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                  <i class="fa-solid fa-file-signature"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Simulados Oficiais</strong>
+                  <span>Treine no formato real com tempo cronometrado e gabarito</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="redacao" onclick="mudarAba('redacao'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(190, 24, 93, 0.12); color: #be185d;">
+                  <i class="fa-solid fa-feather-pointed"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Redação & Corretor IA</strong>
+                  <span>Espelho oficial ENEM com correção em 5 competências</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="quiz" onclick="mudarAba('quiz'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                  <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Quiz & Exercícios de Fixação</strong>
+                  <span>Perguntas rápidas com pontuação de XP e ranking</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grupo 3: Organização & Ferramentas -->
+          <div class="menu-aba-grupo-bloco">
+            <div class="grupo-bloco-titulo">
+              <i class="fa-solid fa-calendar-check" style="color: #0284c7;"></i>
+              <h4>Organização & Ferramentas</h4>
+            </div>
+            <div class="grupo-bloco-itens">
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="cronograma" onclick="mudarAba('cronograma'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
+                  <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Cronogramas & Metas</strong>
+                  <span>Planejamento semanal inteligente criado por IA ou manual</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="notas" onclick="mudarAba('notas'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(124, 58, 237, 0.12); color: #7c3aed;">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Bloco de Notas / Caderno</strong>
+                  <span>Seus resumos, fórmulas e anotações salvos por matéria</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="ferramentas" onclick="mudarAba('ferramentas'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(234, 88, 12, 0.12); color: #ea580c;">
+                  <i class="fa-solid fa-stopwatch"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Foco & Pomodoro</strong>
+                  <span>Temporizador com sons de chuva, cafeteria e biblioteca</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" onclick="alternarLousaRascunho(); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                  <i class="fa-solid fa-pen-ruler"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Lousa de Contas (Rascunho)</strong>
+                  <span>Rabisco digital para cálculos e resoluções rápidas</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grupo 4: Inteligência & Recursos -->
+          <div class="menu-aba-grupo-bloco">
+            <div class="grupo-bloco-titulo">
+              <i class="fa-solid fa-robot" style="color: #6366f1;"></i>
+              <h4>Inteligência & Recursos</h4>
+            </div>
+            <div class="grupo-bloco-itens">
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="chat-ia" onclick="mudarAba('chat-ia'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(99, 102, 241, 0.12); color: #6366f1;">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Tutor IA & Gemini</strong>
+                  <span>Tire dúvidas, peça resumos, pesquisas e resoluções</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" data-tab-alvo="perfil" onclick="mudarAba('perfil'); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(37, 99, 235, 0.12); color: #2563eb;">
+                  <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Meu Perfil & Carreira</strong>
+                  <span>Vestibular alvo, curso dos sonhos, progresso e conquistas</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" onclick="abrirModalCores(); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(234, 179, 8, 0.12); color: #ca8a04;">
+                  <i class="fa-solid fa-palette"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Personalizar Cores</strong>
+                  <span>Escolha entre 30+ tons e modo descanso (luz amarela)</span>
+                </div>
+              </button>
+              <button type="button" class="menu-aba-item-card" onclick="abrirTourSlides(true); fecharModalMenuAbas();">
+                <div class="menu-item-icon" style="background: rgba(236, 72, 153, 0.12); color: #ec4899;">
+                  <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="menu-item-desc">
+                  <strong>Tour Interativo do Site</strong>
+                  <span>Guia passo a passo para aproveitar ao máximo a plataforma</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ========================================================
+       MODAL: CATÁLOGO COMPLETO DE TEMAS DE REDAÇÃO
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-catalogo-temas" onclick="if(event.target === this) fecharCatalogoTemasRedacao()">
+    <div class="modal-card modal-catalogo-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: #be185d; color: #fff;">
+          <i class="fa-solid fa-feather-pointed"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Banco de Temas de Redação Oficiais & Inéditos</h3>
+          <p>Escolha uma proposta para praticar ou crie um tema exclusivo com Inteligência Artificial</p>
+        </div>
+        <button type="button" class="modal-btn-close" onclick="fecharCatalogoTemasRedacao()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-catalogo-body">
+        <!-- Barra de busca e filtros -->
+        <div class="catalogo-topo-bar">
+          <div class="catalogo-busca-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="input-busca-temas" placeholder="Pesquisar por tema, assunto ou palavra-chave (ex: Clima, IA, Saúde, Bets, Trabalho)..." oninput="filtrarCatalogoTemas(this.value)">
+          </div>
+          <button type="button" class="btn-novo-tema-ia-topo" onclick="fecharCatalogoTemasRedacao(); abrirModalCriarTemaRedacao();">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Criar Tema com Gemini</span>
+          </button>
+        </div>
+
+        <!-- Pills de Filtro por Vestibular -->
+        <div class="catalogo-filtros-pills" id="catalogo-filtros-pills">
+          <button type="button" class="cat-pill-btn active" data-vest="todos" onclick="filtrarCatalogoPorVestibular('todos')">Todos os Temas</button>
+          <button type="button" class="cat-pill-btn" data-vest="ENEM" onclick="filtrarCatalogoPorVestibular('ENEM')">ENEM</button>
+          <button type="button" class="cat-pill-btn" data-vest="FUVEST" onclick="filtrarCatalogoPorVestibular('FUVEST')">FUVEST</button>
+          <button type="button" class="cat-pill-btn" data-vest="UNICAMP" onclick="filtrarCatalogoPorVestibular('UNICAMP')">UNICAMP</button>
+          <button type="button" class="cat-pill-btn" data-vest="FATEC" onclick="filtrarCatalogoPorVestibular('FATEC')">FATEC</button>
+          <button type="button" class="cat-pill-btn" data-vest="UNESP" onclick="filtrarCatalogoPorVestibular('UNESP')">UNESP</button>
+          <button type="button" class="cat-pill-btn" data-vest="CUSTOM" onclick="filtrarCatalogoPorVestibular('CUSTOM')">✨ Criados por Mim</button>
+        </div>
+
+        <!-- Grid de Temas -->
+        <div class="catalogo-temas-grid" id="catalogo-temas-grid">
+          <!-- Preenchido via app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: CRIAR TEMA INÉDITO & DESENVOLVER TEXTOS COM GEMINI
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-criar-tema-redacao" onclick="if(event.target === this) fecharModalCriarTemaRedacao()">
+    <div class="modal-card modal-criar-tema-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Criar Tema & Textos Motivadores com Gemini</h3>
+          <p>Digite qualquer ideia ou assunto e a IA gera a proposta oficial completa para você treinar</p>
+        </div>
+        <button type="button" class="modal-btn-close" onclick="fecharModalCriarTemaRedacao()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-criar-tema-body">
+        <div class="form-grupo-tema">
+          <label for="input-tema-custom-titulo"><strong>Qual assunto ou tema você gostaria de treinar?</strong></label>
+          <div class="tema-input-com-sugestao">
+            <input type="text" id="input-tema-custom-titulo" placeholder="Ex: O impacto do uso excessivo de telas na infância e na aprendizagem..." class="form-input">
+            <button type="button" class="btn-sugerir-tema-rapido" onclick="sugerirTemaIneditoRapido()" title="Sortear uma ideia quente de redação">
+              <i class="fa-solid fa-dice"></i> Sugerir Tema
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row-tema">
+          <div class="form-col-tema">
+            <label for="select-tema-custom-vest"><strong>Banca / Estilo do Vestibular:</strong></label>
+            <select id="select-tema-custom-vest" class="form-select">
+              <option value="ENEM">ENEM (Dissertativo-Argumentativo com 5 Competências)</option>
+              <option value="FUVEST">FUVEST / USP (Dissertação Crítica e Filosófica)</option>
+              <option value="UNICAMP">UNICAMP (Gênero Textual Específico: Carta, Artigo, Manifesto)</option>
+              <option value="FATEC">FATEC (Tecnologia, Sociedade e Mercado de Trabalho)</option>
+              <option value="UNESP">UNESP (Pergunta Temática Argumentativa)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="acoes-gerar-tema-box">
+          <button type="button" class="btn-gerar-tema-executar" id="btn-gerar-tema-executar" onclick="gerarTemaComGemini()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Desenvolver Proposta Completa & Textos Motivadores</span>
+          </button>
+        </div>
+
+        <!-- Área de Carregamento e Preview do Tema Gerado -->
+        <div class="preview-tema-gerado" id="preview-tema-gerado" style="display: none;">
+          <div class="preview-tema-header">
+            <span class="preview-badge" id="preview-tema-badge">ENEM</span>
+            <h4 id="preview-tema-titulo">Título da Proposta Gerada</h4>
+          </div>
+          <p class="preview-tema-instrucoes" id="preview-tema-instrucoes">Instruções...</p>
+          
+          <div class="preview-textos-motivadores" id="preview-textos-motivadores">
+            <!-- Textos motivadores sintetizados -->
+          </div>
+
+          <div class="preview-botoes-confirmar">
+            <button type="button" class="btn-aplicar-tema-gerado" onclick="aplicarTemaGeradoAoTreino()">
+              <i class="fa-solid fa-pen-nib"></i> Usar Esta Proposta e Começar Redação
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ========================================================
+       MODAL: ACESSAR CONTA E DADOS EM OUTRO DISPOSITIVO
+       ======================================================== -->
+  <div class="modal-overlay" id="modal-conectar-dispositivo" onclick="if(event.target === this) fecharModalConectarDispositivo()">
+    <div class="modal-card modal-dispositivo-card">
+      <div class="modal-header">
+        <div class="modal-header-icon" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff;">
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+        </div>
+        <div class="modal-header-text">
+          <h3>Acessar Dados em Outros Dispositivos</h3>
+          <p>Leve suas notas, cronogramas e progresso para o celular, tablet ou outro computador</p>
+        </div>
+        <button type="button" class="modal-btn-close" onclick="fecharModalConectarDispositivo()" title="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body modal-dispositivo-body">
+        <!-- Método 1: Login com Email e Senha -->
+        <div class="disp-metodo-box">
+          <div class="disp-metodo-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
+          <div class="disp-metodo-info">
+            <h4>Método 1: Login Direto (Mais Fácil)</h4>
+            <p>Basta abrir o site em qualquer outro navegador ou celular e fazer login com seu <strong>e-mail e senha cadastrados</strong>. Seus dados serão baixados da nuvem automaticamente!</p>
+          </div>
+        </div>
+
+        <!-- Método 2: Código de Nuvem do Aluno -->
+        <div class="disp-metodo-box">
+          <div class="disp-metodo-icon"><i class="fa-solid fa-key"></i></div>
+          <div class="disp-metodo-info">
+            <h4>Método 2: Código de Sincronização da Nuvem</h4>
+            <p>Se preferir ou estiver em modo visitante, use sua chave exclusiva para transferir todos os dados:</p>
+            <div class="disp-codigo-wrapper">
+              <input type="text" id="disp-codigo-nuvem" readonly value="ESTUDA-CARREGANDO..." class="disp-codigo-input">
+              <button type="button" class="btn-copiar-codigo-disp" onclick="copiarCodigoNuvem()" title="Copiar código">
+                <i class="fa-solid fa-copy"></i> Copiar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opção de Restaurar por Código em Novo Dispositivo -->
+        <div class="disp-restaurar-box">
+          <h4>Já tem um código de outro dispositivo?</h4>
+          <p>Cole o código de sincronização abaixo para puxar seus dados para este navegador:</p>
+          <div class="disp-restaurar-row">
+            <input type="text" id="input-codigo-nuvem-restaurar" placeholder="Cole o código (ex: ESTUDA-XXXX-YYYY)..." class="disp-input-restaurar">
+            <button type="button" class="btn-executar-sync-codigo" onclick="restaurarPorCodigoNuvem()">
+              <i class="fa-solid fa-cloud-arrow-down"></i> Baixar Dados da Nuvem
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

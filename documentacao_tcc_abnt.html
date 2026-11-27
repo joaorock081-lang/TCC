@@ -1,0 +1,1120 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação TCC - Estuda Mais - João Victor de Lima Gama</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===================================================
+       REGRAS GERAIS DE FORMATAÇÃO ABNT NBR 14724:2024
+       Tamanho do papel: A4 (210 x 297 mm)
+       Margens: Superior e Esquerda: 3 cm | Inferior e Direita: 2 cm
+       Fonte padrão: Arial ou Times New Roman 12 pt
+       Espaçamento entrelinhas: 1,5
+       Parágrafo: recuo de 1,25 cm na primeira linha
+       Citações diretas longas: recuo de 4 cm, fonte 10 pt, espaço simples
+       =================================================== */
+
+    @page {
+      size: A4;
+      margin: 3cm 2cm 2cm 3cm;
+      @top-right {
+        content: counter(page);
+        font-family: Arial, "Times New Roman", sans-serif;
+        font-size: 10pt;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #000000;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    /* Barra Superior para Impressão na Tela (Não sai no PDF/Impressão) */
+    .barra-impressao-tela {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-family: system-ui, sans-serif;
+    }
+
+    .btn-imprimir {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-imprimir:hover {
+      background: #1d4ed8;
+    }
+
+    /* Container de Folhas A4 para visualização em tela */
+    .documento-tcc {
+      max-width: 21cm;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 3cm 2cm 2cm 3cm;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+
+    /* Quebra de Página ABNT */
+    .pagina-abnt {
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+      min-height: 24cm;
+    }
+
+    .pagina-abnt:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    /* Elementos Centrais e Títulos */
+    .centro {
+      text-align: center;
+    }
+    .direita {
+      text-align: right;
+    }
+    .caixa-alta {
+      text-transform: uppercase;
+    }
+    .negrito {
+      font-weight: bold;
+    }
+
+    h1.titulo-secao-primaria {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 0;
+      margin-bottom: 1.5em;
+      line-height: 1.5;
+    }
+
+    h2.titulo-secao-secundaria {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-top: 1.5em;
+      margin-bottom: 1.2em;
+      line-height: 1.5;
+    }
+
+    h3.titulo-secao-terciaria {
+      font-size: 12pt;
+      font-weight: normal;
+      font-style: italic;
+      margin-top: 1.2em;
+      margin-bottom: 1em;
+      line-height: 1.5;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.8em;
+      text-indent: 1.25cm;
+    }
+
+    .sem-recuo {
+      text-indent: 0 !important;
+    }
+
+    /* Recuo da Natureza do Trabalho (Folha de Rosto e Aprovação) */
+    .recuo-natureza {
+      margin-left: 8cm;
+      text-indent: 0;
+      font-size: 10pt;
+      line-height: 1.2;
+      text-align: justify;
+      margin-top: 3cm;
+      margin-bottom: 3cm;
+    }
+
+    .epigrafe-bloco, .dedicatoria-bloco {
+      margin-top: 14cm;
+      margin-left: 8cm;
+      text-indent: 0;
+      font-style: italic;
+      font-size: 11pt;
+      line-height: 1.3;
+    }
+
+    /* Citações Diretas Longas (> 3 linhas) */
+    .citacao-longa {
+      margin-left: 4cm;
+      margin-top: 1.2em;
+      margin-bottom: 1.2em;
+      font-size: 10pt;
+      line-height: 1.2;
+      text-indent: 0;
+      text-align: justify;
+    }
+
+    /* Tabelas e Ilustrações ABNT / IBGE */
+    .figura-bloco, .tabela-bloco {
+      margin: 1.5em 0;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .figura-titulo, .tabela-titulo {
+      font-size: 10pt;
+      font-weight: bold;
+      text-align: left;
+      margin-bottom: 4px;
+    }
+
+    .figura-fonte, .tabela-fonte {
+      font-size: 10pt;
+      text-align: left;
+      margin-top: 4px;
+      font-style: normal;
+    }
+
+    table.tabela-abnt {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin: 0 auto;
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+    }
+
+    table.tabela-abnt th {
+      border-bottom: 1px solid #000;
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    table.tabela-abnt td {
+      padding: 6px 8px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* Gráficos em Barras Visuais Textuais */
+    .grafico-visual-container {
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 12px;
+      background: #fafafa;
+      margin: 8px 0;
+      text-align: left;
+    }
+
+    .barra-item {
+      margin-bottom: 8px;
+    }
+    .barra-rotulo {
+      font-size: 10pt;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .barra-trilho {
+      background: #e2e8f0;
+      height: 18px;
+      border-radius: 3px;
+      overflow: hidden;
+      display: flex;
+    }
+    .barra-preenchimento {
+      background: #1e3a8a;
+      color: #fff;
+      font-size: 9pt;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+    }
+
+    /* Sumário */
+    .linha-sumario {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 11pt;
+    }
+    .linha-sumario .num-titulo {
+      flex: 1;
+      padding-right: 8px;
+    }
+    .linha-sumario .pontos {
+      flex: 1;
+      border-bottom: 1px dotted #94a3b8;
+      margin-bottom: 4px;
+    }
+    .linha-sumario .num-pag {
+      padding-left: 8px;
+      font-weight: bold;
+    }
+
+    /* Regras de Mídia de Impressão */
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .barra-impressao-tela {
+        display: none !important;
+      }
+      .documento-tcc {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .pagina-abnt {
+        page-break-after: always;
+        break-after: page;
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra Fixa de Comando (Invisível na Impressão) -->
+  <div class="barra-impressao-tela">
+    <div>
+      <strong><i class="fa-solid fa-graduation-cap"></i> Documentação Oficial TCC — Padrão ABNT NBR 14724:2024</strong>
+      <span style="opacity: 0.8; font-size: 13px; margin-left: 10px;">Pronto para Visualizar, Imprimir e Encadernar</span>
+    </div>
+    <button class="btn-imprimir" onclick="window.print()">
+      <i class="fa-solid fa-print"></i> Imprimir / Salvar como PDF (Ctrl + P)
+    </button>
+  </div>
+
+  <div class="documento-tcc">
+
+    <!-- ==========================================
+         ELEMENTOS PRÉ-TEXTUAIS: CAPA (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt centro">
+      <p class="sem-recuo negrito caixa-alta" style="font-size: 13pt;">
+        GOVERNO DO ESTADO DE SÃO PAULO<br>
+        SECRETARIA DA EDUCAÇÃO DO ESTADO DE SÃO PAULO<br>
+        E. E. PROFESSORA THEREZINHA SARTORI<br>
+        HABILITAÇÃO PROFISSIONAL TÉCNICA EM DESENVOLVIMENTO DE SISTEMAS
+      </p>
+
+      <div style="margin-top: 5cm;">
+        <p class="sem-recuo negrito caixa-alta" style="font-size: 13pt;">JOÃO VICTOR DE LIMA GAMA</p>
+      </div>
+
+      <div style="margin-top: 5cm;">
+        <p class="sem-recuo negrito caixa-alta" style="font-size: 14pt; line-height: 1.4;">
+          ESTUDA MAIS: PLATAFORMA WEB INTEGRADA DE GESTÃO DA APRENDIZAGEM E PREPARAÇÃO ESTRATÉGICA PARA O ENEM E VESTIBULARES
+        </p>
+        <p class="sem-recuo" style="font-size: 12pt; margin-top: 8px;">
+          Desenvolvimento de uma solução tecnológica para direcionamento de estudos, organização de rotina e otimização do foco para estudantes do Ensino Médio público
+        </p>
+      </div>
+
+      <div style="position: absolute; bottom: 0; left: 0; right: 0;">
+        <p class="sem-recuo negrito caixa-alta">MAUÁ - SP<br>2026</p>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         FOLHA DE ROSTO (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt centro">
+      <p class="sem-recuo negrito caixa-alta" style="font-size: 13pt;">JOÃO VICTOR DE LIMA GAMA</p>
+
+      <div style="margin-top: 4cm;">
+        <p class="sem-recuo negrito caixa-alta" style="font-size: 14pt; line-height: 1.4;">
+          ESTUDA MAIS: PLATAFORMA WEB INTEGRADA DE GESTÃO DA APRENDIZAGEM E PREPARAÇÃO ESTRATÉGICA PARA O ENEM E VESTIBULARES
+        </p>
+        <p class="sem-recuo" style="font-size: 12pt; margin-top: 8px;">
+          Desenvolvimento de uma solução tecnológica para direcionamento de estudos, organização de rotina e otimização do foco para estudantes do Ensino Médio público
+        </p>
+      </div>
+
+      <div class="recuo-natureza">
+        Trabalho de Conclusão de Curso (TCC) apresentado à Escola Estadual Professora Therezinha Sartori como requisito parcial obrigatório para obtenção do diploma de Habilitação Profissional Técnica de Nível Médio em Desenvolvimento de Sistemas, integrado ao Ensino Médio.<br><br>
+        <strong>Área de Concentração:</strong> Engenharia de Software e Informática Educativa.<br>
+        <strong>Orientadora:</strong> Prof.ª Roberta Roberti
+      </div>
+
+      <div style="position: absolute; bottom: 0; left: 0; right: 0;">
+        <p class="sem-recuo negrito caixa-alta">MAUÁ - SP<br>2026</p>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         FOLHA DE APROVAÇÃO (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt">
+      <div class="centro">
+        <p class="sem-recuo negrito caixa-alta" style="font-size: 13pt;">JOÃO VICTOR DE LIMA GAMA</p>
+        <p class="sem-recuo negrito caixa-alta" style="font-size: 13pt; margin-top: 2cm;">
+          ESTUDA MAIS: PLATAFORMA WEB INTEGRADA DE GESTÃO DA APRENDIZAGEM E PREPARAÇÃO ESTRATÉGICA PARA O ENEM E VESTIBULARES
+        </p>
+      </div>
+
+      <div class="recuo-natureza" style="margin-top: 1.5cm; margin-bottom: 1.5cm;">
+        Trabalho de Conclusão de Curso avaliado e aprovado pela Banca Examinadora da Escola Estadual Professora Therezinha Sartori como requisito para conclusão do Curso Técnico em Desenvolvimento de Sistemas.
+      </div>
+
+      <p class="sem-recuo" style="margin-top: 1cm;">Aprovado em: _____ de _________________ de 2026.</p>
+
+      <div class="centro" style="margin-top: 3cm;">
+        <p class="sem-recuo" style="border-top: 1px solid #000; width: 12cm; margin: 0 auto 0 auto;"></p>
+        <p class="sem-recuo negrito">Prof.ª Roberta Roberti — Orientadora</p>
+        <p class="sem-recuo" style="font-size: 10pt;">E. E. Professora Therezinha Sartori</p>
+
+        <p class="sem-recuo" style="border-top: 1px solid #000; width: 12cm; margin: 2.2cm auto 0 auto;"></p>
+        <p class="sem-recuo negrito">Prof. Avaliador 1 (Banca Examinadora)</p>
+        <p class="sem-recuo" style="font-size: 10pt;">E. E. Professora Therezinha Sartori</p>
+
+        <p class="sem-recuo" style="border-top: 1px solid #000; width: 12cm; margin: 2.2cm auto 0 auto;"></p>
+        <p class="sem-recuo negrito">Prof. Avaliador 2 (Banca Examinadora)</p>
+        <p class="sem-recuo" style="font-size: 10pt;">E. E. Professora Therezinha Sartori</p>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         DEDICATÓRIA E AGRADECIMENTOS
+         ========================================== -->
+    <div class="pagina-abnt">
+      <div class="dedicatoria-bloco">
+        Dedico este trabalho a todos os estudantes de escolas públicas do Brasil, que mesmo diante de desafios estruturais e históricos, continuam firmes no propósito de transformar suas vidas e comunidades por meio do estudo e da dedicação.
+      </div>
+    </div>
+
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">AGRADECIMENTOS</h1>
+
+      <p>Agradeço primeiramente a Deus, por ter me dado saúde, força de vontade, discernimento e sabedoria para superar todas as adversidades enfrentadas durante estes três anos de Ensino Médio integrado ao curso técnico.</p>
+
+      <p>À minha família, por ser a minha base de apoio mais sólida, compreendendo os momentos de ausência dedicados ao estudo e me incentivando a persistir mesmo nas noites mais exaustivas de programação e escrita.</p>
+
+      <p>À minha professora e orientadora, Roberta Roberti, cujo suporte pedagógico, incentivo constante e exigência técnica foram fundamentais para que este trabalho atingisse o nível de excelência e rigor que hoje apresenta.</p>
+
+      <p>A todos os professores e funcionários da E. E. Professora Therezinha Sartori, que com imensa dedicação e recursos limitados constroem uma educação pública transformadora e acolhedora em nosso município.</p>
+
+      <p>Aos meus colegas de turma do curso técnico em Desenvolvimento de Sistemas, pelas trocas de conhecimento, desafios de programação superados em conjunto e pelo companheirismo fraternal mantido ao longo dessa jornada.</p>
+    </div>
+
+    <!-- ==========================================
+         EPÍGRAFE
+         ========================================== -->
+    <div class="pagina-abnt">
+      <div class="epigrafe-bloco">
+        "Educação não transforma o mundo. Educação muda as pessoas. Pessoas transformam o mundo."<br><br>
+        <strong>— Paulo Freire</strong>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         RESUMO (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">RESUMO</h1>
+
+      <p class="sem-recuo">
+        O presente Trabalho de Conclusão de Curso aborda a problemática central vivenciada pelos estudantes concluintes do Ensino Médio, com foco primordial na rede pública estadual: a extrema dificuldade de identificar exatamente o que, quando e como estudar para conquistar a aprovação nos vestibulares concorridos do país — utilizando como modelos de referência exames como ENEM, FUVEST, UNICAMP, FATEC, FSA e PUC, mas abrangendo também os demais processos seletivos e faculdades públicas e privadas de todo o Brasil. Levantamentos empíricos oficiais revelam que 85% dos concluintes da rede pública declaram despreparo total para os certames, 67% sofrem para organizar uma rotina diária de estudos e 65,8% apresentam sintomas severos de ansiedade pré-vestibular, cenário agravado por lacunas de conteúdo onde apenas 8,5% concluem a educação básica com aprendizagem adequada em Matemática. Como resposta concreta a este dilema, projetou-se e implementou-se a plataforma web <strong>Estuda Mais</strong>, um ecossistema educacional completo, responsivo e 100% gratuito fundamentado na Engenharia de Software. A ferramenta centraliza o direcionamento de editais em listas de checagem interativas, gera cronogramas semanais inteligentes automatizados por Inteligência Artificial, provê simulados oficiais cronometrados com correção dinâmica, corretor de redação analítico baseado nas cinco competências do ENEM, lousa digital de contas para rascunhos de exatas, estação de foco com temporizador Pomodoro e ambiência sonora (sons de chuva e ruído marrom para alívio da ansiedade), além de arquitetura offline-first com banco IndexedDB, criptografia forte PBKDF2 (100.000 iterações) e sincronização em nuvem multi-dispositivos por código pessoal. Testes de software comprovaram a usabilidade fluida e a eficácia da aplicação como suporte emancipatório à democratização do ensino superior.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 1.5cm;">
+        <strong>Palavras-chave:</strong> Educação Pública. Preparação para Vestibulares. Engenharia de Software. Gestão da Aprendizagem. Plataforma Web. Inteligência Artificial.
+      </p>
+    </div>
+
+    <!-- ==========================================
+         ABSTRACT (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">ABSTRACT</h1>
+
+      <p class="sem-recuo">
+        This Final Paper investigates the critical obstacle faced by high school graduating students, specifically within the public educational system: the intense difficulty of determining precisely what, when, and how to study to achieve approval in Brazil's most competitive college entrance examinations — exemplified by ENEM, FUVEST, UNICAMP, FATEC, FSA, and PUC, alongside other public and private university admissions. Official empirical surveys indicate that 85% of public school seniors feel thoroughly unprepared for examinations, 67% struggle to structure a consistent daily study routine, and 65.8% experience severe levels of pre-exam anxiety, further compounded by learning deficits in which only 8.5% attain adequate proficiency in Mathematics. To address this crisis, the <strong>Estuda Mais</strong> web platform was designed and deployed—a free, responsive, full-fledged educational ecosystem built on Software Engineering principles. The system centralizes syllabus guidelines into interactive progress checklists, automatically crafts personalized weekly schedules using Artificial Intelligence, provides timed official mock exams with instant scoring, features an automated essay evaluator calibrated against ENEM's five assessment competencies, supplies an interactive calculation scratchpad, and hosts a dedicated focus workstation with Pomodoro cycles and therapeutic ambient soundscapes (rainfall and brown noise for anxiety relief). The architecture implements local-first persistence via IndexedDB, strong PBKDF2 cryptography (100,000 iterations), and frictionless multi-device cloud synchronization via personal codes. Software verification verified seamless usability and robust performance, affirming software engineering as an instrument for educational equity.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 1.5cm;">
+        <strong>Keywords:</strong> Public Education. College Entrance Examinations. Software Engineering. Learning Management. Web Application. Artificial Intelligence.
+      </p>
+    </div>
+
+    <!-- ==========================================
+         SUMÁRIO (OBRIGATÓRIO)
+         ========================================== -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">SUMÁRIO</h1>
+
+      <div class="linha-sumario negrito">
+        <span class="num-titulo">1 INTRODUÇÃO</span>
+        <span class="pontos"></span>
+        <span class="num-pag">1</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">1.1 Contextualização e Formulação do Problema</span>
+        <span class="pontos"></span>
+        <span class="num-pag">1</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">1.2 Justificativa e Fundamentação com Dados Concretos</span>
+        <span class="pontos"></span>
+        <span class="num-pag">2</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 40px;">
+        <span class="num-titulo">1.2.1 Eixo 1: Percepção de Despreparo e Desalinhamento Curricular</span>
+        <span class="pontos"></span>
+        <span class="num-pag">2</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 40px;">
+        <span class="num-titulo">1.2.2 Eixo 2: Dificuldade na Gestão do Tempo e Rotina</span>
+        <span class="pontos"></span>
+        <span class="num-pag">3</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 40px;">
+        <span class="num-titulo">1.2.3 Eixo 3: Defasagem Real de Aprendizagem (Saeb/MEC)</span>
+        <span class="pontos"></span>
+        <span class="num-pag">4</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 40px;">
+        <span class="num-titulo">1.2.4 Eixo 4: Impacto Emocional e Ansiedade Pré-Exames</span>
+        <span class="pontos"></span>
+        <span class="num-pag">5</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">1.3 Objetivos (Geral e Específicos)</span>
+        <span class="pontos"></span>
+        <span class="num-pag">6</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">2 REFERENCIAL TEÓRICO</span>
+        <span class="pontos"></span>
+        <span class="num-pag">7</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">2.1 O Estudante da Escola Pública e o Acesso Universitário</span>
+        <span class="pontos"></span>
+        <span class="num-pag">7</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">2.2 Métodos de Estudo Ativo e Psicologia Educacional</span>
+        <span class="pontos"></span>
+        <span class="num-pag">8</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">2.3 Engenharia de Software Web e Armazenamento no Navegador</span>
+        <span class="pontos"></span>
+        <span class="num-pag">9</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">3 METODOLOGIA DE DESENVOLVIMENTO</span>
+        <span class="pontos"></span>
+        <span class="num-pag">11</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">3.1 Levantamento de Requisitos Funcionais e Não-Funcionais</span>
+        <span class="pontos"></span>
+        <span class="num-pag">11</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">3.2 Regras de Negócio do Sistema</span>
+        <span class="pontos"></span>
+        <span class="num-pag">13</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">4 ENGENHARIA E MODELAGEM DO SISTEMA</span>
+        <span class="pontos"></span>
+        <span class="num-pag">14</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">4.1 Diagrama de Casos de Uso</span>
+        <span class="pontos"></span>
+        <span class="num-pag">14</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">4.2 Modelo de Banco de Dados (DER) e Dicionário de Dados</span>
+        <span class="pontos"></span>
+        <span class="num-pag">15</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">5 DESENVOLVIMENTO E FUNCIONALIDADES DA PLATAFORMA</span>
+        <span class="pontos"></span>
+        <span class="num-pag">17</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">5.1 Mapeamento de Editais e Cronograma Inteligente</span>
+        <span class="pontos"></span>
+        <span class="num-pag">17</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">5.2 Hub de Vídeo Aulas com Lousa de Cálculos Móvel</span>
+        <span class="pontos"></span>
+        <span class="num-pag">18</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">5.3 Redação Oficial com IA e Estação de Foco Relaxante</span>
+        <span class="pontos"></span>
+        <span class="num-pag">19</span>
+      </div>
+      <div class="linha-sumario" style="padding-left: 20px;">
+        <span class="num-titulo">5.4 Sincronização em Nuvem Multi-Dispositivos e Criptografia PBKDF2</span>
+        <span class="pontos"></span>
+        <span class="num-pag">20</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">6 TESTES DE SOFTWARE E RESULTADOS</span>
+        <span class="pontos"></span>
+        <span class="num-pag">21</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">7 CONSIDERAÇÕES FINAIS</span>
+        <span class="pontos"></span>
+        <span class="num-pag">23</span>
+      </div>
+
+      <div class="linha-sumario negrito" style="margin-top: 8px;">
+        <span class="num-titulo">REFERÊNCIAS</span>
+        <span class="pontos"></span>
+        <span class="num-pag">25</span>
+      </div>
+      <div class="linha-sumario negrito">
+        <span class="num-titulo">GLOSSÁRIO</span>
+        <span class="pontos"></span>
+        <span class="num-pag">27</span>
+      </div>
+      <div class="linha-sumario negrito">
+        <span class="num-titulo">APÊNDICE A – Guia de Operação da Plataforma</span>
+        <span class="pontos"></span>
+        <span class="num-pag">28</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ELEMENTOS TEXTUAIS: CAPÍTULO 1 - INTRODUÇÃO
+         ========================================== -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">1 INTRODUÇÃO</h1>
+
+      <h2 class="titulo-secao-secundaria">1.1 Contextualização e Formulação do Problema</h2>
+
+      <p>
+        O acesso à educação superior representa um dos mais expressivos vetores de transformação social e desenvolvimento econômico no cenário contemporâneo. No Brasil, os processos seletivos públicos e privados — capitaneados pelo Exame Nacional do Ensino Médio (ENEM) e pelos vestibulares de instituições de ponta — a exemplo de FUVEST (USP), UNICAMP, FATEC, Fundação Santo André (FSA) e PUC, entre diversas outras faculdades e universidades públicas e privadas de todo o país — constituem o principal gargalo meritocrático enfrentado pela juventude ao término da Educação Básica.
+      </p>
+
+      <p>
+        Entretanto, a preparação para esses certames exige um volume monumental e heterogêneo de conteúdos curriculares, dispersos entre apostilas volumosas, editais densos e uma multiplicidade desordenada de canais na internet. Para o concluinte da escola pública, essa conjuntura traduz-se em uma desorientação paralisante, consubstanciada na questão central: <strong>"O que exatamente eu devo estudar hoje, em que ordem e com qual ferramenta para garantir a minha aprovação universitária?"</strong>.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">1.2 Justificativa e Fundamentação com Dados Concretos</h2>
+
+      <p>
+        A urgência social e tecnológica deste projeto sustenta-se em dados quantitativos consolidados por institutos educacionais e órgãos oficiais de pesquisa. O problema desdobra-se em quatro eixos analíticos interconectados:
+      </p>
+
+      <h3 class="titulo-secao-terciaria">1.2.1 Eixo 1: Percepção de Despreparo e Desalinhamento Curricular</h3>
+
+      <p>
+        Conforme pesquisa da Rede Escola Pública e Universidade em parceria com o Grupo Escola Pública e Democracia (Gepud), divulgada pela Direttrix (2023), <strong>85% dos estudantes concluintes da rede estadual paulista declararam não se sentir preparados</strong> para enfrentar o ENEM e os vestibulares convencionais.
+      </p>
+
+      <p>
+        O estudo revelou ainda que <strong>64,5% dos estudantes da rede estadual não cursaram os itinerários formativos que haviam originalmente pretendido</strong>, evidenciando falhas estruturais de orientação pedagógica e dispersão do foco nas disciplinas fundamentais cobradas pelas bancas examinadoras.
+      </p>
+
+      <div class="figura-bloco">
+        <div class="figura-titulo">Gráfico 1 — Percepção de Despreparo dos Concluintes da Rede Pública</div>
+        <div class="grafico-visual-container">
+          <div class="barra-item">
+            <div class="barra-rotulo">Sentem-se Despreparados para o ENEM / Vestibulares (85%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 85%; background: #dc2626;">85%</div>
+            </div>
+          </div>
+          <div class="barra-item">
+            <div class="barra-rotulo">Sentem-se Preparados para os Exames (15%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 15%; background: #16a34a;">15%</div>
+            </div>
+          </div>
+        </div>
+        <div class="figura-fonte">Fonte: Elaborado pelo autor com base em dados de Gepud / Rede Escola Pública (2023).</div>
+      </div>
+
+      <h3 class="titulo-secao-terciaria">1.2.2 Eixo 2: Dificuldade na Gestão do Tempo e Rotina</h3>
+
+      <p>
+        A ausência de métodos organizacionais é outro entrave determinante. Levantamento da Associação Brasileira de Educação a Distância (ABED), realizado com mais de 5.500 participantes, constatou que <strong>67% dos estudantes relatam dificuldade crônica para estabelecer e cumprir uma rotina diária de estudos</strong>.
+      </p>
+
+      <p>
+        Corroborando essa realidade, dados divulgados pelo Guia do Estudante mostram que <strong>52% dos candidatos estudam por menos de um ano antes da prova</strong>, demonstrando que a esmagadora maioria posterga a preparação para os últimos meses do 3º ano, acumulando matérias sem escalonamento estratégico.
+      </p>
+
+      <div class="figura-bloco">
+        <div class="figura-titulo">Gráfico 2 — Dificuldade Organizacional e Janela Temporal de Estudo</div>
+        <div class="grafico-visual-container">
+          <div class="barra-item">
+            <div class="barra-rotulo">Dificuldade em Organizar a Rotina Diária de Estudos (67%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 67%; background: #ea580c;">67%</div>
+            </div>
+          </div>
+          <div class="barra-item">
+            <div class="barra-rotulo">Início dos Estudos com Menos de 1 Ano de Prazo (52%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 52%; background: #d97706;">52%</div>
+            </div>
+          </div>
+        </div>
+        <div class="figura-fonte">Fonte: Elaborado pelo autor com base em ABED (2022) e Guia do Estudante (2023).</div>
+      </div>
+    </div>
+
+    <!-- PÁGINA: CONTINUAÇÃO JUSTIFICATIVA E OBJETIVOS -->
+    <div class="pagina-abnt">
+      <h3 class="titulo-secao-terciaria">1.2.3 Eixo 3: Defasagem Real de Aprendizagem (Dados Oficiais Saeb/MEC)</h3>
+
+      <p>
+        A hesitação sobre "o que estudar" tem raízes na defasagem de conteúdos essenciais ao longo da trajetória escolar. Relatório do movimento Todos Pela Educação sobre as estatísticas do Sistema de Avaliação da Educação Básica (Saeb/Inep/MEC) aponta:
+      </p>
+
+      <p>
+        Em <strong>Matemática</strong>, apenas <strong>8,5% dos estudantes concluem o Ensino Médio com aprendizagem adequada</strong>, enquanto alarmantes <strong>58,6% saem em nível abaixo do básico</strong>. Em Língua Portuguesa, somente 35,2% alcançam proficiência adequada. Diante disso, 52% dos vestibulandos apontam a Matemática como a maior barreira no ENEM, seguida por Língua Portuguesa (20%) e Ciências Humanas (12%).
+      </p>
+
+      <div class="figura-bloco">
+        <div class="figura-titulo">Gráfico 3 — Níveis de Aprendizagem Adequada ao Fim do Ensino Médio (Saeb)</div>
+        <div class="grafico-visual-container">
+          <div class="barra-item">
+            <div class="barra-rotulo">Matemática Adequada: Apenas 8,5% (91,5% Inadequado ou Abaixo do Básico)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 8.5%; background: #2563eb;">8,5%</div>
+            </div>
+          </div>
+          <div class="barra-item">
+            <div class="barra-rotulo">Língua Portuguesa Adequada: 35,2% (64,8% Inadequado ou Abaixo do Básico)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 35.2%; background: #7c3aed;">35,2%</div>
+            </div>
+          </div>
+        </div>
+        <div class="figura-fonte">Fonte: Elaborado pelo autor com base em dados de Inep/MEC e Todos Pela Educação (2023).</div>
+      </div>
+
+      <h3 class="titulo-secao-terciaria">1.2.4 Eixo 4: Impacto Emocional e Ansiedade Pré-Exames</h3>
+
+      <p>
+        Estudo acadêmico divulgado via Semantic Scholar, baseado na renomada escala clínica DASS-21, identificou que <strong>65,8% dos pré-vestibulandos sofrem com níveis elevados de ansiedade e estresse</strong> (sendo 39,5% em grau severo ou extremamente severo). Pesquisas da Universidade Federal do Delta do Parnaíba (UFDPar) atestam que esses índices relacionam-se diretamente à baixa percepção de autoeficácia acadêmica e ao isolamento em rotinas desorganizadas.
+      </p>
+
+      <div class="figura-bloco">
+        <div class="figura-titulo">Gráfico 4 — Prevalência de Ansiedade e Estresse em Estudantes Pré-Vestibulandos</div>
+        <div class="grafico-visual-container">
+          <div class="barra-item">
+            <div class="barra-rotulo">Grau Severo ou Muito Alto de Ansiedade (39,5%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 39.5%; background: #b91c1c;">39,5%</div>
+            </div>
+          </div>
+          <div class="barra-item">
+            <div class="barra-rotulo">Grau Considerável / Moderado (26,3%)</div>
+            <div class="barra-trilho">
+              <div class="barra-preenchimento" style="width: 26.3%; background: #f59e0b;">26,3%</div>
+            </div>
+          </div>
+        </div>
+        <div class="figura-fonte">Fonte: Elaborado pelo autor com base na escala clínica DASS-21 e UFDPar (2023).</div>
+      </div>
+
+      <h2 class="titulo-secao-secundaria">1.3 Objetivos</h2>
+
+      <p>
+        <strong>Objetivo Geral:</strong> Projetar, modelar e construir a plataforma web <strong>Estuda Mais</strong>, oferecendo um ambiente digital integrado, gratuito e estruturado que centralize editais seletivos, automatize o planejamento de rotinas por IA, disponibilize ferramentas práticas de estudo e gestão do foco, e viabilize sincronização em nuvem segura para múltiplos dispositivos.
+      </p>
+
+      <p>
+        <strong>Objetivos Específicos:</strong>
+      </p>
+      <p>1. Estruturar os editais e conteúdos programáticos mais cobrados em exames de referência (como ENEM, FUVEST, UNICAMP, FATEC, FSA e PUC, estendendo-se também às demais faculdades e vestibulares públicos e privados) em listas interativas de checagem com métricas percentuais de avanço;</p>
+      <p>2. Desenvolver um gerador de cronograma semanal automatizado integrado à IA generativa;</p>
+      <p>3. Incorporar reprodutor de vídeo aulas integrado à lousa digital para rascunhos de cálculos matemáticos;</p>
+      <p>4. Desenvolver módulo de redação oficial com espelho do ENEM e avaliação analítica nas 5 competências oficiais;</p>
+      <p>5. Prover estação de foco com temporizador Pomodoro, ambiência sonora de alívio da ansiedade e modo cromático de descanso visual;</p>
+      <p>6. Implementar segurança baseada em criptografia PBKDF2 com 100.000 iterações e sincronização em nuvem via código unívoco sem fricção.</p>
+    </div>
+
+    <!-- CAPÍTULO 2 - REFERENCIAL TEÓRICO -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">2 REFERENCIAL TEÓRICO</h1>
+
+      <h2 class="titulo-secao-secundaria">2.1 O Estudante da Escola Pública e o Acesso Universitário</h2>
+
+      <p>
+        A literatura pedagógica nacional aponta que o ingresso no ensino superior reflete assimetrias históricas de capital cultural e infraestrutura. Alves (2021) salienta que a dispersão de materiais de estudo não organizados sobrecarrega cognitivamente o aluno da rede pública, criando um ciclo de estresse e desistência. O desenvolvimento de plataformas orientadas à clareza atua como instrumento de nivelamento e justiça distributiva educacional.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">2.2 Métodos de Estudo Ativo e Psicologia Educacional</h2>
+
+      <p>
+        Para fundamentar as funcionalidades da aplicação, foram incorporados preceitos científicos consagrados:
+      </p>
+
+      <p>
+        <strong>A Técnica Pomodoro:</strong> Desenvolvida por Cirillo (2018), equilibra 25 minutos de atenção focada com 5 minutos de pausa reparadora, prevenindo o esgotamento mental e promovendo o cumprimento contínuo de metas diárias.
+      </p>
+
+      <p>
+        <strong>Recuperação Ativa (Active Recall):</strong> Kirschner e Hendricks (2020) comprovam que a resolução imediata de exercícios e testes curtos retém até 80% mais conceitos na memória de longo prazo em comparação à leitura passiva de resumos.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">2.3 Engenharia de Software Web e Armazenamento no Navegador</h2>
+
+      <p>
+        A arquitetura técnica do projeto foi fundamentada nas normas W3C para desenvolvimento moderno:
+      </p>
+
+      <p>
+        <strong>HTML5, CSS3 Modular e JavaScript Vanilla ES6+:</strong> A decisão de prescindir de frameworks pesados baseia-se na necessidade de compatibilidade universal e carregamento quase instantâneo, viabilizando o acesso em computadores com hardware básico presentes nos laboratórios escolares e em smartphones modestos.
+      </p>
+
+      <p>
+        <strong>IndexedDB e Arquitetura Offline-First:</strong> Como muitos estudantes de periferias enfrentam instabilidade de conexão à internet, a persistência primária opera via IndexedDB nativo do navegador, permitindo a gravação de notas, checklists e redações mesmo sem sinal de rede.
+      </p>
+
+      <p>
+        <strong>Segurança Criptográfica (Web Crypto API):</strong> Seguindo as diretrizes OWASP (2023), as senhas dos alunos são processadas pelo algoritmo PBKDF2 com 100.000 iterações e salt aleatório, garantindo proteção de dados mesmo em máquinas de uso compartilhado na escola.
+      </p>
+    </div>
+
+    <!-- CAPÍTULO 3 - METODOLOGIA E REQUISITOS -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">3 METODOLOGIA DE DESENVOLVIMENTO</h1>
+
+      <p>
+        Adotou-se o modelo ágil com adaptações do framework Scrum, estruturado em ciclos iterativos de 15 dias compreendendo pesquisa de campo, prototipação, desenvolvimento e testes de usabilidade com alunos do 3º ano da E. E. Professora Therezinha Sartori.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">3.1 Levantamento de Requisitos Funcionais e Não-Funcionais</h2>
+
+      <div class="tabela-bloco">
+        <div class="tabela-titulo">Quadro 1 — Requisitos Funcionais do Sistema (RF)</div>
+        <table class="tabela-abnt">
+          <thead>
+            <tr>
+              <th style="width: 15%;">Código</th>
+              <th style="width: 65%;">Descrição do Requisito</th>
+              <th style="width: 20%;">Prioridade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>RF01</strong></td><td>Permitir cadastro e autenticação segura com e-mail, senha e vestibular-alvo.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF02</strong></td><td>Disponibilizar acesso no modo Visitante/Banca sem cadastro prévio.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF03</strong></td><td>Exibir editais de vestibulares de referência (como ENEM, FUVEST, UNICAMP, FATEC, FSA e PUC, além de outras faculdades públicas e privadas) em listas de checagem.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF04</strong></td><td>Marcar tópicos estudados e recalcular barra de progresso em tempo real.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF05</strong></td><td>Gerar cronograma semanal inteligente baseado nos dias livres do estudante via IA.</td><td>Importante</td></tr>
+            <tr><td><strong>RF06</strong></td><td>Reprodutor de vídeo aulas com campo para inserção dinâmica de links do YouTube.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF07</strong></td><td>Lousa digital interativa móvel para rascunho de contas com caneta e borracha.</td><td>Importante</td></tr>
+            <tr><td><strong>RF08</strong></td><td>Gerenciar notas do caderno digital com categorias, cores e pesquisa rápida.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF09</strong></td><td>Banco de simulados cronometrados com gabarito imediato e percentual de acertos.</td><td>Essencial</td></tr>
+            <tr><td><strong>RF10</strong></td><td>Corretor de redação com espelho oficial e notas nas 5 competências do ENEM.</td><td>Importante</td></tr>
+            <tr><td><strong>RF11</strong></td><td>Arena de quiz gamificada com pontuação de XP, ranking e conquistas.</td><td>Desejável</td></tr>
+            <tr><td><strong>RF12</strong></td><td>Temporizador Pomodoro com ambiência sonora (chuva, ruído marrom, café).</td><td>Importante</td></tr>
+            <tr><td><strong>RF13</strong></td><td>Sincronização em nuvem e restauração de dados em múltiplos aparelhos por código.</td><td>Importante</td></tr>
+          </tbody>
+        </table>
+        <div class="tabela-fonte">Fonte: Elaborado pelo autor (2026).</div>
+      </div>
+
+      <div class="tabela-bloco">
+        <div class="tabela-titulo">Quadro 2 — Requisitos Não-Funcionais (RNF) e Regras de Negócio (RN)</div>
+        <table class="tabela-abnt">
+          <thead>
+            <tr>
+              <th style="width: 15%;">Código</th>
+              <th style="width: 25%;">Categoria</th>
+              <th style="width: 60%;">Descrição Técnica / Restrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>RNF01</strong></td><td>Usabilidade</td><td>Interface responsiva adaptada para telas de celulares, tablets e desktops.</td></tr>
+            <tr><td><strong>RNF02</strong></td><td>Segurança</td><td>Senhas cifradas com PBKDF2 (100.000 iterações com salt SHA-256).</td></tr>
+            <tr><td><strong>RNF03</strong></td><td>Segurança</td><td>Bloqueio temporário de tentativas por 60s após 5 erros seguidos de senha.</td></tr>
+            <tr><td><strong>RNF04</strong></td><td>Disponibilidade</td><td>Funcionamento das principais funções mesmo sem conexão com a internet.</td></tr>
+            <tr><td><strong>RN01</strong></td><td>Regra de Negócio</td><td>Não permitir duplicação de e-mail no cadastro de contas de usuários.</td></tr>
+            <tr><td><strong>RN02</strong></td><td>Regra de Negócio</td><td>A nota da redação situa-se entre 0 e 1000 pts (5 competências de 0 a 200 pts).</td></tr>
+          </tbody>
+        </table>
+        <div class="tabela-fonte">Fonte: Elaborado pelo autor (2026).</div>
+      </div>
+    </div>
+
+    <!-- CAPÍTULO 4 - MODELAGEM E BANCO DE DADOS -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">4 ENGENHARIA E MODELAGEM DO SISTEMA</h1>
+
+      <p>
+        A modelagem conceitual do Estuda Mais foi elaborada de acordo com as especificações da UML (Unified Modeling Language), mapeando a estrutura dos atores, serviços e entidades do banco de dados local e distribuído.
+      </p>
+
+      <div class="figura-bloco">
+        <div class="figura-titulo">Figura 1 — Modelo Entidade-Relacionamento do Banco de Dados (DER)</div>
+        <div style="border: 1px solid #cbd5e1; padding: 12px; font-family: monospace; font-size: 9pt; background: #fafafa; text-align: left; line-height: 1.3;">
+          [USUARIO] (1) ──── (N) [NOTA]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├────── (N) [REDACAO]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├────── (N) [SIMULADO_RESULTADO]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├────── (1) [PROGRESSO_CHECKLIST]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;└────── (1) [CRONOGRAMA_SEMANAL]<br>
+        </div>
+        <div class="figura-fonte">Fonte: Elaborado pelo autor (2026).</div>
+      </div>
+
+      <div class="tabela-bloco">
+        <div class="tabela-titulo">Quadro 3 — Dicionário de Dados das Entidades Persistidas</div>
+        <table class="tabela-abnt">
+          <thead>
+            <tr>
+              <th>Entidade</th>
+              <th>Campo</th>
+              <th>Tipo</th>
+              <th>Descrição e Chaves</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>USUARIO</strong></td><td>id</td><td>VARCHAR(64)</td><td>Chave Primária (PK) única gerada via timestamp.</td></tr>
+            <tr><td></td><td>nome</td><td>VARCHAR(120)</td><td>Nome completo do vestibulando.</td></tr>
+            <tr><td></td><td>email</td><td>VARCHAR(160)</td><td>E-mail cadastrado (identificador de login).</td></tr>
+            <tr><td></td><td>passwordHash</td><td>VARCHAR(128)</td><td>Hash PBKDF2 com 100.000 iterações.</td></tr>
+            <tr><td></td><td>salt</td><td>VARCHAR(64)</td><td>Salt criptográfico aleatório por conta.</td></tr>
+            <tr><td></td><td>vestibular</td><td>VARCHAR(32)</td><td>Exame prioritário escolhido (ENEM, FUVEST, etc).</td></tr>
+            <tr><td><strong>NOTA</strong></td><td>id</td><td>VARCHAR(64)</td><td>Chave Primária (PK) do card de anotação.</td></tr>
+            <tr><td></td><td>usuarioId</td><td>VARCHAR(64)</td><td>Chave Estrangeira (FK) ligada ao Usuário.</td></tr>
+            <tr><td></td><td>titulo</td><td>VARCHAR(150)</td><td>Título identificador do resumo.</td></tr>
+            <tr><td></td><td>conteudo</td><td>TEXT</td><td>Texto formatado da nota de estudo.</td></tr>
+            <tr><td><strong>REDACAO</strong></td><td>id</td><td>VARCHAR(64)</td><td>Chave Primária (PK) do histórico de redação.</td></tr>
+            <tr><td></td><td>notaTotal</td><td>INT</td><td>Pontuação final atribuída pela IA (0 a 1000).</td></tr>
+            <tr><td></td><td>feedback</td><td>TEXT</td><td>Parecer pedagógico por competência ENEM.</td></tr>
+          </tbody>
+        </table>
+        <div class="tabela-fonte">Fonte: Elaborado pelo autor (2026).</div>
+      </div>
+    </div>
+
+    <!-- CAPÍTULO 5 - DESENVOLVIMENTO E FUNCIONALIDADES -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">5 DESENVOLVIMENTO E FUNCIONALIDADES DA PLATAFORMA</h1>
+
+      <h2 class="titulo-secao-secundaria">5.1 Mapeamento de Editais e Cronograma Inteligente</h2>
+
+      <p>
+        O módulo de vestibulares traduz a complexidade dos manuais do candidato em uma interface transparente. A plataforma adota como exemplos de destaque alguns dos exames mais concorridos e procurados do estado de São Paulo e do Brasil (a exemplo do ENEM, FUVEST, UNICAMP, FATEC, Fundação Santo André - FSA e PUC), contudo a aplicação foi arquitetada para contemplar a matriz curricular de múltiplos outros vestibulares públicos e privados, garantindo uma formação ampla e adaptável a qualquer instituição pretendida pelo estudante. O vestibulando acessa a aba do seu exame prioritário e depara-se com as matérias subdivididas pelos tópicos de maior incidência estatística. À medida que avança na leitura ou assiste às aulas, assinala os itens já consolidados. O sistema calcula a taxa de avanço em tempo real, proporcionando reforço positivo imediato e sensação de evolução contínua.
+      </p>
+
+      <p>
+        O gerador de cronograma semanal soluciona a indecisão na gestão do tempo (Eixo 2). Integrado com a API da inteligência artificial, o algoritmo analisa a quantidade de dias úteis disponíveis do vestibulando e distribui turnos equilibrados, intercalando matérias de raciocínio exato com ciências humanas para evitar a fadiga mental.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">5.2 Hub de Vídeo Aulas com Lousa de Cálculos Móvel</h2>
+
+      <p>
+        Com base na constatação de que 91,5% dos alunos saem da escola pública com defasagem severa em Matemática (Eixo 3), o módulo de Vídeo Aulas foi desenhado com ferramentas de suporte prático:
+      </p>
+
+      <p>
+        1. <strong>Seleção dos Melhores Professores:</strong> Recomendação curada de 3 canais de excelência por disciplina;
+      </p>
+      <p>
+        2. <strong>Player Integrado ("Assistir Aula Aqui"):</strong> O estudante insere qualquer URL do YouTube e assiste à aula sem as distrações de recomendações laterais ou comentários de redes sociais;
+      </p>
+      <p>
+        3. <strong>Lousa Digital Flutuante:</strong> Canvas interativo em que o estudante pode rabiscar cálculos de física e matemática diretamente na tela, alternando cores de caneta e apagando erros pontuais com borracha digital, sem precisar de folhas avulsas.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">5.3 Redação Oficial com IA e Estação de Foco Relaxante</h2>
+
+      <p>
+        O corretor de redações reproduz a folha oficial do ENEM. O texto inserido é submetido a uma instrução rígida de avaliação que devolve a nota decomposta nas 5 competências oficiais do MEC, acompanhada de sugestões práticas para melhoria da proposta de intervenção.
+      </p>
+
+      <p>
+        Para responder à alta prevalência de ansiedade (65,8% dos vestibulandos segundo a escala DASS-21), o Estuda Mais incorpora a <strong>Estação de Foco e Cromoterapia</strong>. Ela reúne temporizador Pomodoro calibrado para ciclos de 25 minutos, reprodutor com controle de volume de sons da natureza (chuva mansa, ondas marítimas, cafeteria) e <em>ruído marrom</em>, além de disponibilizar a paleta de <strong>Cores Amareladas (Modo Descanso)</strong>, que minimiza a radiação de luz azul e confere um ambiente caloroso e acolhedor para estudos no período noturno.
+      </p>
+
+      <h2 class="titulo-secao-secundaria">5.4 Sincronização em Nuvem Multi-Dispositivos e Criptografia PBKDF2</h2>
+
+      <p>
+        No cabeçalho reestruturado em dois andares compactos, o usuário acessa as 11 abas principais sem estrangulamento de espaço. No perfil, o motor <em>EstudaMaisCloudSync</em> gera um código pessoal único (ex: <code>ESTUDA-78AF3B</code>). Ao abrir a aplicação em outro computador ou em seu celular, o estudante insere esse código e recupera automaticamente todo o seu progresso de estudo, notas e redações, eliminando o isolamento de dados do navegador.
+      </p>
+    </div>
+
+    <!-- CAPÍTULO 6 E 7 - TESTES E CONSIDERAÇÕES FINAIS -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria">6 TESTES DE SOFTWARE E RESULTADOS</h1>
+
+      <p>
+        A validação do sistema contemplou testes de caixa-preta, testes de carga no armazenamento IndexedDB e avaliação em dispositivos móveis e desktops com diferentes larguras de tela.
+      </p>
+
+      <div class="tabela-bloco">
+        <div class="tabela-titulo">Quadro 4 — Síntese dos Casos de Teste e Validação do Sistema</div>
+        <table class="tabela-abnt">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cenário de Teste</th>
+              <th>Comportamento Observado</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>CT01</strong></td><td>Cadastro de conta com senha alfanumérica.</td><td>Geração do hash PBKDF2 com salt e persistência local.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT02</strong></td><td>5 tentativas erradas sucessivas de login.</td><td>Acionamento do rate limiter com bloqueio temporário de 60s.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT03</strong></td><td>Marcação de tópicos nos editais oficiais.</td><td>Cálculo imediato de porcentagem e gravação transacional.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT04</strong></td><td>Abertura de janelas móveis (Lousa, Foco, Notas).</td><td>Posicionamento visível garantido no quadrante superior direito.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT05</strong></td><td>Reprodução de aula via URL dinâmica do YouTube.</td><td>Renderização do vídeo e ativação de lousa de anotações.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT06</strong></td><td>Submissão de redação no modelo ENEM.</td><td>Avaliação detalhada devolvida nas 5 competências oficiais.</td><td><strong>Aprovado</strong></td></tr>
+            <tr><td><strong>CT07</strong></td><td>Exportação e restauração de dados na nuvem.</td><td>Geração de código curto e replicação de dados em outro aparelho.</td><td><strong>Aprovado</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="tabela-fonte">Fonte: Elaborado pelo autor (2026).</div>
+      </div>
+
+      <h1 class="titulo-secao-primaria" style="margin-top: 1.5cm;">7 CONSIDERAÇÕES FINAIS</h1>
+
+      <p>
+        O projeto <strong>Estuda Mais</strong> comprovou com sucesso a viabilidade de utilizar o conhecimento técnico adquirido no curso de Desenvolvimento de Sistemas para solucionar um problema social histórico que afeta a juventude da escola pública. O sistema conseguiu conectar os quatro eixos da problemática (despreparo, desorganização temporal, defasagem em matemática e ansiedade elevada) a módulos de software correspondentes, simples e acolhedores.
+      </p>
+
+      <p>
+        Como trabalhos futuros, propõe-se a compilação do ecossistema no formato de aplicativo móvel nativo (PWA/Capacitor) para distribuição gratuita na Google Play Store, além do desenvolvimento de módulos cooperativos para formação de grupos virtuais de estudo e correção colaborativa de redações entre colegas de escola pública.
+      </p>
+    </div>
+
+    <!-- REFERÊNCIAS BIBLIOGRÁFICAS -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">REFERÊNCIAS</h1>
+
+      <p class="sem-recuo">
+        ABED – Associação Brasileira de Educação a Distância. <strong>Censo EAD.BR 2022/2023:</strong> Relatório analítico da aprendizagem aberta e a distância no Brasil. São Paulo: ABED, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        ALVES, Thiago. <strong>Desigualdades educacionais e acesso ao ensino superior no Brasil:</strong> Uma análise comparada das redes pública e privada. <em>Revista Brasileira de Estudos Pedagógicos</em>, Brasília, v. 102, n. 261, p. 345-368, 2021.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>ABNT NBR 14724:</strong> Informação e documentação — Trabalhos acadêmicos — Apresentação. 4. ed. Rio de Janeiro: ABNT, 2024.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>ABNT NBR 6023:</strong> Informação e documentação — Referências — Elaboração. Rio de Janeiro: ABNT, 2018.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>ABNT NBR 6027:</strong> Informação e documentação — Sumário — Apresentação. Rio de Janeiro: ABNT, 2012.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. <strong>ABNT NBR 10520:</strong> Informação e documentação — Citações em documentos — Apresentação. Rio de Janeiro: ABNT, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        CIRILLO, Francesco. <strong>A Técnica Pomodoro:</strong> O sistema de gerenciamento de tempo que transformou a forma como trabalhamos e estudamos. São Paulo: Sextante, 2018.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        DIRETTRIX. <strong>Desafios do Novo Ensino Médio e a preparação para o vestibular na rede pública paulista.</strong> São Paulo: Relatório Especial, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        GUIA DO ESTUDANTE. <strong>Raio-X do Vestibulando 2023:</strong> Hábitos de estudo, matérias críticas e preparação para o ENEM. São Paulo: Editora Abril, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        IBGE – Instituto Brasileiro de Geografia e Estatística. <strong>Normas de apresentação tabular.</strong> 3. ed. Rio de Janeiro: IBGE, 1993.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        INEP – Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira. <strong>Relatório de Resultados do Sistema de Avaliação da Educação Básica (Saeb) 2023.</strong> Brasília: MEC/Inep, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        KIRSCHNER, Paul A.; HENDRICKS, Carl. <strong>Como a aprendizagem acontece:</strong> Práticas baseadas em evidências para o ensino eficaz. Porto Alegre: Penso, 2020.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        OWASP – Open Web Application Security Project. <strong>Password Storage Cheat Sheet:</strong> Recommendations for modern password hashing and PBKDF2 parameters. OWASP Foundation, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        REDE ESCOLA PÚBLICA E UNIVERSIDADE; GEPUD – Grupo Escola Pública e Democracia. <strong>Pesquisa sobre o Ensino Médio Paulista e a Percepção dos Estudantes Concluintes.</strong> São Paulo: Repu/Gepud, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        TODOS PELA EDUCAÇÃO. <strong>Anuário Brasileiro da Educação Básica 2023.</strong> São Paulo: Moderna / Todos Pela Educação, 2023.
+      </p>
+
+      <p class="sem-recuo" style="margin-top: 12px;">
+        UFDPar – Universidade Federal do Delta do Parnaíba. <strong>Níveis de ansiedade e percepção de autoeficácia acadêmica em estudantes pré-vestibulandos da rede pública.</strong> <em>Revista Interdisciplinar de Estudos em Saúde e Educação</em>, Parnaíba, v. 8, n. 2, p. 112-129, 2023.
+      </p>
+    </div>
+
+    <!-- GLOSSÁRIO E APÊNDICE A -->
+    <div class="pagina-abnt">
+      <h1 class="titulo-secao-primaria centro">GLOSSÁRIO</h1>
+
+      <p class="sem-recuo"><strong>Active Recall:</strong> Prática pedagógica baseada na recuperação ativa de informações da memória por meio de testes e exercícios práticos.</p>
+      <p class="sem-recuo"><strong>Client-Side:</strong> Processamento computacional executado no navegador do usuário final.</p>
+      <p class="sem-recuo"><strong>IndexedDB:</strong> Banco de dados local transacional de alta capacidade fornecido nativamente pelos navegadores web.</p>
+      <p class="sem-recuo"><strong>PBKDF2:</strong> Padrão de derivação de chaves criptográficas que eleva o custo computacional para proteção de senhas contra ataques cibernéticos.</p>
+      <p class="sem-recuo"><strong>Ruído Marrom:</strong> Sinal acústico de baixa frequência e densidade harmônica utilizado para acalmar a mente e reduzir picos de ansiedade.</p>
+
+      <h1 class="titulo-secao-primaria centro" style="margin-top: 2cm;">APÊNDICE A — GUIA DE USO DA PLATAFORMA</h1>
+
+      <p>1. <strong>Execução:</strong> Abra o arquivo <code>index.html</code> em qualquer navegador de internet moderno (Edge, Chrome, Firefox);</p>
+      <p>2. <strong>Autenticação:</strong> Cadastre uma nova conta ou utilize o botão <em>"Entrar como Visitante / Banca do TCC"</em> para acesso imediato sem necessidade de preenchimento;</p>
+      <p>3. <strong>Navegação:</strong> Explore as 11 abas dispostas no cabeçalho em dois andares (Início, Vestibulares, Vídeo Aulas, Simulados, Redação, Quiz, Cronograma, Foco Pomodoro, Caderno, Dicas e Perfil);</p>
+      <p>4. <strong>Ferramentas Móveis:</strong> Clique nos botões superiores de Lousa, Notas, Tutor IA ou Foco para acionar janelas flutuantes que podem ser reposicionadas livremente pela tela;</p>
+      <p>5. <strong>Sincronização em Nuvem:</strong> Na aba Perfil, clique em <em>"Sincronizar Agora com a Nuvem"</em> para salvar suas informações e obter seu código pessoal de vinculação em outros dispositivos.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
