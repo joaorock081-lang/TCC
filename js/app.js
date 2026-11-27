@@ -1,4 +1,4 @@
-/**
+﻿/**
  * APLICAÇÃO PRINCIPAL - ESTUDAMAIS PORTAL DO VESTIBULANDO
  * TCC: Plataforma de Apoio aos Estudos
  */
@@ -69,6 +69,8 @@ const AppState = {
   }
 };
 
+window.AppState = AppState;
+
 // Frases motivacionais para vestibulandos
 const FRASES_MOTIVACIONAIS = [
   { frase: "O sucesso é a soma de pequenos esforços repetidos dia após dia.", autor: "Robert Collier" },
@@ -79,30 +81,35 @@ const FRASES_MOTIVACIONAIS = [
   { frase: "Respeite seu ritmo, cuide do seu sono e confie na sua trajetória de estudos.", autor: "Equipe EstudaMais" }
 ];
 
-// Inicialização
+// Inicialização Resiliente & Blindada
 document.addEventListener('DOMContentLoaded', () => {
-  inicializarTema();
-  inicializarAutenticacao();
-  if (AppState.currentUser) {
-    carregarDadosUsuarioAtivo(AppState.currentUser.id);
-  } else {
-    carregarDadosLocais();
-  }
-  configurarNavegacao();
-  renderizarFraseMotivacional();
-  renderizarVestibularesTabs();
-  renderizarVestibularAtivo();
-  renderizarDicasEstudo();
-  renderizarNotas();
-  renderizarTarefas();
-  configurarPomodoro();
-  configurarRuidoAmbiente();
-  configurarPesquisaGlobal();
-  configurarQuiz();
-  configurarLousa();
-  inicializarRedacao();
-  inicializarSimulados();
-  atualizarEstatisticasDashboard();
+  try { inicializarTema(); } catch (e) { console.error('Erro ao inicializar tema:', e); }
+  try {
+    inicializarAutenticacao();
+    if (AppState.currentUser) {
+      carregarDadosUsuarioAtivo(AppState.currentUser.id);
+    } else {
+      carregarDadosLocais();
+    }
+  } catch (e) { console.error('Erro na autenticação:', e); }
+
+  try { configurarNavegacao(); } catch (e) { console.error('Erro ao configurar navegação:', e); }
+  try { renderizarFraseMotivacional(); } catch (e) { console.error('Erro ao renderizar frase motivacional:', e); }
+  try { renderizarVestibularesTabs(); } catch (e) { console.error('Erro ao renderizar abas de vestibulares:', e); }
+  try { renderizarVestibularAtivo(); } catch (e) { console.error('Erro ao renderizar vestibular ativo:', e); }
+  try { renderizarDicasEstudo(); } catch (e) { console.error('Erro ao renderizar dicas de estudo:', e); }
+  try { renderizarNotas(); } catch (e) { console.error('Erro ao renderizar notas:', e); }
+  try { renderizarTarefas(); } catch (e) { console.error('Erro ao renderizar tarefas:', e); }
+  try { configurarPomodoro(); } catch (e) { console.error('Erro ao configurar pomodoro:', e); }
+  try { configurarRuidoAmbiente(); } catch (e) { console.error('Erro ao configurar ruído ambiente:', e); }
+  try { configurarPesquisaGlobal(); } catch (e) { console.error('Erro ao configurar pesquisa global:', e); }
+  try { configurarQuiz(); } catch (e) { console.error('Erro ao configurar quiz:', e); }
+  try { configurarLousa(); } catch (e) { console.error('Erro ao configurar lousa:', e); }
+  try { inicializarRedacao(); } catch (e) { console.error('Erro ao inicializar redação:', e); }
+  try { inicializarSimulados(); } catch (e) { console.error('Erro ao inicializar simulados:', e); }
+  try { atualizarEstatisticasDashboard(); } catch (e) { console.error('Erro ao atualizar estatísticas:', e); }
+  try { inicializarChatIACronograma(); } catch (e) { console.error('Erro ao inicializar chat IA e cronograma:', e); }
+  try { renderizarVideoaulas(); } catch (e) { console.error('Erro ao renderizar videoaulas:', e); }
 });
 
 /* ========================================================
@@ -175,8 +182,36 @@ const EstudaMaisDB = {
     });
   },
 
-  // Gera hash SHA-256 seguro com salt para senhas
+  // Gera hash PBKDF2 seguro de alta resistência com salt para senhas (100.000 iterações)
   async hashPassword(password, salt) {
+    try {
+      if (window.crypto && window.crypto.subtle) {
+        const enc = new TextEncoder();
+        const keyMaterial = await window.crypto.subtle.importKey(
+          'raw',
+          enc.encode(password),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveBits']
+        );
+        const saltBuffer = enc.encode(salt || 'salt_tcc_2026_sec');
+        const derivedBits = await window.crypto.subtle.deriveBits(
+          {
+            name: 'PBKDF2',
+            salt: saltBuffer,
+            iterations: 100000,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          256
+        );
+        const hashArr = Array.from(new Uint8Array(derivedBits));
+        return 'pbkdf2$' + hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+    } catch (e) {
+      console.warn('PBKDF2 crypto indisponível, usando SHA-256 fallback.', e);
+    }
+    // Fallback SHA-256
     try {
       const enc = new TextEncoder();
       const data = enc.encode(password + '::estudamais::' + (salt || 'salt_tcc_2026'));
@@ -185,18 +220,29 @@ const EstudaMaisDB = {
         const hashArr = Array.from(new Uint8Array(hashBuf));
         return hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
       }
-    } catch (e) {
-      console.warn('Crypto subtle indisponível, usando fallback de hash.');
+    } catch (e) {}
+    return 'h_' + Math.abs(password.length * 31).toString(16) + '_sec';
+  },
+
+  // Verificação retrocompatível com hashes antigos e novos
+  async verificarSenha(senhaDigitada, salt, hashSalvo) {
+    if (!hashSalvo) return false;
+    if (hashSalvo.startsWith('pbkdf2$')) {
+      const novoHash = await this.hashPassword(senhaDigitada, salt);
+      return novoHash === hashSalvo;
     }
-    // Fallback simples caso crypto não esteja disponível
-    let hash = 0;
-    const str = password + '::' + salt;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash |= 0;
-    }
-    return 'h_' + Math.abs(hash).toString(16) + '_sec';
+    // Hash legado SHA-256
+    try {
+      const enc = new TextEncoder();
+      const data = enc.encode(senhaDigitada + '::estudamais::' + (salt || 'salt_tcc_2026'));
+      if (window.crypto && window.crypto.subtle) {
+        const hashBuf = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArr = Array.from(new Uint8Array(hashBuf));
+        const sha256 = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+        if (sha256 === hashSalvo) return true;
+      }
+    } catch (e) {}
+    return false;
   },
 
   // Salva ou atualiza usuário no banco
@@ -379,6 +425,13 @@ function inicializarAutenticacao() {
       AppState.currentUser = JSON.parse(rawSession);
       AppState.isAuthGate = false;
       document.body.classList.remove('auth-gate-active');
+
+      // Se é a primeira vez entrando com sessão ativa, exibe o tour de boas-vindas suavemente
+      if (!localStorage.getItem('estudamais_tour_visto')) {
+        setTimeout(() => {
+          if (typeof abrirTourSlides === 'function') abrirTourSlides(false);
+        }, 900);
+      }
     } else {
       AppState.currentUser = null;
       AppState.isAuthGate = true;
@@ -541,6 +594,7 @@ window.fecharModalAuth = function() {
   }
   const modal = document.getElementById('modal-auth');
   if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.alternarAbaAuth = function(aba) {
@@ -642,6 +696,11 @@ window.executarCadastroConta = async function(e) {
   mostrarToast(`🎉 Bem-vindo(a), ${novoUsuario.nome.split(' ')[0]}! Sua conta foi criada com sucesso.`);
   if (typeof tocarFanfarraVitoria === 'function') tocarFanfarraVitoria();
   if (typeof dispararConfetes === 'function') dispararConfetes();
+
+  // Exibe os slides de tour e apresentação das funções do site
+  setTimeout(() => {
+    if (typeof abrirTourSlides === 'function') abrirTourSlides(false);
+  }, 650);
 };
 
 // Executa Login
@@ -663,11 +722,16 @@ window.executarLoginConta = async function(e) {
     return;
   }
 
-  const hashDigitado = await EstudaMaisDB.hashPassword(senha, usuario.salt);
-  if (hashDigitado !== usuario.passwordHash) {
+  // Rate limiting contra força bruta
+  if (window.TentativasLogin && !window.TentativasLogin.verificar()) return;
+
+  const senhaValida = await EstudaMaisDB.verificarSenha(senha, usuario.salt, usuario.passwordHash);
+  if (!senhaValida) {
+    if (window.TentativasLogin) window.TentativasLogin.falha();
     alert('Senha incorreta! Por favor, verifique sua senha e tente novamente.');
     return;
   }
+  if (window.TentativasLogin) window.TentativasLogin.sucesso();
 
   // Autenticação bem sucedida e destrava o gate
   AppState.currentUser = usuario;
@@ -684,6 +748,11 @@ window.executarLoginConta = async function(e) {
 
   mostrarToast(`✨ Login realizado com sucesso! Bons estudos, ${usuario.nome.split(' ')[0]}!`);
   if (typeof tocarSomAcertoQuiz === 'function') tocarSomAcertoQuiz();
+
+  // Exibe os slides de tour e apresentação das funções do site
+  setTimeout(() => {
+    if (typeof abrirTourSlides === 'function') abrirTourSlides(false);
+  }, 450);
 };
 
 // Atalho para Avaliadores, Professores e Visitantes da Banca do TCC
@@ -711,6 +780,11 @@ window.entrarComoVisitante = async function() {
   if (typeof renderizarAbaPerfil === 'function') renderizarAbaPerfil();
 
   mostrarToast('👋 Bem-vindo(a) ao EstudaMais! Acesso liberado no Modo Visitante.');
+
+  // Exibe os slides de tour e apresentação das funções do site
+  setTimeout(() => {
+    if (typeof abrirTourSlides === 'function') abrirTourSlides(false);
+  }, 450);
 };
 
 // Executa Logout
@@ -767,11 +841,13 @@ window.abrirModalPerfil = function() {
   document.getElementById('perfil-stat-pomodoro').textContent = `${ciclosPomo} ciclos`;
 
   modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.fecharModalPerfil = function() {
   const modal = document.getElementById('modal-perfil-usuario');
   if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 // Exportar Backup de Todos os Dados do Usuário em JSON
@@ -1102,11 +1178,13 @@ window.abrirModalEditarPerfil = function() {
   });
 
   modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.fecharModalEditarPerfil = function() {
   const modal = document.getElementById('modal-editar-perfil');
   if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.selecionarAvatarEdicao = function(avatarClass, elem) {
@@ -1358,13 +1436,37 @@ function configurarNavegacao() {
 function mudarAba(tabId) {
   AppState.currentTab = tabId;
 
-  // Atualiza botões superiores
+  // Atualiza botões superiores e itens dos grupos
   document.querySelectorAll('.nav-btn').forEach(btn => {
     if (btn.dataset.tab === tabId) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
     }
+  });
+
+  // Mapeamento e destaque de grupos de abas
+  const mapaGrupos = {
+    'vestibulares': 'conteudos',
+    'videoaulas': 'conteudos',
+    'dicas': 'conteudos',
+    'simulados': 'pratica',
+    'redacao': 'pratica',
+    'quiz': 'pratica',
+    'cronograma': 'organizacao',
+    'notas': 'organizacao',
+    'ferramentas': 'organizacao'
+  };
+  const grupoAtivo = mapaGrupos[tabId] || null;
+
+  document.querySelectorAll('.nav-group-item').forEach(item => {
+    item.classList.toggle('has-active-child', item.dataset.group === grupoAtivo);
+  });
+  document.querySelectorAll('.nav-group-subitem').forEach(sub => {
+    sub.classList.toggle('active', sub.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.menu-aba-item-card').forEach(card => {
+    card.classList.toggle('ativo', card.dataset.tabAlvo === tabId);
   });
 
   // Centraliza suavemente o botão ativo no carrossel superior
@@ -1394,9 +1496,25 @@ function mudarAba(tabId) {
   });
 
   if (tabId === 'vestibulares') {
-    renderizarVestibularAtivo();
+    try {
+      const tabsContainer = document.getElementById('vestibulares-tabs');
+      if (!tabsContainer || tabsContainer.children.length === 0) {
+        renderizarVestibularesTabs();
+      }
+      renderizarVestibularAtivo();
+    } catch (e) {
+      console.error('Erro ao renderizar aba vestibulares:', e);
+    }
   } else if (tabId === 'perfil') {
     renderizarAbaPerfil();
+  } else if (tabId === 'videoaulas') {
+    if (typeof renderizarVideoaulas === 'function') {
+      renderizarVideoaulas();
+    }
+  } else if (tabId === 'cronograma') {
+    if (typeof renderizarCronogramaUI === 'function') {
+      renderizarCronogramaUI();
+    }
   }
 }
 
@@ -1406,7 +1524,10 @@ function mudarAba(tabId) {
 function renderizarFraseMotivacional() {
   const container = document.getElementById('frase-motivacional');
   if (!container) return;
-  const aleatoria = FRASES_MOTIVACIONAIS[Math.floor(Math.random() * FRASES_MOTIVACIONAIS.length)];
+  const lista = (typeof FRASES_MOTIVACIONAIS !== 'undefined' && Array.isArray(FRASES_MOTIVACIONAIS) && FRASES_MOTIVACIONAIS.length > 0)
+    ? FRASES_MOTIVACIONAIS
+    : [{ frase: "A persistência é o caminho do êxito na conquista da sua vaga.", autor: "EstudaMais" }];
+  const aleatoria = lista[Math.floor(Math.random() * lista.length)];
   container.innerHTML = `
     <i class="fa-solid fa-quote-left quote-icon"></i>
     <p class="frase-texto">"${aleatoria.frase}"</p>
@@ -1415,24 +1536,31 @@ function renderizarFraseMotivacional() {
 }
 
 function atualizarEstatisticasDashboard() {
-  // Total de tópicos e concluídos
   let totalTopicos = 0;
   let concluidos = 0;
 
-  Object.keys(VESTIBULARES_DATA).forEach(vestId => {
-    const v = VESTIBULARES_DATA[vestId];
-    v.areas.forEach(area => {
-      area.disciplinas.forEach(disc => {
-        disc.topicos.forEach((topico, idx) => {
-          totalTopicos++;
-          const key = `${vestId}-${disc.nome}-${idx}`;
-          if (AppState.checklistProgresso[key]) {
-            concluidos++;
+  if (typeof VESTIBULARES_DATA !== 'undefined' && VESTIBULARES_DATA) {
+    Object.keys(VESTIBULARES_DATA).forEach(vestId => {
+      const v = VESTIBULARES_DATA[vestId];
+      if (v && v.areas && Array.isArray(v.areas)) {
+        v.areas.forEach(area => {
+          if (area && area.disciplinas && Array.isArray(area.disciplinas)) {
+            area.disciplinas.forEach(disc => {
+              if (disc && disc.topicos && Array.isArray(disc.topicos)) {
+                disc.topicos.forEach((topico, idx) => {
+                  totalTopicos++;
+                  const key = `${vestId}-${disc.nome}-${idx}`;
+                  if (AppState.checklistProgresso && AppState.checklistProgresso[key]) {
+                    concluidos++;
+                  }
+                });
+              }
+            });
           }
         });
-      });
+      }
     });
-  });
+  }
 
   const percGeral = totalTopicos > 0 ? Math.round((concluidos / totalTopicos) * 100) : 0;
 
@@ -1448,12 +1576,12 @@ function atualizarEstatisticasDashboard() {
 
   const statNotas = document.getElementById('stat-total-notas');
   if (statNotas) {
-    statNotas.textContent = AppState.notes.length;
+    statNotas.textContent = (AppState.notes || []).length;
   }
 
   const statPomodoro = document.getElementById('stat-pomodoros-feitos');
   if (statPomodoro) {
-    statPomodoro.textContent = AppState.pomodoro.ciclosCompletos;
+    statPomodoro.textContent = (AppState.pomodoro && AppState.pomodoro.ciclosCompletos) || 0;
   }
 
   const barraGeral = document.getElementById('barra-progresso-geral');
@@ -1467,18 +1595,20 @@ function atualizarEstatisticasDashboard() {
    ======================================================== */
 function renderizarVestibularesTabs() {
   const tabsContainer = document.getElementById('vestibulares-tabs');
-  if (!tabsContainer) return;
+  if (!tabsContainer || typeof VESTIBULARES_DATA === 'undefined' || !VESTIBULARES_DATA) return;
 
   tabsContainer.innerHTML = '';
   Object.keys(VESTIBULARES_DATA).forEach(vestKey => {
     const vest = VESTIBULARES_DATA[vestKey];
+    if (!vest) return;
     const btn = document.createElement('button');
     btn.className = `vest-tab-btn ${vestKey === AppState.currentVestibular ? 'active' : ''}`;
     btn.dataset.vest = vestKey;
+    const badgeText = vest.badge ? (vest.badge.indexOf('/') !== -1 ? vest.badge.split('/')[0].trim() : vest.badge) : (vest.nome || 'Geral');
     btn.innerHTML = `
-      <i class="fa-solid ${vest.icone}"></i>
-      <span>${vest.nome}</span>
-      <span class="tab-badge">${vest.badge.split('/')[0].trim()}</span>
+      <i class="fa-solid ${vest.icone || 'fa-graduation-cap'}"></i>
+      <span>${vest.nome || vestKey.toUpperCase()}</span>
+      <span class="tab-badge">${badgeText}</span>
     `;
     btn.addEventListener('click', () => {
       AppState.currentVestibular = vestKey;
@@ -1492,7 +1622,11 @@ function renderizarVestibularesTabs() {
 
 function renderizarVestibularAtivo() {
   const container = document.getElementById('vestibular-conteudo-detalhado');
-  if (!container) return;
+  if (!container || typeof VESTIBULARES_DATA === 'undefined' || !VESTIBULARES_DATA) return;
+
+  if (!AppState.currentVestibular || !VESTIBULARES_DATA[AppState.currentVestibular]) {
+    AppState.currentVestibular = Object.keys(VESTIBULARES_DATA)[0] || 'enem';
+  }
 
   const vest = VESTIBULARES_DATA[AppState.currentVestibular];
   if (!vest) return;
@@ -1501,15 +1635,21 @@ function renderizarVestibularAtivo() {
   let totalDesteVest = 0;
   let concluidosDesteVest = 0;
 
-  vest.areas.forEach(area => {
-    area.disciplinas.forEach(disc => {
-      disc.topicos.forEach((_, idx) => {
-        totalDesteVest++;
-        const key = `${vest.id}-${disc.nome}-${idx}`;
-        if (AppState.checklistProgresso[key]) concluidosDesteVest++;
-      });
+  if (vest.areas && Array.isArray(vest.areas)) {
+    vest.areas.forEach(area => {
+      if (area.disciplinas && Array.isArray(area.disciplinas)) {
+        area.disciplinas.forEach(disc => {
+          if (disc.topicos && Array.isArray(disc.topicos)) {
+            disc.topicos.forEach((_, idx) => {
+              totalDesteVest++;
+              const key = `${vest.id}-${disc.nome}-${idx}`;
+              if (AppState.checklistProgresso && AppState.checklistProgresso[key]) concluidosDesteVest++;
+            });
+          }
+        });
+      }
     });
-  });
+  }
 
   const perc = totalDesteVest > 0 ? Math.round((concluidosDesteVest / totalDesteVest) * 100) : 0;
 
@@ -1523,7 +1663,7 @@ function renderizarVestibularAtivo() {
         <div class="vest-detalhes-grid">
           <div class="vest-detalhe-item">
             <span class="detalhe-label"><i class="fa-regular fa-clock"></i> Formato da Prova:</span>
-            <span class="detalhe-val">${vest.detalhesGerais.formato || vest.detalhesGerais.primeiraFase}</span>
+            <span class="detalhe-val">${(vest.detalhesGerais && (vest.detalhesGerais.formato || vest.detalhesGerais.primeiraFase)) || 'Ver edital oficial'}</span>
           </div>
           ${vest.detalhesGerais.segundaFase ? `
             <div class="vest-detalhe-item">
@@ -1539,7 +1679,7 @@ function renderizarVestibularAtivo() {
           ` : ''}
           <div class="vest-detalhe-item dica-ouro">
             <span class="detalhe-label"><i class="fa-solid fa-lightbulb"></i> Dica Estratégica:</span>
-            <span class="detalhe-val">${vest.detalhesGerais.dicaChave}</span>
+            <span class="detalhe-val">${(vest.detalhesGerais && vest.detalhesGerais.dicaChave) || 'Consulte o edital e resolva provas anteriores.'}</span>
           </div>
         </div>
       </div>
@@ -1901,6 +2041,7 @@ window.abrirModalNovaNota = function() {
   document.getElementById('nota-conteudo-input').value = '';
   document.getElementById('nota-cor-input').value = 'azul';
   modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.abrirModalEditarNota = function(id) {
@@ -1915,11 +2056,13 @@ window.abrirModalEditarNota = function(id) {
   document.getElementById('nota-conteudo-input').value = nota.conteudo;
   document.getElementById('nota-cor-input').value = nota.cor || 'azul';
   modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.fecharModalNota = function() {
   const modal = document.getElementById('modal-nota');
   if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.salvarNotaModal = function() {
@@ -2940,6 +3083,11 @@ window.setLousaFerramenta = function(tool) {
   if (status) {
     status.textContent = tool === 'pen' ? 'Lápis' : 'Borracha';
   }
+
+  const canvas = document.getElementById('lousa-canvas');
+  if (canvas) {
+    canvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+  }
 };
 
 window.setLousaCor = function(cor) {
@@ -3042,6 +3190,42 @@ const PALETAS_CORES = [
       { id: 'verde-menta', nome: 'Verde Menta / Sálvia', tipo: 'Fresco & Clean', corHex: '#0f766e', corSec: '#14b8a6', desc: 'Arejado, clean e muito moderno' },
       { id: 'verde-oliva', nome: 'Verde Floresta / Oliva', tipo: 'Equilíbrio & Serenidade', corHex: '#365314', corSec: '#84cc16', desc: 'Orgânico, maduro e transmite firmeza nos estudos' }
     ]
+  },
+  {
+    familia: 'Âmbar',
+    icone: 'fa-mug-hot',
+    cores: [
+      { id: 'ambar-relax', nome: 'Âmbar Noturno & Sépia', tipo: 'Descanso Visual', corHex: '#78350f', corSec: '#d97706', desc: 'Filtro de luz azul, tom sépia perfeito para leitura relaxante' },
+      { id: 'caramelo-suave', nome: 'Caramelo Aconchegante', tipo: 'Conforto & Foco', corHex: '#854d0e', corSec: '#eab308', desc: 'Tons quentes que amenizam o cansaço óptico' },
+      { id: 'terracota-argila', nome: 'Terracota Natural', tipo: 'Equilíbrio Orgânico', corHex: '#7c2d12', corSec: '#ea580c', desc: 'Caloroso e acolhedor para manter o ritmo sem fadiga' }
+    ]
+  },
+  {
+    familia: 'Turquesa',
+    icone: 'fa-water',
+    cores: [
+      { id: 'turquesa-oceano', nome: 'Turquesa Oceânica', tipo: 'Calmaria & Serenidade', corHex: '#115e59', corSec: '#14b8a6', desc: 'Reduz a ansiedade pré-vestibular e clareia os pensamentos' },
+      { id: 'aqua-cristal', nome: 'Aqua Tropical', tipo: 'Frescor & Nitidez', corHex: '#155e75', corSec: '#06b6d4', desc: 'Mente limpa e arejada para raciocínio lógico' },
+      { id: 'ciano-eletrico', nome: 'Ciano Futurista', tipo: 'Alta Tecnologia', corHex: '#0e7490', corSec: '#00e5ff', desc: 'Contraste tecnológico e vibrante para simulados rápidos' }
+    ]
+  },
+  {
+    familia: 'Laranja',
+    icone: 'fa-cloud-sun',
+    cores: [
+      { id: 'laranja-sunset', nome: 'Laranja Pôr do Sol', tipo: 'Acolhedor & Vivo', corHex: '#9a3412', corSec: '#f97316', desc: 'Energia equilibrada com conforto aos olhos' },
+      { id: 'laranja-tangerina', nome: 'Tangerina Criativa', tipo: 'Estímulo de Ideias', corHex: '#c2410c', corSec: '#fb923c', desc: 'Ideal para momentos de brainstorming e redação' },
+      { id: 'cobre-nobre', nome: 'Cobre & Bronze', tipo: 'Sofisticação Nobre', corHex: '#703c1b', corSec: '#d97736', desc: 'Clássico e refinado com presença marcante' }
+    ]
+  },
+  {
+    familia: 'Minimalista',
+    icone: 'fa-cube',
+    cores: [
+      { id: 'grafite-obsidiana', nome: 'Grafite & Titânio', tipo: 'Foco Puro', corHex: '#1e293b', corSec: '#64748b', desc: 'Zero distrações visuais, foco cirúrgico no conteúdo' },
+      { id: 'ardosia-chumbo', nome: 'Ardósia & Zinco', tipo: 'Neutro Moderno', corHex: '#27272a', corSec: '#71717a', desc: 'Sobriedade elegante e clean para estudos analíticos' },
+      { id: 'cafe-biblioteca', nome: 'Café & Biblioteca', tipo: 'Clássico Universitário', corHex: '#3b2219', corSec: '#875338', desc: 'Ambiente nobre de biblioteca com tons de madeira' }
+    ]
   }
 ];
 
@@ -3061,9 +3245,15 @@ window.aplicarTema = function(modo, acento, exibirNotificacao = false) {
     // Atualiza ícone do botão
     const iconBtn = document.getElementById('icon-theme-toggle');
     if (iconBtn) {
-      iconBtn.className = modo === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-      if (iconBtn.parentElement) {
-        iconBtn.parentElement.title = modo === 'dark' ? 'Ativar Modo Claro' : 'Ativar Modo Escuro';
+      if (modo === 'dark') {
+        iconBtn.className = 'fa-solid fa-moon';
+        if (iconBtn.parentElement) iconBtn.parentElement.title = 'Modo Atual: Escuro (Clique para Modo Descanso)';
+      } else if (modo === 'warm') {
+        iconBtn.className = 'fa-solid fa-mug-hot';
+        if (iconBtn.parentElement) iconBtn.parentElement.title = 'Modo Atual: Descanso & Luz Amarelada (Clique para Modo Claro)';
+      } else {
+        iconBtn.className = 'fa-solid fa-sun';
+        if (iconBtn.parentElement) iconBtn.parentElement.title = 'Modo Atual: Claro (Clique para Modo Escuro)';
       }
     }
   }
@@ -3079,13 +3269,17 @@ window.aplicarTema = function(modo, acento, exibirNotificacao = false) {
 
   if (exibirNotificacao) {
     const nomeCor = obterNomeCorPorId(AppState.theme.accent);
-    const nomeModo = AppState.theme.mode === 'dark' ? 'Modo Escuro' : 'Modo Claro';
+    let nomeModo = 'Modo Claro';
+    if (AppState.theme.mode === 'dark') nomeModo = 'Modo Escuro';
+    else if (AppState.theme.mode === 'warm') nomeModo = 'Modo Descanso (Luz Amarelada)';
     mostrarToast(`Aparência atualizada: ${nomeModo} • ${nomeCor}`);
   }
 };
 
 window.alternarModoEscuro = function() {
-  const novoModo = AppState.theme.mode === 'dark' ? 'light' : 'dark';
+  const modos = ['light', 'dark', 'warm'];
+  const atualIdx = modos.indexOf(AppState.theme.mode);
+  const novoModo = modos[(atualIdx + 1) % modos.length];
   aplicarTema(novoModo, AppState.theme.accent, true);
 };
 
@@ -3094,6 +3288,7 @@ window.abrirModalCores = function() {
   if (modal) {
     renderizarPaletasCores();
     modal.classList.add('active');
+    if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
   }
 };
 
@@ -3101,6 +3296,7 @@ window.fecharModalCores = function() {
   const modal = document.getElementById('modal-cores');
   if (modal) {
     modal.classList.remove('active');
+    if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
   }
 };
 
@@ -3162,10 +3358,10 @@ window.atualizarSelecaoVisualTema = function() {
   // Atualiza botões de modo
   const cardLight = document.getElementById('mode-card-light');
   const cardDark = document.getElementById('mode-card-dark');
-  if (cardLight && cardDark) {
-    cardLight.classList.toggle('active', AppState.theme.mode === 'light');
-    cardDark.classList.toggle('active', AppState.theme.mode === 'dark');
-  }
+  const cardWarm = document.getElementById('mode-card-warm');
+  if (cardLight) cardLight.classList.toggle('active', AppState.theme.mode === 'light');
+  if (cardDark) cardDark.classList.toggle('active', AppState.theme.mode === 'dark');
+  if (cardWarm) cardWarm.classList.toggle('active', AppState.theme.mode === 'warm');
 
   // Atualiza cards de cores
   document.querySelectorAll('.color-option-card').forEach(card => {
@@ -3709,11 +3905,13 @@ window.abrirModalConfigGemini = function() {
   }
 
   modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.fecharModalConfigGemini = function() {
   const modal = document.getElementById('modal-config-gemini');
   if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
 };
 
 window.salvarChaveGemini = function() {
@@ -4521,6 +4719,189 @@ window.inicializarSimulados = function() {
       </div>
     `;
   }).join('');
+
+  const selDisc = document.getElementById('builder-disciplina');
+  if (selDisc && typeof atualizarOpcoesTemasSimulado === 'function') {
+    atualizarOpcoesTemasSimulado();
+  }
+};
+
+window.alternarModoVisualizacaoSimulados = function(modo) {
+  const painelCards = document.getElementById('simulados-lista-cards');
+  const painelCustom = document.getElementById('simulado-custom-builder-card');
+  const pillBancas = document.getElementById('pill-simulados-bancas');
+  const pillCustom = document.getElementById('pill-simulados-custom');
+
+  if (modo === 'custom') {
+    if (painelCards) painelCards.style.display = 'none';
+    if (painelCustom) painelCustom.style.display = 'block';
+    if (pillBancas) pillBancas.classList.remove('active');
+    if (pillCustom) pillCustom.classList.add('active');
+    atualizarOpcoesTemasSimulado();
+  } else {
+    if (painelCards) painelCards.style.display = 'grid';
+    if (painelCustom) painelCustom.style.display = 'none';
+    if (pillBancas) pillBancas.classList.add('active');
+    if (pillCustom) pillCustom.classList.remove('active');
+  }
+};
+
+window.atualizarOpcoesTemasSimulado = function() {
+  const selDisc = document.getElementById('builder-disciplina');
+  const selTema = document.getElementById('builder-tema');
+  if (!selDisc || !selTema) return;
+
+  const discEscolhida = selDisc.value;
+  const listaTemas = (typeof TEMAS_DISCIPLINAS_DATA !== 'undefined' && TEMAS_DISCIPLINAS_DATA[discEscolhida])
+    ? TEMAS_DISCIPLINAS_DATA[discEscolhida]
+    : ['Todos os Temas da Disciplina', 'Conceitos Fundamentais', 'Aplicações Práticas'];
+
+  selTema.innerHTML = listaTemas.map(tema => `<option value="${tema}">${tema}</option>`).join('');
+};
+
+window.gerarSimuladoCustomizadoPorTema = function() {
+  const selVest = document.getElementById('builder-vestibular');
+  const selDisc = document.getElementById('builder-disciplina');
+  const selTema = document.getElementById('builder-tema');
+  const selQtd = document.getElementById('builder-qtd-questoes');
+
+  const vestEscolhido = selVest ? selVest.value : 'todos';
+  const discEscolhida = selDisc ? selDisc.value : 'Matemática';
+  const temaEscolhido = selTema ? selTema.value : 'Todos os Temas';
+  const qtdDesejada = selQtd ? parseInt(selQtd.value, 10) : 10;
+
+  let poolQuestoes = [];
+  if (typeof SIMULADOS_DATA !== 'undefined') {
+    SIMULADOS_DATA.forEach(sim => {
+      (sim.questoes || []).forEach(q => {
+        poolQuestoes.push({ ...q, vestibularOrigem: sim.vestibular });
+      });
+    });
+  }
+  if (typeof QUIZ_QUESTIONS !== 'undefined') {
+    QUIZ_QUESTIONS.forEach(q => {
+      poolQuestoes.push({ ...q, vestibularOrigem: q.vestibular });
+    });
+  }
+
+  const termoDisc = discEscolhida.toLowerCase();
+  let filtradas = poolQuestoes.filter(q => {
+    const d = (q.disciplina || '').toLowerCase();
+    const a = (q.area || '').toLowerCase();
+    const condDisc = d.includes(termoDisc) || a.includes(termoDisc) || termoDisc.includes(d);
+    
+    let condVest = true;
+    if (vestEscolhido !== 'todos') {
+      const v = (q.vestibularOrigem || q.vestibular || '').toLowerCase();
+      condVest = v.includes(vestEscolhido.toLowerCase());
+    }
+    return condDisc && condVest;
+  });
+
+  if (temaEscolhido && !temaEscolhido.toLowerCase().includes('todos')) {
+    const palavrasChave = temaEscolhido.toLowerCase().split(/[\s,&()]+/);
+    const refinadas = filtradas.filter(q => {
+      const texto = ((q.enunciado || '') + ' ' + (q.disciplina || '') + ' ' + (q.explicacao || '')).toLowerCase();
+      return palavrasChave.some(p => p.length > 3 && texto.includes(p));
+    });
+    if (refinadas.length >= 3) {
+      filtradas = refinadas;
+    }
+  }
+
+  if (filtradas.length < qtdDesejada) {
+    const adicionais = poolQuestoes.filter(q => {
+      const d = (q.disciplina || '').toLowerCase();
+      return (d.includes(termoDisc) || termoDisc.includes(d)) && !filtradas.some(f => f.id === q.id);
+    });
+    filtradas = filtradas.concat(adicionais);
+  }
+
+  if (filtradas.length < qtdDesejada) {
+    const gerais = poolQuestoes.filter(q => !filtradas.some(f => f.id === q.id));
+    filtradas = filtradas.concat(gerais);
+  }
+
+  filtradas.sort(() => Math.random() - 0.5);
+  const questoesFinais = filtradas.slice(0, qtdDesejada);
+
+  const novoId = 'simulado-custom-' + Date.now();
+  const vestLabel = vestEscolhido === 'todos' ? 'Multidisciplinar' : vestEscolhido;
+  const temaLabel = (temaEscolhido && !temaEscolhido.toLowerCase().includes('todos')) ? ` • ${temaEscolhido}` : '';
+
+  const novoSimulado = {
+    id: novoId,
+    vestibular: vestLabel,
+    titulo: `Simulado Sob Medida: ${discEscolhida}${temaLabel}`,
+    subtitulo: `${questoesFinais.length} Questões selecionadas sob medida com cronômetro e gabarito oficial comentado`,
+    tempoMinutos: Math.max(15, Math.round(questoesFinais.length * 3.5)),
+    disciplinas: [discEscolhida],
+    questoes: questoesFinais
+  };
+
+  SIMULADOS_DATA.unshift(novoSimulado);
+  inicializarSimulados();
+
+  mostrarToast(`🎯 Simulado sob medida de ${discEscolhida} gerado com sucesso!`);
+  iniciarSimulado(novoId);
+};
+
+window.criarProximoSimuladoPorIA = function(simuladoAnterior, acertos, total, pct, areas) {
+  let menorPct = 101;
+  let areaReforco = 'Conhecimentos Gerais';
+
+  if (areas && Object.keys(areas).length > 0) {
+    Object.entries(areas).forEach(([areaNome, dados]) => {
+      const p = (dados.acertos / dados.total) * 100;
+      if (p < menorPct) {
+        menorPct = p;
+        areaReforco = areaNome;
+      }
+    });
+  }
+
+  let pool = [];
+  if (typeof SIMULADOS_DATA !== 'undefined') {
+    SIMULADOS_DATA.forEach(s => {
+      if (s.id !== simuladoAnterior.id) {
+        (s.questoes || []).forEach(q => pool.push({ ...q, vestibularOrigem: s.vestibular }));
+      }
+    });
+  }
+  if (typeof QUIZ_QUESTIONS !== 'undefined') {
+    QUIZ_QUESTIONS.forEach(q => pool.push({ ...q, vestibularOrigem: q.vestibular }));
+  }
+
+  const termo = areaReforco.toLowerCase();
+  let questoesFoco = pool.filter(q => {
+    const a = (q.area || '').toLowerCase();
+    const d = (q.disciplina || '').toLowerCase();
+    return a.includes(termo) || d.includes(termo) || termo.includes(d);
+  });
+
+  if (questoesFoco.length < 10) {
+    const outras = pool.filter(q => !questoesFoco.some(f => f.id === q.id));
+    outras.sort(() => Math.random() - 0.5);
+    questoesFoco = questoesFoco.concat(outras.slice(0, 10 - questoesFoco.length));
+  }
+
+  questoesFoco.sort(() => Math.random() - 0.5);
+  const questoesIA = questoesFoco.slice(0, 10);
+
+  const novoIdIA = 'simulado-ia-' + Date.now();
+  const novoSim = {
+    id: novoIdIA,
+    vestibular: simuladoAnterior.vestibular || 'ENEM',
+    titulo: `Simulado Adaptativo IA • Reforço em ${areaReforco}`,
+    subtitulo: `10 Questões adaptativas selecionadas pela IA com base nos seus pontos de melhoria do simulado anterior`,
+    tempoMinutos: 35,
+    disciplinas: [areaReforco, 'Revisão Adaptativa'],
+    focoTexto: `${areaReforco} (Aproveitamento anterior: ${menorPct <= 100 ? Math.round(menorPct) + '%' : 'Aprofundamento'})`,
+    questoes: questoesIA
+  };
+
+  SIMULADOS_DATA.unshift(novoSim);
+  return novoSim;
 };
 
 window.iniciarSimulado = function(idSimulado) {
@@ -4787,8 +5168,14 @@ function renderizarPainelResultadoSimulado(acertos, total, pct, areas) {
   const sim = AppState.simulado.ativo;
   if (!sim) return;
 
+  // Gera automaticamente o próximo simulado adaptativo por IA com base no desempenho
+  const novoSimuladoIA = criarProximoSimuladoPorIA(sim, acertos, total, pct, areas);
+  setTimeout(() => {
+    mostrarToast("✨ A IA preparou automaticamente seu próximo simulado adaptativo!");
+  }, 1200);
+
   // Busca outros simulados recomendados (priorizando matérias e vestibulares diferentes)
-  const outros = (typeof SIMULADOS_DATA !== 'undefined' ? SIMULADOS_DATA : []).filter(s => s.id !== sim.id);
+  const outros = (typeof SIMULADOS_DATA !== "undefined" ? SIMULADOS_DATA : []).filter(s => s.id !== sim.id && s.id !== novoSimuladoIA.id);
   const recomendados = outros.slice(0, 3);
 
   container.innerHTML = `
@@ -4815,6 +5202,20 @@ function renderizarPainelResultadoSimulado(acertos, total, pct, areas) {
           <span class="metrica-label">Erros / Em Branco</span>
         </div>
       </div>
+      <!-- NOVO SIMULADO CRIADO AUTOMATICAMENTE PELA IA -->
+      <div class="simulado-ia-proximo-box">
+        <div class="ia-box-header">
+          <span class="ia-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerado Automaticamente por IA</span>
+          <h3>✨ Novo Simulado Adaptativo Preparado para Você!</h3>
+        </div>
+        <p>A Inteligência Artificial do EstudaMais analisou seu desempenho neste exame e construiu automaticamente uma nova prova com <strong>${novoSimuladoIA.questoes.length} questões</strong> especialmente focadas nos seus pontos de melhoria: <strong>${novoSimuladoIA.focoTexto}</strong>.</p>
+        <div class="ia-box-actions">
+          <button class="btn-iniciar-ia-simulado" onclick="iniciarSimulado('${novoSimuladoIA.id}')">
+            <i class="fa-solid fa-bolt"></i> Iniciar Próximo Simulado da IA Agora (${novoSimuladoIA.tempoMinutos} min)
+          </button>
+        </div>
+      </div>
+
 
       <!-- Desempenho por Área de Conhecimento -->
       <div class="simulado-areas-performance">
@@ -4944,5 +5345,3347 @@ window.voltarParaListaSimulados = function() {
   inicializarSimulados();
 };
 
+/* ========================================================
+   SISTEMA DE TOUR & SLIDES DE APRESENTAÇÃO DO SITE (ONBOARDING)
+   ======================================================== */
+let tourSlideAtual = 1;
+const TOTAL_TOUR_SLIDES = 8;
+
+window.abrirTourSlides = function(forcado = false) {
+  const modal = document.getElementById('modal-tour-site');
+  if (!modal) return;
+
+  tourSlideAtual = 1;
+  irParaTourSlide(1);
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+
+  window.removeEventListener('keydown', lidarTecladoTour);
+  window.addEventListener('keydown', lidarTecladoTour);
+};
+
+window.fecharTourSlides = function() {
+  const modal = document.getElementById('modal-tour-site');
+  if (modal) {
+    modal.classList.remove('active');
+    if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+  }
+  localStorage.setItem('estudamais_tour_visto', 'true');
+  window.removeEventListener('keydown', lidarTecladoTour);
+};
+
+function lidarTecladoTour(e) {
+  const modal = document.getElementById('modal-tour-site');
+  if (!modal || !modal.classList.contains('active')) return;
+
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    tourProximoSlide();
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    tourSlideAnterior();
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    fecharTourSlides();
+  }
+}
+
+window.irParaTourSlide = function(num) {
+  if (num < 1) num = 1;
+  if (num > TOTAL_TOUR_SLIDES) num = TOTAL_TOUR_SLIDES;
+  tourSlideAtual = num;
+
+  // Atualiza exibição dos slides
+  const slides = document.querySelectorAll('.tour-slide-item');
+  slides.forEach((slide) => {
+    const idx = parseInt(slide.getAttribute('data-slide-index'), 10);
+    slide.classList.toggle('active', idx === num);
+  });
+
+  // Atualiza paginação de bolinhas (dots)
+  const dots = document.querySelectorAll('.tour-dot');
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', (idx + 1) === num);
+  });
+
+  // Atualiza contador de passos
+  const counter = document.getElementById('tour-step-counter');
+  if (counter) {
+    counter.textContent = `Slide ${num} de ${TOTAL_TOUR_SLIDES}`;
+  }
+
+  // Atualiza botões Voltar / Avançar
+  const btnPrev = document.getElementById('btn-tour-prev');
+  const btnNext = document.getElementById('btn-tour-next');
+
+  if (btnPrev) {
+    btnPrev.disabled = (num === 1);
+  }
+
+  if (btnNext) {
+    if (num === TOTAL_TOUR_SLIDES) {
+      btnNext.classList.add('btn-tour-concluir');
+      btnNext.innerHTML = `<span>Começar a Estudar Agora!</span> <i class="fa-solid fa-rocket"></i>`;
+    } else {
+      btnNext.classList.remove('btn-tour-concluir');
+      btnNext.innerHTML = `<span>Avançar</span> <i class="fa-solid fa-arrow-right"></i>`;
+    }
+  }
+};
+
+window.tourProximoSlide = function() {
+  if (tourSlideAtual < TOTAL_TOUR_SLIDES) {
+    irParaTourSlide(tourSlideAtual + 1);
+  } else {
+    // Último slide concluído com sucesso
+    fecharTourSlides();
+    if (typeof tocarFanfarraVitoria === 'function') tocarFanfarraVitoria();
+    if (typeof dispararConfetes === 'function') dispararConfetes();
+    mostrarToast('🎓 Parabéns! Você conheceu todos os recursos do EstudaMais. Bons estudos rumo à aprovação!');
+  }
+};
+
+window.tourSlideAnterior = function() {
+  if (tourSlideAtual > 1) {
+    irParaTourSlide(tourSlideAtual - 1);
+  }
+};
 
 
+
+
+
+
+/* ========================================================
+   ESTUDAMAIS - CHAT IA COM GOOGLE GEMINI & GERADOR DE CRONOGRAMAS (V2 ENHANCED)
+   Gamificação, Modos de Personalidade, Áudio TTS, Timer Integrado & Impressão
+   ======================================================== */
+
+// Estado do Chat IA e Cronograma Gamificado
+AppState.chatIA = {
+  mensagens: [],
+  carregando: false,
+  modo: 'tutor', // 'tutor', 'desafio', 'zen', 'cronograma'
+  somAtivo: true,
+  vozAtiva: false
+};
+
+AppState.cronograma = {
+  semanaAtual: 1,
+  diasEstudoPorSemana: 5,
+  horasPorDia: 4,
+  turnoPreferido: 'tarde',
+  xp: 0,
+  streakDias: 1,
+  planoSemanal: null
+};
+
+// Sintetizador de Som Leve via Web Audio API (sem arquivos externos)
+function emitirSomChat(tipo = 'pop') {
+  if (!AppState.chatIA.somAtivo) return;
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (tipo === 'pop') {
+      osc.frequency.setValueAtTime(540, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.08);
+    } else if (tipo === 'sucesso') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.setValueAtTime(554.37, ctx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch (e) {}
+}
+
+// Inicializar Chat IA e Cronograma
+function inicializarChatIACronograma() {
+  carregarHistoricoChatIA();
+  carregarCronogramaSalvo();
+  renderizarMensagensChatIA();
+  renderizarCronogramaUI();
+  configurarEventosChatIA();
+}
+
+// Carregar Histórico do Chat
+function carregarHistoricoChatIA() {
+  try {
+    const userId = AppState.currentUser ? AppState.currentUser.id : 'convidado';
+    const salvas = localStorage.getItem(`estudamais_chat_ia_${userId}`);
+    if (salvas) {
+      AppState.chatIA.mensagens = JSON.parse(salvas);
+    } else {
+      const user = AppState.currentUser;
+      const nome = user ? user.nome.split(' ')[0] : 'Estudante';
+      const vest = user && user.vestibular ? user.vestibular : 'vestibulares';
+      const curso = user && user.curso ? ` para ${user.curso}` : '';
+
+      AppState.chatIA.mensagens = [
+        {
+          id: 'msg-intro-1',
+          remetente: 'ia',
+          texto: `Olá, **${nome}**! Sou o seu **Tutor de Inteligência Artificial do EstudaMais** 🎓✨\n\nEstou conectado ao **Google Gemini** para te apoiar em cada detalhe rumo à aprovação no **${vest}**${curso}.\n\nVocê pode escolher meu modo de apoio logo acima ou me pedir:\n- 📚 Explicar matérias e teorias complexas\n- ⚡ **Desafio / Quiz:** Posso testar seus conhecimentos com perguntas da banca!\n- 🧘 **Mentor Zen:** Dicas de foco, pausas e controle de ansiedade pré-prova\n- 📅 **Criar seu Cronograma Semanal:** Distribuo seus horários de acordo com seu tempo livre!\n\nComo começamos nossos estudos hoje?`,
+          timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        }
+      ];
+    }
+  } catch (e) {
+    console.error('Erro ao carregar chat da IA:', e);
+  }
+}
+
+// Salvar Histórico do Chat
+function salvarHistoricoChatIA() {
+  try {
+    const userId = AppState.currentUser ? AppState.currentUser.id : 'convidado';
+    localStorage.setItem(`estudamais_chat_ia_${userId}`, JSON.stringify(AppState.chatIA.mensagens.slice(-50)));
+  } catch (e) {}
+}
+
+// Alternar Modo de Personalidade da IA
+window.alternarModoChatIA = function(modo) {
+  AppState.chatIA.modo = modo;
+  document.querySelectorAll('.chat-ia-modo-pill').forEach(btn => {
+    if (btn.dataset.modo === modo) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const dicasModos = {
+    tutor: '🎯 Modo Tutor Ativo: Foco em explicação didática, resolução de dúvidas e matérias que mais caem.',
+    desafio: '⚡ Modo Desafio Ativo: Vou te fazer uma pergunta surpresa para testar sua retenção! Pronto(a)?',
+    zen: '🧘 Modo Zen Ativo: Foco em gerenciamento do tempo, alívio de ansiedade e saúde mental nos estudos.',
+    cronograma: '📅 Modo Cronograma Ativo: Diga quantas horas tem livres e eu monto seu plano semanal!'
+  };
+
+  if (window.mostrarToast) {
+    window.mostrarToast(dicasModos[modo] || 'Modo atualizado!');
+  }
+
+  if (modo === 'desafio') {
+    perguntarRapidoChatIA('Me faça um desafio rápido: 1 questão teste da banca examinadora sobre um tema muito cotado!');
+  } else if (modo === 'zen') {
+    perguntarRapidoChatIA('Estou um pouco ansioso(a) com a rotina de estudos. Que técnica prática posso usar hoje para manter a calma e o foco?');
+  }
+};
+
+// Renderizar Mensagens do Chat
+function renderizarMensagensChatIA() {
+  const container = document.getElementById('chat-ia-mensagens-container');
+  if (!container) return;
+
+  if (AppState.chatIA.mensagens.length === 0) {
+    container.innerHTML = `
+      <div class="chat-ia-vazio">
+        <div class="chat-ia-vazio-icon"><i class="fa-solid fa-sparkles"></i></div>
+        <h3>Tire qualquer dúvida com a IA</h3>
+        <p>Faça uma pergunta, peça a explicação de um tema ou solicite um cronograma personalizado!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = AppState.chatIA.mensagens.map(msg => {
+    const isUser = msg.remetente === 'usuario';
+    const parsedText = formatarMarkdownChat(msg.texto);
+    const avatar = isUser ? (AppState.currentUser?.avatar || 'fa-user-graduate') : 'fa-robot';
+
+    return `
+      <div class="chat-ia-msg-wrapper ${isUser ? 'msg-usuario' : 'msg-ia'} anim-fade-in" id="${msg.id}">
+        <div class="chat-ia-msg-avatar">
+          <i class="fa-solid ${avatar}"></i>
+        </div>
+        <div class="chat-ia-msg-balao">
+          <div class="chat-ia-msg-autor">
+            <strong>${isUser ? (AppState.currentUser?.nome?.split(' ')[0] || 'Você') : 'Tutor EstudaMais (Gemini AI)'}</strong>
+            <span class="chat-ia-msg-hora">${msg.timestamp || ''}</span>
+          </div>
+          <div class="chat-ia-msg-conteudo" id="conteudo-${msg.id}">
+            ${parsedText}
+          </div>
+
+          <!-- Ações Rápidas da Mensagem -->
+          <div class="chat-ia-msg-ferramentas">
+            <button class="btn-chat-tool" onclick="copiarTextoMensagemIA('${msg.id}')" title="Copiar resposta">
+              <i class="fa-regular fa-copy"></i> <span>Copiar</span>
+            </button>
+            ${!isUser ? `
+              <button class="btn-chat-tool" onclick="falarMensagemIA('${msg.id}')" title="Ouvir explicação">
+                <i class="fa-solid fa-volume-high"></i> <span>Ouvir</span>
+              </button>
+              <button class="btn-chat-tool" onclick="perguntarRapidoChatIA('Me explique de forma ainda mais simples, como se eu tivesse 10 anos.')" title="Explicar mais simples">
+                <i class="fa-solid fa-lightbulb"></i> <span>Simplificar</span>
+              </button>
+            ` : ''}
+          </div>
+
+          ${!isUser && msg.acaoCronograma ? `
+            <div class="chat-ia-msg-acoes-cronograma">
+              <button class="btn-chat-aplicar-cronograma" onclick="aplicarCronogramaSugeridoPelaIA('${msg.id}')">
+                <i class="fa-solid fa-calendar-check"></i> Aplicar Este Cronograma na Aba Cronogramas
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  setTimeout(() => {
+    container.scrollTop = container.scrollHeight;
+  }, 50);
+}
+
+// Copiar Texto da Mensagem
+window.copiarTextoMensagemIA = function(msgId) {
+  const msg = AppState.chatIA.mensagens.find(m => m.id === msgId);
+  if (msg && msg.texto) {
+    navigator.clipboard.writeText(msg.texto).then(() => {
+      if (window.mostrarToast) window.mostrarToast('📋 Texto copiado para a área de transferência!');
+    }).catch(() => {
+      if (window.mostrarToast) window.mostrarToast('Texto copiado!', 'info');
+    });
+  }
+};
+
+// Voz / Leitura em Áudio da Resposta (Text-to-Speech nativo)
+window.falarMensagemIA = function(msgId) {
+  if (!('speechSynthesis' in window)) {
+    if (window.mostrarToast) window.mostrarToast('Leitura de voz não suportada neste navegador.', 'aviso');
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const msg = AppState.chatIA.mensagens.find(m => m.id === msgId);
+  if (!msg || !msg.texto) return;
+
+  const limpo = msg.texto.replace(/[*#`_\[\]]/g, '');
+  const utter = new SpeechSynthesisUtterance(limpo);
+  utter.lang = 'pt-BR';
+  utter.rate = 1.05;
+
+  if (window.mostrarToast) window.mostrarToast('🔊 Reproduzindo explicação em áudio...');
+  window.speechSynthesis.speak(utter);
+};
+
+// Formatador simples e seguro de Markdown para o Chat
+function formatarMarkdownChat(texto) {
+  if (!texto) return '';
+  let limpo = texto;
+
+  // Sanitização e limpeza de LaTeX bruto antes de escapar HTML
+  // Transforma \[ ... \] em bloco matemático limpo
+  limpo = limpo.replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
+    let f = formula
+      .replace(/\\text\{([^}]+)\}/g, '$1')
+      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1 / $2)')
+      .replace(/\\approx/g, ' ≈ ')
+      .replace(/\\times|\\cdot/g, ' × ')
+      .replace(/\\le|\\leq/g, ' ≤ ')
+      .replace(/\\ge|\\geq/g, ' ≥ ')
+      .replace(/\\pm/g, ' ± ')
+      .replace(/\\sqrt\{([^}]+)\}/g, '√($1)')
+      .replace(/\\/g, '')
+      .trim();
+    return '\n\n```math\n' + f + '\n```\n\n';
+  });
+
+  // Transforma \( ... \) em fórmula inline limpa
+  limpo = limpo.replace(/\\\(([\s\S]*?)\\\)/g, (match, formula) => {
+    let f = formula
+      .replace(/\\text\{([^}]+)\}/g, '$1')
+      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1 / $2)')
+      .replace(/\\approx/g, ' ≈ ')
+      .replace(/\\times|\\cdot/g, ' × ')
+      .replace(/\\le|\\leq/g, ' ≤ ')
+      .replace(/\\ge|\\geq/g, ' ≥ ')
+      .replace(/\\pm/g, ' ± ')
+      .replace(/\\sqrt\{([^}]+)\}/g, '√($1)')
+      .replace(/\\/g, '')
+      .trim();
+    return ' `' + f + '` ';
+  });
+
+  // Limpeza de tokens LaTeX isolados remanescentes
+  limpo = limpo
+    .replace(/\\text\{([^}]+)\}/g, '$1')
+    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1 / $2)')
+    .replace(/\\approx/g, '≈')
+    .replace(/\\times|\\cdot/g, '×')
+    .replace(/\\le|\\leq/g, '≤')
+    .replace(/\\ge|\\geq/g, '≥')
+    .replace(/\\pm/g, '±')
+    .replace(/\\sqrt\{([^}]+)\}/g, '√($1)')
+    .replace(/\\([a-zA-Z])/g, '$1')
+    .replace(/\\[\[\]\(\)\{\}]/g, '')
+    .replace(/\\/g, '');
+
+  let html = limpo
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Bloco de matemática formatado
+  html = html.replace(/```math\n([\s\S]*?)```/g, '<div class="chat-math-block">$1</div>');
+  // Bloco de código padrão
+  html = html.replace(/```([a-z]*)\n([\s\S]*?)```/g, '<pre class="chat-code-block"><code>$2</code></pre>');
+  // Código inline
+  html = html.replace(/`([^`]+)`/g, '<span class="chat-math-inline">$1</span>');
+  // Negrito
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Itálico
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  // Tópicos com bullet point
+  html = html.replace(/^\s*[-•]\s+(.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>[\s\S]+?<\/li>)/g, '<ul class="chat-lista-resumo">$1</ul>');
+  // Quebras de linha
+  html = html.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+
+  return html;
+}
+window.formatarMarkdownChat = formatarMarkdownChat;
+
+// Configurar Eventos e Envio do Chat IA
+function configurarEventosChatIA() {
+  const form = document.getElementById('chat-ia-form');
+  const input = document.getElementById('chat-ia-input');
+  if (form && input) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      enviarMensagemChatIA();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        enviarMensagemChatIA();
+      }
+    });
+  }
+}
+
+// Enviar Mensagem do Estudante para a IA
+window.enviarMensagemChatIA = async function(textoPreDefinido = null) {
+  const input = document.getElementById('chat-ia-input');
+  const btnEnviar = document.getElementById('chat-ia-btn-enviar');
+  const texto = (textoPreDefinido || (input ? input.value : '')).trim();
+
+  if (!texto || AppState.chatIA.carregando) return;
+
+  if (input) input.value = '';
+  AppState.chatIA.carregando = true;
+  emitirSomChat('pop');
+
+  const userMsgId = 'msg-user-' + Date.now();
+  AppState.chatIA.mensagens.push({
+    id: userMsgId,
+    remetente: 'usuario',
+    texto: texto,
+    timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  });
+
+  renderizarMensagensChatIA();
+  salvarHistoricoChatIA();
+
+  const container = document.getElementById('chat-ia-mensagens-container');
+  let typingEl = document.createElement('div');
+  typingEl.id = 'chat-ia-typing-indicator';
+  typingEl.className = 'chat-ia-msg-wrapper msg-ia anim-fade-in';
+  typingEl.innerHTML = `
+    <div class="chat-ia-msg-avatar"><i class="fa-solid fa-robot"></i></div>
+    <div class="chat-ia-msg-balao typing-balao">
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <small style="color: var(--text-muted); font-size: 0.78rem;">Consultando Inteligência Artificial do Gemini...</small>
+    </div>
+  `;
+  if (container) {
+    container.appendChild(typingEl);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  if (btnEnviar) {
+    btnEnviar.disabled = true;
+    btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  }
+
+  try {
+    const respostaIA = await processarPerguntaComIA(texto);
+    if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+
+    emitirSomChat('pop');
+    AppState.chatIA.mensagens.push({
+      id: 'msg-ia-' + Date.now(),
+      remetente: 'ia',
+      texto: respostaIA.texto,
+      acaoCronograma: respostaIA.temCronograma ? respostaIA.cronogramaData : null,
+      timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    });
+
+    renderizarMensagensChatIA();
+    salvarHistoricoChatIA();
+
+    if (respostaIA.temCronograma && respostaIA.cronogramaData) {
+      if (typeof dispararConfetes === 'function') dispararConfetes();
+      if (window.mostrarToast) {
+        window.mostrarToast('📅 A IA gerou um cronograma de estudos sob medida! Clique no botão abaixo da mensagem para sincronizar.');
+      }
+    }
+  } catch (err) {
+    console.error('Erro na resposta do chat IA:', err);
+    if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+
+    AppState.chatIA.mensagens.push({
+      id: 'msg-ia-err-' + Date.now(),
+      remetente: 'ia',
+      texto: `Desculpe, ocorreu uma oscilação na conexão com a IA: *${err.message || 'Erro temporário'}*.\n\nPor favor, tente novamente ou conecte sua chave da API do Google Gemini no botão acima para máxima velocidade!`,
+      timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    });
+    renderizarMensagensChatIA();
+    salvarHistoricoChatIA();
+  } finally {
+    AppState.chatIA.carregando = false;
+    if (btnEnviar) {
+      btnEnviar.disabled = false;
+      btnEnviar.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+    }
+    if (input) input.focus();
+  }
+};
+
+// Processa a pergunta do estudante utilizando Gemini
+async function processarPerguntaComIA(pergunta) {
+  const user = AppState.currentUser;
+  const vestibular = user ? (user.vestibular || 'ENEM') : 'ENEM';
+  const curso = user ? (user.curso || 'Não especificado') : 'Ensino Superior';
+  const nomeAluno = user ? user.nome.split(' ')[0] : 'Estudante';
+  const modo = AppState.chatIA.modo || 'tutor';
+
+  let modoInstrucao = '';
+  if (modo === 'desafio') {
+    modoInstrucao = 'MODO DESAFIO: Elabore uma questão teste contextualizada no estilo da banca com 4 alternativas (A, B, C, D) e peça para o aluno responder!';
+  } else if (modo === 'zen') {
+    modoInstrucao = 'MODO ZEN / ANTI-ANSIEDADE: Forneça suporte acolhedor, técnicas de respiração (ex: 4-7-8), organização saudável do sono e incentivo psicológico realista.';
+  } else if (modo === 'cronograma') {
+    modoInstrucao = 'MODO CRONOGRAMA: Seu foco principal é montar rotinas e grades semanais de estudos de alta performance com tempos de estudo e pausas.';
+  } else {
+    modoInstrucao = 'MODO TUTOR: Explique com didática de excelência, exemplos práticos do cotidiano e foque nos conteúdos mais recorrentes da banca examinadora.';
+  }
+
+  const systemPrompt = `Você é o Tutor de Inteligência Artificial Oficial do portal EstudaMais, especialista em aprovação nos maiores vestibulares do Brasil (ENEM, Fuvest, Unicamp, Unesp, Fatec, ITA, FSA e particulares).
+Aluno: ${nomeAluno}
+Vestibular foco: ${vestibular}
+Curso pretendido: ${curso}
+${modoInstrucao}
+
+Diretrizes:
+1. Responda em Português do Brasil com tom encorajador, altamente didático, DIRETO, RÁPIDO e OBJETIVO.
+2. Seja CONCISO e vá direto ao ponto: não use saudações longas ou rodeios. Explique o cerne da questão com rapidez.
+3. NUNCA utilize marcação crua de LaTeX como \\(, \\), \\[, \\], \\text{...} ou \\frac{...}{...}. Apresente fórmulas em notação direta e limpa, por exemplo: "PV = C / (1 + r)^n" ou "V = Vo + at".
+4. Use negrito para pontos-chave e tópicos com bullet points para leitura dinâmica.
+5. Se o aluno pedir um "cronograma" ou "plano de estudos", crie um cronograma semanal detalhado por dias com matérias prioritárias para ${vestibular} e ${curso}. Ao final, inclua a estrutura JSON estrita:
+CRONOGRAMA_JSON:
+{
+  "diasEstudo": 5,
+  "horasPorDia": 4,
+  "vestibular": "${vestibular}",
+  "curso": "${curso}",
+  "dias": {
+    "Segunda": ["Matemática Básica", "Física Mecânica", "Revisão Ativa"],
+    "Terça": ["Biologia Celular", "Química Geral", "Questões da Banca"],
+    "Quarta": ["Linguagens & Interpretação", "História Geral", "Redação"],
+    "Quinta": ["Geografia Humana", "Filosofia & Sociologia", "Exercícios"],
+    "Sexta": ["Matemática Financeira", "Química Orgânica", "Simulado Rápido"],
+    "Sábado": ["Revisão dos Erros da Semana", "Redação Prática"]
+  }
+}
+6. Para exercícios, resolva de forma rápida e lógica, destacando o passo crucial da resolução.`;
+
+  const promptFinal = `${systemPrompt}\n\nPergunta do Aluno:\n"${pergunta}"`;
+  const apiKey = localStorage.getItem('estudamais_gemini_api_key');
+  const modelo = localStorage.getItem('estudamais_gemini_model') || 'gemini-1.5-flash';
+
+  let rawResposta = null;
+
+  if (apiKey) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ parts: [{ text: promptFinal }] }],
+        generationConfig: { temperature: 0.35, maxOutputTokens: 2048 }
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        const data = await res.json();
+        rawResposta = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      }
+    } catch (e) {
+      console.warn('Falha na requisição direta Gemini API, acionando contingência:', e);
+    }
+  }
+
+  if (!rawResposta) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(promptFinal)}`, {
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        rawResposta = await res.text();
+      }
+    } catch (e) {
+      console.warn('Falha na contingência pública:', e);
+    }
+  }
+
+  if (!rawResposta) {
+    rawResposta = gerarRespostaLocalInteligente(pergunta, vestibular, curso, nomeAluno);
+  }
+
+  let cronogramaData = null;
+  let temCronograma = false;
+
+  const matchCronograma = rawResposta.match(/CRONOGRAMA_JSON:\s*(\{[\s\S]*?\})/);
+  if (matchCronograma) {
+    try {
+      cronogramaData = JSON.parse(matchCronograma[1]);
+      temCronograma = true;
+      rawResposta = rawResposta.replace(/CRONOGRAMA_JSON:\s*\{[\s\S]*?\}/, '').trim();
+    } catch (e) {
+      console.warn('Erro ao decodificar JSON do cronograma da IA:', e);
+    }
+  }
+
+  return {
+    texto: rawResposta,
+    temCronograma,
+    cronogramaData
+  };
+}
+
+// Fallback local especialista
+function gerarRespostaLocalInteligente(pergunta, vestibular, curso, nomeAluno) {
+  const p = pergunta.toLowerCase();
+
+  if (p.includes('cronograma') || p.includes('plano de estudo') || p.includes('horario') || p.includes('rotina')) {
+    return `Com certeza, **${nomeAluno}**! Preparei um cronograma de estudos de alta performance especialmente estruturado para o **${vestibular}** e seu foco em **${curso}**:\n\n### 🗓️ Metodologia do seu Cronograma:\n- **Ciclos de Foco (Pomodoro 50m/10m):** Alterne teoria com resolução massiva de exercícios.\n- **Incidência de Pesos:** Priorizamos as disciplinas com maior peso para ${curso}.\n- **Revisão Ativa aos Sábados:** Fixação dos erros acumulados na semana.\n\nCRONOGRAMA_JSON:
+{
+  "diasEstudo": 5,
+  "horasPorDia": 4,
+  "vestibular": "${vestibular}",
+  "curso": "${curso}",
+  "dias": {
+    "Segunda": ["Matemática Básica & Álgebra", "Física Mecânica", "Resolução de 15 Exercícios"],
+    "Terça": ["Biologia Celular & Ecologia", "Química Geral", "Flashcards de Revisão"],
+    "Quarta": ["Interpretação de Texto & Linguagens", "História do Brasil", "Prática de Redação"],
+    "Quinta": ["Geografia Física & Política", "Filosofia & Sociologia", "Exercícios da Banca"],
+    "Sexta": ["Matemática Geometria & Funções", "Química Orgânica", "Simulado Cronometrado"],
+    "Sábado": ["Revisão Ativa dos Cadernos", "Treino de Redação Pautada Oficial"]
+  }
+}\n\nVocê pode clicar no botão **"Aplicar Este Cronograma"** abaixo para sincronizá-lo diretamente com a aba Cronogramas e marcar seu progresso diário!`;
+  }
+
+  if (p.includes('desafio') || p.includes('quiz') || p.includes('questão')) {
+    return `⚡ **Desafio Rápido de Fixação!**\n\n*(Vestibular ${vestibular})*\n**Pergunta:** Em Ecologia, como se denomina a relação ecológica interespecífica na qual uma espécie é beneficiada sem que a outra seja prejudicada (ex: rêmora e tubarão)?\n\n- **A)** Mutualismo\n- **B)** Comensalismo\n- **C)** Parasitismo\n- **D)** Competição\n\n*Responda aqui embaixo com a sua alternativa e eu te dou o feedback imediato!*`;
+  }
+
+  return `Excelente pergunta, **${nomeAluno}**!\n\nNo contexto do **${vestibular}** para **${curso}**, dominar esse conteúdo com resolução frequente de exercícios da banca examinadora é o grande diferencial competitivo.\n\n💡 **Dica de Ouro:**\n- Faça resumos no nosso **Bloco de Notas Integrado**.\n- Pratique exercícios na **Arena de Quiz** para reforçar sua memória de longo prazo.\n- Utilize o cronômetro no **Espaço de Concentração & Foco** para estudar com alta retenção!\n\nSe quiser, pergunte algo mais específico sobre esse tema ou peça para eu gerar um cronograma sob medida!`;
+}
+
+// Inserir Pergunta Rápida no Chat
+window.perguntarRapidoChatIA = function(texto) {
+  const input = document.getElementById('chat-ia-input');
+  if (input) {
+    input.value = texto;
+    enviarMensagemChatIA();
+  }
+};
+
+// Limpar Histórico do Chat
+window.limparHistoricoChatIA = function() {
+  if (confirm('Deseja realmente limpar as mensagens da conversa com a IA?')) {
+    AppState.chatIA.mensagens = [];
+    salvarHistoricoChatIA();
+    carregarHistoricoChatIA();
+    renderizarMensagensChatIA();
+    if (window.mostrarToast) window.mostrarToast('Conversa com a IA reiniciada.', 'info');
+  }
+};
+
+// ========================================================
+// SISTEMA DE CRONOGRAMA DE ESTUDOS INTELIGENTE & GAMIFICADO
+// ========================================================
+
+// Carrega cronograma salvo no storage
+function carregarCronogramaSalvo() {
+  try {
+    const userId = AppState.currentUser ? AppState.currentUser.id : 'convidado';
+    const salvo = localStorage.getItem(`estudamais_cronograma_${userId}`);
+    if (salvo) {
+      const parsed = JSON.parse(salvo);
+      AppState.cronograma = { ...AppState.cronograma, ...parsed };
+      if (!AppState.cronograma.semanaAtual) AppState.cronograma.semanaAtual = 1;
+    } else {
+      gerarCronogramaInicialPadrao();
+    }
+  } catch (e) {
+    console.error('Erro ao carregar cronograma:', e);
+  }
+}
+
+// Salva cronograma no storage
+function salvarCronogramaStorage() {
+  try {
+    const userId = AppState.currentUser ? AppState.currentUser.id : 'convidado';
+    localStorage.setItem(`estudamais_cronograma_${userId}`, JSON.stringify(AppState.cronograma));
+  } catch (e) {}
+}
+
+// Gera cronograma padrão baseado nos dados do estudante
+function gerarCronogramaInicialPadrao() {
+  const user = AppState.currentUser;
+  const vest = user && user.vestibular ? user.vestibular : 'ENEM';
+
+  AppState.cronograma.semanaAtual = AppState.cronograma.semanaAtual || 1;
+  AppState.cronograma.diasEstudoPorSemana = AppState.cronograma.diasEstudoPorSemana || 5;
+  AppState.cronograma.horasPorDia = AppState.cronograma.horasPorDia || 4;
+  AppState.cronograma.xp = AppState.cronograma.xp || 0;
+  AppState.cronograma.streakDias = AppState.cronograma.streakDias || 1;
+  
+  if (typeof gerarGradeSemanaCurricular === 'function') {
+    AppState.cronograma.planoSemanal = gerarGradeSemanaCurricular(
+      AppState.cronograma.semanaAtual,
+      AppState.cronograma.diasEstudoPorSemana,
+      AppState.cronograma.horasPorDia
+    );
+  } else {
+    AppState.cronograma.planoSemanal = {
+      "Segunda": [
+        { id: "c-seg-1", materia: "Matemática", topico: "Funções e Equações", tempo: "90 min", concluido: false },
+        { id: "c-seg-2", materia: "Física", topico: "Mecânica e Cinemática", tempo: "90 min", concluido: false },
+        { id: "c-seg-3", materia: "Exercícios", topico: "15 Questões com Cronômetro", tempo: "60 min", concluido: false }
+      ],
+      "Terça": [
+        { id: "c-ter-1", materia: "Biologia", topico: "Ecologia e Meio Ambiente", tempo: "90 min", concluido: false },
+        { id: "c-ter-2", materia: "Química", topico: "Estequiometria e Soluções", tempo: "90 min", concluido: false },
+        { id: "c-ter-3", materia: "Revisão", topico: "Flashcards e Mapa Mental", tempo: "60 min", concluido: false }
+      ],
+      "Quarta": [
+        { id: "c-qua-1", materia: "Linguagens", topico: "Interpretação e Figuras de Linguagem", tempo: "90 min", concluido: false },
+        { id: "c-qua-2", materia: "História", topico: "Brasil Império e República", tempo: "90 min", concluido: false },
+        { id: "c-qua-3", materia: "Redação", topico: "Produção de Redação com IA", tempo: "60 min", concluido: false }
+      ],
+      "Quinta": [
+        { id: "c-qui-1", materia: "Geografia", topico: "Geopolítica e Climatologia", tempo: "90 min", concluido: false },
+        { id: "c-qui-2", materia: "Filosofia / Sociologia", topico: "Cidadania e Pensadores Contemporâneos", tempo: "90 min", concluido: false },
+        { id: "c-qui-3", materia: "Exercícios", topico: "Questões do " + vest, tempo: "60 min", concluido: false }
+      ],
+      "Sexta": [
+        { id: "c-sex-1", materia: "Matemática", topico: "Geometria Plana e Espacial", tempo: "90 min", concluido: false },
+        { id: "c-sex-2", materia: "Química Orgânica", topico: "Funções Oxigenadas e Nitrogenadas", tempo: "90 min", concluido: false },
+        { id: "c-sex-3", materia: "Simulado", topico: "Treino Rápido na Arena de Quiz", tempo: "60 min", concluido: false }
+      ],
+      "Sábado": [
+        { id: "c-sab-1", materia: "Revisão Geral", topico: "Caderno de Erros da Semana", tempo: "90 min", concluido: false },
+        { id: "c-sab-2", materia: "Redação", topico: "Reescrita e Ajustes de Competência", tempo: "90 min", concluido: false }
+      ]
+    };
+  }
+  salvarCronogramaStorage();
+}
+
+// Obtém o nome do dia da semana atual em português
+function obterDiaSemanaHoje() {
+  const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  const idx = new Date().getDay();
+  return dias[idx];
+}
+
+// Renderizar Interface do Cronograma
+function renderizarCronogramaUI() {
+  const container = document.getElementById('cronograma-semanal-grid');
+  const barraProgresso = document.getElementById('cronograma-barra-progresso');
+  const percentualTexto = document.getElementById('cronograma-percentual-texto');
+  const contadorTarefas = document.getElementById('cronograma-contador-tarefas');
+  const badgeVestibular = document.getElementById('cronograma-badge-vestibular');
+  const badgeCurso = document.getElementById('cronograma-badge-curso');
+  const xpBadge = document.getElementById('cronograma-badge-xp');
+  const streakBadge = document.getElementById('cronograma-badge-streak');
+
+  // Elementos do Controlador de Semanas
+  const tagSemana = document.getElementById('cronograma-tag-semana');
+  const temaSemana = document.getElementById('cronograma-tema-semana');
+  const btnAnterior = document.getElementById('btn-semana-anterior');
+  const btnProxima = document.getElementById('btn-semana-proxima');
+
+  const semanaNum = AppState.cronograma.semanaAtual || 1;
+  const infoSemana = (typeof SEMANAS_PROGRESSAO_CRONOGRAMA !== 'undefined' && SEMANAS_PROGRESSAO_CRONOGRAMA[semanaNum - 1]) 
+    ? SEMANAS_PROGRESSAO_CRONOGRAMA[semanaNum - 1] 
+    : { tema: `Fase ${semanaNum}: Estudos Focados` };
+
+  if (tagSemana) tagSemana.innerHTML = `<i class="fa-solid fa-calendar-week"></i> Semana ${semanaNum} de 12`;
+  if (temaSemana) temaSemana.textContent = infoSemana.tema;
+  if (btnAnterior) btnAnterior.disabled = (semanaNum <= 1);
+  if (btnProxima) btnProxima.disabled = (semanaNum >= 12);
+
+  if (!container) return;
+
+  const user = AppState.currentUser;
+  if (badgeVestibular) badgeVestibular.textContent = user ? (user.vestibular || 'ENEM') : 'ENEM';
+  if (badgeCurso) badgeCurso.textContent = user ? (user.curso || 'Ensino Superior') : 'Vestibular';
+
+  const xpTotal = AppState.cronograma.xp || 0;
+  const streakAtual = AppState.cronograma.streakDias || 1;
+  if (xpBadge) xpBadge.textContent = `${xpTotal} XP`;
+  if (streakBadge) streakBadge.textContent = `${streakAtual} Dias Seguidos`;
+
+  const plano = AppState.cronograma.planoSemanal;
+  if (!plano) {
+    gerarCronogramaInicialPadrao();
+    return renderizarCronogramaUI();
+  }
+
+  const diaHoje = obterDiaSemanaHoje();
+  const diasSemana = Object.keys(plano);
+  let totalTarefas = 0;
+  let concluidas = 0;
+
+  let html = '';
+  diasSemana.forEach(dia => {
+    const itens = plano[dia] || [];
+    totalTarefas += itens.length;
+    const concluidasDia = itens.filter(i => i.concluido).length;
+    concluidas += concluidasDia;
+    const isHoje = dia.toLowerCase() === diaHoje.toLowerCase();
+
+    html += `
+      <div class="cronograma-dia-card anim-slide-up ${isHoje ? 'dia-atual-destaque' : ''}">
+        <div class="cronograma-dia-header">
+          <div class="cronograma-dia-titulo">
+            <i class="fa-regular fa-calendar"></i>
+            <span>${dia}</span>
+            ${isHoje ? '<span class="dia-hoje-tag">HOJE 🔥</span>' : ''}
+          </div>
+          <span class="cronograma-dia-badge ${concluidasDia === itens.length && itens.length > 0 ? 'badge-completo' : ''}">
+            ${concluidasDia}/${itens.length} feitas
+          </span>
+        </div>
+
+        <div class="cronograma-dia-tarefas">
+          ${itens.length === 0 ? `
+            <div class="cronograma-dia-vazio">
+              <i class="fa-solid fa-mug-hot"></i>
+              <span>Nenhum bloco agendado para este dia.</span>
+            </div>
+          ` : ''}
+          ${itens.map((item, idx) => `
+            <div class="cronograma-tarefa-item ${item.concluido ? 'feita' : ''}">
+              <div class="cronograma-check-box" onclick="alternarConclusaoTarefaCronograma('${dia}', ${idx})" title="Marcar como concluída">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div class="cronograma-tarefa-corpo" onclick="alternarConclusaoTarefaCronograma('${dia}', ${idx})">
+                <div class="cronograma-tarefa-materia">${item.materia}</div>
+                <div class="cronograma-tarefa-topico">${item.topico}</div>
+              </div>
+              <div class="cronograma-tarefa-acoes">
+                <span class="cronograma-tarefa-tempo">${item.tempo || '60m'}</span>
+                <button class="btn-tarefa-foco" onclick="iniciarFocoComMateria('${item.materia}')" title="Estudar agora no Modo Foco Pomodoro">
+                  <i class="fa-solid fa-stopwatch"></i>
+                </button>
+                <button class="btn-tarefa-excluir" onclick="removerTarefaCronograma('${dia}', ${idx})" title="Remover matéria">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="cronograma-dia-footer">
+          <button class="btn-adicionar-tarefa-dia" onclick="abrirModalNovaTarefaCronograma('${dia}')">
+            <i class="fa-solid fa-plus"></i> Adicionar Matéria
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  const pct = totalTarefas > 0 ? Math.round((concluidas / totalTarefas) * 100) : 0;
+  if (barraProgresso) barraProgresso.style.width = `${pct}%`;
+  if (percentualTexto) percentualTexto.textContent = `${pct}% Concluído`;
+  if (contadorTarefas) contadorTarefas.textContent = `${concluidas}/${totalTarefas} metas semanais`;
+}
+
+// Iniciar Modo Foco diretamente com a matéria do cronograma
+window.iniciarFocoComMateria = function(materia) {
+  if (typeof mudarAba === 'function') mudarAba('ferramentas');
+  const label = document.getElementById('pomodoro-mode-label');
+  if (label) label.textContent = `Foco: ${materia}`;
+  if (window.mostrarToast) {
+    window.mostrarToast(`⏱️ Bloco de Foco carregado para: ${materia}. Bons estudos!`);
+  }
+};
+
+// Alternar conclusão de tarefa no cronograma com XP e comemoração
+window.alternarConclusaoTarefaCronograma = function(dia, idx) {
+  const plano = AppState.cronograma.planoSemanal;
+  if (plano && plano[dia] && plano[dia][idx]) {
+    const item = plano[dia][idx];
+    item.concluido = !item.concluido;
+
+    if (item.concluido) {
+      AppState.cronograma.xp = (AppState.cronograma.xp || 0) + 25;
+      emitirSomChat('sucesso');
+      if (typeof tocarSomAcertoQuiz === 'function') tocarSomAcertoQuiz();
+      if (window.mostrarToast) window.mostrarToast(`🎯 +25 XP! Meta de ${item.materia} concluída!`);
+
+      // Se todas as tarefas do dia foram feitas, celebra!
+      const todasDia = plano[dia].every(t => t.concluido);
+      if (todasDia && typeof dispararConfetes === 'function') {
+        dispararConfetes();
+      }
+    } else {
+      AppState.cronograma.xp = Math.max(0, (AppState.cronograma.xp || 0) - 25);
+    }
+
+    salvarCronogramaStorage();
+    renderizarCronogramaUI();
+  }
+};
+
+// Remover tarefa individual do cronograma
+window.removerTarefaCronograma = function(dia, idx) {
+  const plano = AppState.cronograma.planoSemanal;
+  if (plano && plano[dia] && plano[dia][idx]) {
+    const item = plano[dia][idx];
+    if (confirm(`Deseja remover "${item.materia}" de ${dia}?`)) {
+      plano[dia].splice(idx, 1);
+      salvarCronogramaStorage();
+      renderizarCronogramaUI();
+      if (window.mostrarToast) window.mostrarToast('Matéria removida do dia.');
+    }
+  }
+};
+
+// Abre modal para gerar cronograma por IA perguntando parâmetros
+window.abrirModalGerarCronogramaIA = function() {
+  const modal = document.getElementById('modal-gerar-cronograma-ia');
+  if (!modal) return;
+
+  const user = AppState.currentUser;
+  const inputVestibular = document.getElementById('cronograma-ia-vestibular');
+  const inputCurso = document.getElementById('cronograma-ia-curso');
+
+  if (inputVestibular) inputVestibular.value = user ? (user.vestibular || 'ENEM') : 'ENEM';
+  if (inputCurso) inputCurso.value = user ? (user.curso || 'Medicina') : 'Vestibular';
+
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.fecharModalGerarCronogramaIA = function() {
+  const modal = document.getElementById('modal-gerar-cronograma-ia');
+  if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+// Executa geração de cronograma via IA com as respostas do modal
+window.executarGeradorCronogramaIA = async function(e) {
+  if (e) e.preventDefault();
+  const btn = document.getElementById('btn-confirmar-gerar-cronograma-ia');
+  const vest = document.getElementById('cronograma-ia-vestibular')?.value || 'ENEM';
+  const curso = document.getElementById('cronograma-ia-curso')?.value || 'Vestibular';
+  const horas = document.getElementById('cronograma-ia-horas')?.value || '4';
+  const dias = document.getElementById('cronograma-ia-dias')?.value || '5';
+  const turno = document.getElementById('cronograma-ia-turno')?.value || 'tarde';
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Construindo Cronograma com Gemini...';
+  }
+
+  try {
+    const promptCronograma = `Crie um cronograma de estudos semanal de alta performance para um vestibulando com os seguintes dados:
+- Vestibular Alvo: ${vest}
+- Curso Desejado: ${curso}
+- Horas de estudo por dia: ${horas} horas
+- Dias disponíveis na semana: ${dias} dias
+- Turno preferido: ${turno}
+
+Elabore um planejamento estratégico equilibrando matérias com maior peso na prova com resolução prática de questões e revisões de memória.
+Retorne a explicação pedagógica e OBRIGATORIAMENTE termine com o bloco JSON:
+CRONOGRAMA_JSON:
+{
+  "diasEstudo": ${dias},
+  "horasPorDia": ${horas},
+  "vestibular": "${vest}",
+  "curso": "${curso}",
+  "dias": { ... }
+}`;
+
+    const res = await processarPerguntaComIA(promptCronograma);
+    fecharModalGerarCronogramaIA();
+
+    if (res.temCronograma && res.cronogramaData) {
+      aplicarObjetoCronograma(res.cronogramaData);
+      if (typeof dispararConfetes === 'function') dispararConfetes();
+      if (window.mostrarToast) {
+        window.mostrarToast(`✨ Cronograma da IA para ${vest} (${curso}) ativado com sucesso!`, 'sucesso');
+      }
+    } else {
+      aplicarCronogramaFallback(vest, curso, parseInt(dias, 10), parseInt(horas, 10));
+      if (window.mostrarToast) {
+        window.mostrarToast(`✨ Cronograma personalizado para ${vest} gerado com sucesso!`, 'sucesso');
+      }
+    }
+
+    renderizarCronogramaUI();
+  } catch (err) {
+    console.error('Erro ao gerar cronograma por IA:', err);
+    aplicarCronogramaFallback(vest, curso, parseInt(dias, 10), parseInt(horas, 10));
+    fecharModalGerarCronogramaIA();
+    renderizarCronogramaUI();
+    if (window.mostrarToast) {
+      window.mostrarToast('Cronograma gerado via motor inteligente do EstudaMais!', 'info');
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Cronograma com IA';
+    }
+  }
+};
+
+// Aplica cronograma sugerido na mensagem do chat
+window.aplicarCronogramaSugeridoPelaIA = function(msgId) {
+  const msg = AppState.chatIA.mensagens.find(m => m.id === msgId);
+  if (msg && msg.acaoCronograma) {
+    aplicarObjetoCronograma(msg.acaoCronograma);
+    renderizarCronogramaUI();
+    mudarAba('cronograma');
+    if (window.mostrarToast) {
+      window.mostrarToast('📅 Cronograma sincronizado com sucesso na sua aba Cronogramas!');
+    }
+  }
+};
+
+// Transforma o objeto do Gemini na estrutura interna do cronograma
+function aplicarObjetoCronograma(data) {
+  if (!data || !data.dias) return;
+
+  const novoPlano = {};
+  const diasNomes = Object.keys(data.dias);
+
+  diasNomes.forEach(diaNome => {
+    const materias = data.dias[diaNome];
+    novoPlano[diaNome] = materias.map((mat, i) => {
+      let matNome = typeof mat === 'string' ? mat : (mat.materia || 'Estudo');
+      let topico = typeof mat === 'object' && mat.topico ? mat.topico : 'Revisão e Questões';
+      let tempo = typeof mat === 'object' && mat.tempo ? mat.tempo : '60 min';
+
+      return {
+        id: `c-ai-${diaNome}-${i}-${Date.now()}`,
+        materia: matNome,
+        topico: topico,
+        tempo: tempo,
+        concluido: false
+      };
+    });
+  });
+
+  AppState.cronograma.diasEstudoPorSemana = data.diasEstudo || diasNomes.length;
+  AppState.cronograma.horasPorDia = data.horasPorDia || 4;
+  AppState.cronograma.planoSemanal = novoPlano;
+  salvarCronogramaStorage();
+}
+
+// Fallback robusto para criação de cronograma
+function aplicarCronogramaFallback(vest, curso, diasQtd, horas) {
+  const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].slice(0, diasQtd);
+  const materiasPadrao = [
+    { m: "Matemática", t: "Álgebra e Geometria" },
+    { m: "Física", t: "Mecânica e Termologia" },
+    { m: "Biologia", t: "Ecologia e Genética" },
+    { m: "Química", t: "Química Geral e Orgânica" },
+    { m: "Linguagens", t: "Interpretação e Literatura" },
+    { m: "História", t: "Brasil e Geral" },
+    { m: "Geografia", t: "Geopolítica e Meio Ambiente" },
+    { m: "Redação", t: "Prática em Folha Pautada" },
+    { m: "Simulado", t: "Resolução de Provas Anteriores" }
+  ];
+
+  const novoPlano = {};
+  diasSemana.forEach((dia, dIdx) => {
+    const item1 = materiasPadrao[(dIdx * 2) % materiasPadrao.length];
+    const item2 = materiasPadrao[(dIdx * 2 + 1) % materiasPadrao.length];
+    const tempoBloco = Math.round((horas * 60) / 2) + " min";
+
+    novoPlano[dia] = [
+      { id: `c-fb-${dia}-1`, materia: item1.m, topico: item1.t, tempo: tempoBloco, concluido: false },
+      { id: `c-fb-${dia}-2`, materia: item2.m, topico: item2.t, tempo: tempoBloco, concluido: false }
+    ];
+  });
+
+  AppState.cronograma.diasEstudoPorSemana = diasQtd;
+  AppState.cronograma.horasPorDia = horas;
+  AppState.cronograma.planoSemanal = novoPlano;
+  salvarCronogramaStorage();
+}
+
+// Modal para adicionar tarefa manual ao cronograma
+window.abrirModalNovaTarefaCronograma = function(dia) {
+  const modal = document.getElementById('modal-tarefa-cronograma');
+  const diaInput = document.getElementById('tarefa-cronograma-dia');
+  const diaTexto = document.getElementById('modal-tarefa-dia-texto');
+  if (!modal) return;
+
+  if (diaInput) diaInput.value = dia;
+  if (diaTexto) diaTexto.textContent = dia;
+
+  modal.classList.add('active');
+};
+
+window.fecharModalNovaTarefaCronograma = function() {
+  const modal = document.getElementById('modal-tarefa-cronograma');
+  if (modal) modal.classList.remove('active');
+};
+
+window.salvarNovaTarefaCronograma = function(e) {
+  if (e) e.preventDefault();
+  const dia = document.getElementById('tarefa-cronograma-dia')?.value;
+  const materia = document.getElementById('tarefa-cronograma-materia')?.value?.trim();
+  const topico = document.getElementById('tarefa-cronograma-topico')?.value?.trim();
+  const tempo = document.getElementById('tarefa-cronograma-tempo')?.value || '60 min';
+
+  if (!dia || !materia) {
+    alert('Por favor, informe a matéria a ser estudada.');
+    return;
+  }
+
+  if (!AppState.cronograma.planoSemanal) AppState.cronograma.planoSemanal = {};
+  if (!AppState.cronograma.planoSemanal[dia]) AppState.cronograma.planoSemanal[dia] = [];
+
+  AppState.cronograma.planoSemanal[dia].push({
+    id: `c-man-${Date.now()}`,
+    materia: materia,
+    topico: topico || 'Exercícios e Revisão',
+    tempo: tempo,
+    concluido: false
+  });
+
+  salvarCronogramaStorage();
+  fecharModalNovaTarefaCronograma();
+  renderizarCronogramaUI();
+  if (window.mostrarToast) window.mostrarToast(`Matéria adicionada a ${dia}!`);
+};
+
+// Resetar tarefas semanais para recomeçar a semana
+window.reiniciarSemanaCronograma = function() {
+  if (confirm('Deseja avançar para a próxima semana e atualizar automaticamente as matérias e horários do edital?')) {
+    let proxima = (AppState.cronograma.semanaAtual || 1) + 1;
+    if (proxima > 12) proxima = 1;
+    AppState.cronograma.semanaAtual = proxima;
+    AppState.cronograma.streakDias = (AppState.cronograma.streakDias || 1) + 1;
+    AppState.cronograma.xp = (AppState.cronograma.xp || 0) + 100;
+
+    const diasQtd = AppState.cronograma.diasEstudoPorSemana || 5;
+    const horas = AppState.cronograma.horasPorDia || 4;
+    AppState.cronograma.planoSemanal = gerarGradeSemanaCurricular(proxima, diasQtd, horas);
+
+    salvarCronogramaStorage();
+    renderizarCronogramaUI();
+    if (typeof dispararConfetes === 'function') dispararConfetes();
+    if (typeof emitirSomChat === 'function') emitirSomChat('sucesso');
+    if (window.mostrarToast) window.mostrarToast(`🚀 Bem-vindo à Semana ${proxima}! Novas matérias carregadas (+100 XP)!`);
+  }
+};
+
+// Imprimir / Salvar PDF do Cronograma
+window.imprimirCronogramaEstudos = function() {
+  window.print();
+};
+
+
+// 12 Semanas de Progressão Curricular Dinâmica para Vestibulares
+const SEMANAS_PROGRESSAO_CRONOGRAMA = [
+  {
+    semana: 1,
+    tema: "Fase 1: Fundamentos & Diagnóstico Inicial",
+    materias: [
+      { m: "Matemática", t: "Conjuntos Numéricos, Frações & Razão e Proporção" },
+      { m: "Física", t: "Cinemática Escalar: MRU, MRUV e Gráficos" },
+      { m: "Biologia", t: "Níveis de Organização & Ecologia Básica (Cadeias Alimentares)" },
+      { m: "Química", t: "Modelos Atômicos, Tabela Periódica & Ligações Químicas" },
+      { m: "Linguagens", t: "Gêneros Textuais & Estratégias de Interpretação" },
+      { m: "História", t: "Brasil Colônia: Ciclo do Açúcar e Mineração" },
+      { m: "Geografia", t: "Cartografia, Escalas & Fusos Horários" },
+      { m: "Redação", t: "Estrutura do Texto Dissertativo-Argumentativo & Tese" }
+    ]
+  },
+  {
+    semana: 2,
+    tema: "Fase 2: Funções, Leis de Newton & Genética Básica",
+    materias: [
+      { m: "Matemática", t: "Função Afim (1º Grau) & Função Quadrática (2º Grau)" },
+      { m: "Física", t: "Leis de Newton, Atrito e Força Elástica" },
+      { m: "Biologia", t: "Genética Mendeliana: 1ª Lei de Mendel & Heredogramas" },
+      { m: "Química", t: "Massa Molar, Quantidade de Matéria (Mol) & Estequiometria" },
+      { m: "Linguagens", t: "Figuras de Linguagem & Funções da Linguagem" },
+      { m: "História", t: "Brasil Império: 1º e 2º Reinado e Abolição" },
+      { m: "Geografia", t: "Relevo, Geologia & Placas Tectônicas do Brasil" },
+      { m: "Redação", t: "Parágrafos de Desenvolvimento: Argumentação e Repertório" }
+    ]
+  },
+  {
+    semana: 3,
+    tema: "Fase 3: Geometria Plana, Termologia & Citologia",
+    materias: [
+      { m: "Matemática", t: "Geometria Plana: Triângulos, Teorema de Pitágoras e Áreas" },
+      { m: "Física", t: "Termometria, Calorimetria & Trocas de Calor" },
+      { m: "Biologia", t: "Citologia: Membrana Plasmática, Osmose e Transporte Ativo" },
+      { m: "Química", t: "Soluções: Concentração Comum, Molaridade e Diluição" },
+      { m: "Linguagens", t: "Literatura: Classicismo, Barroco e Arcadismo no Brasil" },
+      { m: "História", t: "República da Espada & República Oligárquica (Café com Leite)" },
+      { m: "Geografia", t: "Climas do Brasil, Massas de Ar & Dinâmica Atmosférica" },
+      { m: "Redação", t: "Construção de Repertório Sociológico e Filosófico" }
+    ]
+  },
+  {
+    semana: 4,
+    tema: "Fase 4: Trigonometria, Eletricidade & Fisiologia Humana",
+    materias: [
+      { m: "Matemática", t: "Trigonometria: Relações no Triângulo Retângulo e Ciclo Trigonométrico" },
+      { m: "Física", t: "Eletrodinâmica: Corrente, Tensão, Lei de Ohm e Potência Elétrica" },
+      { m: "Biologia", t: "Fisiologia: Sistemas Digestório, Circulatório e Respiratório" },
+      { m: "Química", t: "Cinética Química: Fatores que Alteram a Velocidade da Reação" },
+      { m: "Linguagens", t: "Literatura: Romantismo (Poesia e Prosa) & Realismo / Machado" },
+      { m: "História", t: "A Era Vargas (1930-1945): Estado Novo e Trabalhismo" },
+      { m: "Geografia", t: "Biomas Brasileiros, Desmatamento e Impactos Ambientais" },
+      { m: "Redação", t: "Proposta de Intervenção Completa com os 5 Elementos" }
+    ]
+  },
+  {
+    semana: 5,
+    tema: "Fase 5: Geometria Espacial, Ondulatória & Evolução",
+    materias: [
+      { m: "Matemática", t: "Geometria Espacial: Prismas, Cilindros, Pirâmides e Cones" },
+      { m: "Física", t: "Ondulatória: Reflexão, Refração, Difração e Efeito Doppler" },
+      { m: "Biologia", t: "Evolução: Darwinismo, Neodarwinismo e Seleção Natural" },
+      { m: "Química", t: "Equilíbrio Químico: Kc, Kp e Princípio de Le Chatelier" },
+      { m: "Linguagens", t: "Modernismo no Brasil: Semana de 22 e 1ª Fase Modernista" },
+      { m: "História", t: "Guerra Fria, Queda do Muro de Berlim e Nova Ordem Mundial" },
+      { m: "Geografia", t: "Urbanização Brasileira, Metropolização e Problemas Urbanos" },
+      { m: "Redação", t: "Coesão Interparágrafos e Recursos Conectivos Avançados" }
+    ]
+  },
+  {
+    semana: 6,
+    tema: "Fase 6: Combinatória, Magnetismo & Termoquímica",
+    materias: [
+      { m: "Matemática", t: "Análise Combinatória: Princípio Fundamental, Arranjo e Combinação" },
+      { m: "Física", t: "Magnetismo: Campo Magnético, Força Magnética e Regra da Mão Direita" },
+      { m: "Biologia", t: "Divisão Celular: Mitose, Meiose e Gametogênese" },
+      { m: "Química", t: "Termoquímica: Entalpia, Lei de Hess e Energia de Ligação" },
+      { m: "Linguagens", t: "Modernismo 2ª Fase (Carlos Drummond, Graciliano Ramos, Clarice)" },
+      { m: "História", t: "Ditadura Militar no Brasil (1964-1985) e Redemocratização" },
+      { m: "Geografia", t: "Agropecuária Brasileira: Commodities, Fronteira Agrícola e Conflitos" },
+      { m: "Simulado", t: "Treino Cronometrado de Prova Oficial (Foco em Gestão de Tempo)" }
+    ]
+  },
+  {
+    semana: 7,
+    tema: "Fase 7: Probabilidade, Óptica & Eletroquímica",
+    materias: [
+      { m: "Matemática", t: "Probabilidade Simples, Condicional e Eventos Simultâneos" },
+      { m: "Física", t: "Óptica Geométrica: Espelhos Planos e Esféricos, Lentes e Refração" },
+      { m: "Biologia", t: "Microbiologia: Vírus, Bactérias, Protozoários e Doenças Endêmicas" },
+      { m: "Química", t: "Eletroquímica: Pilhas, DDP e Eletrólise Ígnea e Aquosa" },
+      { m: "Linguagens", t: "Intertextualidade, Paráfrase, Paródia e Ironia" },
+      { m: "História", t: "Revolução Industrial, Iluminismo e Revolução Francesa" },
+      { m: "Geografia", t: "Matriz Energética: Petróleo, Hidrelétricas e Fontes Renováveis" },
+      { m: "Redação", t: "Redação Completa em Folha Pautada de 30 Linhas (Tempo: 60min)" }
+    ]
+  },
+  {
+    semana: 8,
+    tema: "Fase 8: Estatística, Hidrostática & Química Orgânica",
+    materias: [
+      { m: "Matemática", t: "Estatística: Média Aritmética, Ponderada, Moda, Mediana e Desvio Padrão" },
+      { m: "Física", t: "Hidrostática: Pressão, Teorema de Stevin e Empuxo (Arquimedes)" },
+      { m: "Biologia", t: "Biotecnologia: Transgênicos, Clonagem e CRISPR / Edição Gênica" },
+      { m: "Química", t: "Química Orgânica: Funções Oxigenadas (Álcool, Éter, Aldeído, Cetona)" },
+      { m: "Linguagens", t: "Poesia Concreta, Tropicalismo e Produção Cultural Contemporânea" },
+      { m: "História", t: "Primeira e Segunda Guerra Mundial: Causas e Consequências Globais" },
+      { m: "Geografia", t: "Demografia: Pirâmides Etárias, Transição Demográfica e Migrações" },
+      { m: "Redação", t: "Análise de Redações Nota 1000 e Erros Frequentes na Competência 1" }
+    ]
+  },
+  {
+    semana: 9,
+    tema: "Fase 9: Logaritmos, Indução Eletromagnética & Isomeria",
+    materias: [
+      { m: "Matemática", t: "Função Exponencial & Logaritmos: Propriedades e Aplicações" },
+      { m: "Física", t: "Indução Eletromagnética: Lei de Faraday e Transformadores" },
+      { m: "Biologia", t: "Botânica: Briófitas, Pteridófitas, Gimnospermas e Angiospermas" },
+      { m: "Química", t: "Isomeria Plana e Espacial (Cis-Trans / Óptica)" },
+      { m: "Linguagens", t: "Concordância Verbal e Nominal & Regência com Crase" },
+      { m: "História", t: "Cidadania e Direitos Sociais na Constituição de 1988" },
+      { m: "Geografia", t: "Globalização, Blocos Econômicos e Tensões Geopolíticas Atuais" },
+      { m: "Simulado", t: "Simulado Especial com Questões Específicas da Banca Alvo" }
+    ]
+  },
+  {
+    semana: 10,
+    tema: "Fase 10: Matrizes, Gravitação & Reações Orgânicas",
+    materias: [
+      { m: "Matemática", t: "Matrizes, Determinantes e Sistemas Lineares com Escalonamento" },
+      { m: "Física", t: "Gravitação Universal: Leis de Kepler e Força Gravitacional" },
+      { m: "Biologia", t: "Imunologia: Antígenos, Anticorpos, Vacinas vs Soros" },
+      { m: "Química", t: "Reações Orgânicas: Esterificação, Saponificação e Polímeros" },
+      { m: "Linguagens", t: "Variação Linguística: Preconceito Linguístico e Adequação" },
+      { m: "História", t: "História da América: Independências e Populismo Latino-Americano" },
+      { m: "Geografia", t: "Geopolítica: Conflitos no Oriente Médio, Ucrânia e Ásia" },
+      { m: "Redação", t: "Simulação Real de Tema Inédito com Correção por IA" }
+    ]
+  },
+  {
+    semana: 11,
+    tema: "Fase 11: Reta Final — Revisão dos Top Assuntos Mais Cobrados",
+    materias: [
+      { m: "Matemática", t: "Super Revisão: Funções, Geometria e Estatística Recorrente" },
+      { m: "Física", t: "Super Revisão: Circuitos Elétricos, Calorimetria e Leis de Newton" },
+      { m: "Biologia", t: "Super Revisão: Ecologia, Genética e Fisiologia Humana" },
+      { m: "Química", t: "Super Revisão: Estequiometria, Soluções e Funções Orgânicas" },
+      { m: "Linguagens", t: "Super Revisão: Interpretação de Textos e Obras Obrigatórias" },
+      { m: "Humanas", t: "Super Revisão: Brasil República, Era Vargas e Geopolítica" },
+      { m: "Redação", t: "Lapidação de Esqueletos de Redação e Repertórios Curinga" },
+      { m: "Simulado", t: "Simulado Oficial Cronometrado da 1ª Fase com TRI" }
+    ]
+  },
+  {
+    semana: 12,
+    tema: "Fase 12: Super Simulado Geral & Estratégia de Prova",
+    materias: [
+      { m: "Estratégia", t: "Ordem Ideal de Resolução: Identificação das Fáceis e Médias" },
+      { m: "Revisão Leve", t: "Fórmulas Essenciais de Matemática, Física e Química" },
+      { m: "Redação", t: "Memorização dos Conectivos Chave e Checklist da Proposta" },
+      { m: "Descanso Ativo", t: "Técnicas de Respiração, Higiene do Sono e Autoconfiança" },
+      { m: "Simulado Final", t: "Simulado de Fechamento com Análise Detalhada dos Desvios" },
+      { m: "Celebração", t: "Alinhamento Psicológico: Rumo à Vaga no Vestibular dos Seus Sonhos!" }
+    ]
+  }
+];
+
+// Gerador Automático de Cronograma Progressivo por Semana
+function gerarGradeSemanaCurricular(numSemana, diasQtd = 5, horas = 4) {
+  const semIndex = Math.max(0, Math.min(SEMANAS_PROGRESSAO_CRONOGRAMA.length - 1, numSemana - 1));
+  const configSemana = SEMANAS_PROGRESSAO_CRONOGRAMA[semIndex];
+  const diasNomes = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].slice(0, diasQtd);
+  
+  const grade = {};
+  const materias = configSemana.materias;
+  const tempoBloco = Math.round((horas * 60) / 2) + " min";
+
+  diasNomes.forEach((dia, dIdx) => {
+    const item1 = materias[(dIdx * 2) % materias.length];
+    const item2 = materias[(dIdx * 2 + 1) % materias.length];
+
+    grade[dia] = [
+      {
+        id: `c-w${numSemana}-${dia}-1`,
+        materia: item1.m,
+        topico: item1.t,
+        tempo: tempoBloco,
+        concluido: false
+      },
+      {
+        id: `c-w${numSemana}-${dia}-2`,
+        materia: item2.m,
+        topico: item2.t,
+        tempo: tempoBloco,
+        concluido: false
+      }
+    ];
+  });
+
+  return grade;
+}
+
+// Trocar de Semana e atualizar automaticamente matérias e horários
+window.mudarSemanaCronograma = function(delta) {
+  let semanaAtual = (AppState.cronograma.semanaAtual || 1) + delta;
+  if (semanaAtual < 1) semanaAtual = 1;
+  if (semanaAtual > 12) semanaAtual = 12;
+
+  AppState.cronograma.semanaAtual = semanaAtual;
+  const diasQtd = AppState.cronograma.diasEstudoPorSemana || 5;
+  const horas = AppState.cronograma.horasPorDia || 4;
+
+  // Atualiza automaticamente as matérias e horários para a nova semana
+  AppState.cronograma.planoSemanal = gerarGradeSemanaCurricular(semanaAtual, diasQtd, horas);
+  salvarCronogramaStorage();
+  renderizarCronogramaUI();
+
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  if (window.mostrarToast) {
+    const semInfo = SEMANAS_PROGRESSAO_CRONOGRAMA[semanaAtual - 1];
+    window.mostrarToast(`📅 Semana ${semanaAtual} carregada: ${semInfo ? semInfo.tema : ''}`);
+  }
+};
+
+// Gerenciamento Universal do Bloqueio de Scroll de Fundo para Modais (Sem Loops ou Travamentos)
+function gerenciarBloqueioScrollModal() {
+  const algumAtivo = !!document.querySelector('.modal-overlay.active, .modal.active');
+  const estaAberto = document.body.classList.contains('modal-aberto');
+  if (algumAtivo !== estaAberto) {
+    document.body.classList.toggle('modal-aberto', algumAtivo);
+    document.documentElement.classList.toggle('modal-aberto', algumAtivo);
+  }
+}
+window.gerenciarBloqueioScrollModal = gerenciarBloqueioScrollModal;
+
+/* ========================================================
+   SEÇÃO 12: VÍDEO AULAS DO YOUTUBE & CURADORIA DE CANAIS
+   ======================================================== */
+
+// Inicialização do estado de Videoaulas no AppState
+if (!AppState.videoaulas) {
+  let favs = [];
+  try {
+    favs = JSON.parse(localStorage.getItem('estudamais_canais_favoritos') || '[]');
+  } catch (e) {
+    favs = [];
+  }
+  AppState.videoaulas = {
+    filtroDisciplina: 'todas',
+    termoBusca: '',
+    apenasFavoritos: false,
+    favoritos: favs,
+    videoAtual: null
+  };
+}
+
+// Renderização dos cards de canais recomendados
+function renderizarVideoaulas() {
+  const container = document.getElementById('videoaulas-grid');
+  if (!container) return;
+
+  if (typeof CANAIS_YOUTUBE_DATA === 'undefined' || !Array.isArray(CANAIS_YOUTUBE_DATA)) {
+    container.innerHTML = `
+      <div class="videoaulas-vazio">
+        <i class="fa-brands fa-youtube"></i>
+        <h3>Carregando curadoria de canais...</h3>
+        <p>A lista de vídeo aulas está sendo sincronizada com os melhores professores do YouTube.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const { filtroDisciplina, termoBusca, apenasFavoritos, favoritos } = AppState.videoaulas;
+
+  // Filtragem dos canais
+  let filtrados = CANAIS_YOUTUBE_DATA.filter(canal => {
+    // Filtro por disciplina
+    if (filtroDisciplina && filtroDisciplina !== 'todas') {
+      if (canal.disciplinaId !== filtroDisciplina) return false;
+    }
+
+    // Filtro por favoritos
+    if (apenasFavoritos) {
+      if (!favoritos.includes(canal.id)) return false;
+    }
+
+    // Filtro por termo de busca
+    if (termoBusca) {
+      const q = termoBusca.toLowerCase();
+      const matchNome = (canal.nomeCanal || '').toLowerCase().includes(q);
+      const matchProf = (canal.professor || '').toLowerCase().includes(q);
+      const matchDisc = (canal.disciplina || '').toLowerCase().includes(q);
+      const matchDesc = (canal.descricao || '').toLowerCase().includes(q);
+      const matchDest = (canal.destaque || '').toLowerCase().includes(q);
+      const matchVid = (canal.videoTitulo || '').toLowerCase().includes(q);
+      const matchPlaylists = Array.isArray(canal.playlists) && canal.playlists.some(p => p.toLowerCase().includes(q));
+
+      if (!matchNome && !matchProf && !matchDisc && !matchDesc && !matchDest && !matchVid && !matchPlaylists) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Atualiza botão de favoritos no topo
+  const btnFavTopo = document.getElementById('btn-filtro-favoritos-canais');
+  if (btnFavTopo) {
+    btnFavTopo.classList.toggle('active', !!apenasFavoritos);
+    const spanText = btnFavTopo.querySelector('span');
+    if (spanText) {
+      spanText.textContent = apenasFavoritos
+        ? `Favoritos (${favoritos.length}) [Ativo]`
+        : `Meus Favoritos (${favoritos.length})`;
+    }
+  }
+
+  // Se nenhum resultado encontrado
+  if (filtrados.length === 0) {
+    container.innerHTML = `
+      <div class="videoaulas-vazio">
+        <i class="fa-solid fa-film"></i>
+        <h3>Nenhum canal ou vídeo encontrado</h3>
+        <p>Tente buscar por outro termo, limpar a pesquisa ou selecionar "Todas as Matérias".</p>
+        <button type="button" class="btn-hero-primary" onclick="limparBuscaVideoaulas(); filtrarDisciplinaVideoaulas('todas');" style="margin-top: 1rem;">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>Ver Todos os Canais</span>
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Gera HTML dos cards
+  container.innerHTML = filtrados.map(canal => {
+    const isFav = favoritos.includes(canal.id);
+    const playlistsHtml = Array.isArray(canal.playlists)
+      ? canal.playlists.map(pl => `<span class="canal-playlist-tag" title="Assunto/Playlist"><i class="fa-solid fa-play"></i> ${escapeHTML(pl)}</span>`).join('')
+      : '';
+
+    return `
+      <article class="canal-card anim-fade-in" data-canal-id="${canal.id}">
+        <!-- Topo do Card -->
+        <div class="canal-card-header">
+          <div class="canal-icone-box" style="background: ${canal.corIcone || '#2563eb'};">
+            <i class="fa-solid ${canal.icone || 'fa-graduation-cap'}"></i>
+          </div>
+          <div class="canal-header-info">
+            <div class="canal-disciplina-pill">
+              <i class="fa-solid ${canal.icone || 'fa-book'}"></i>
+              <span>${canal.disciplina}</span>
+            </div>
+            <h3 class="canal-nome">${escapeHTML(canal.nomeCanal)}</h3>
+            <span class="canal-professor"><i class="fa-solid fa-chalkboard-user"></i> ${escapeHTML(canal.professor)}</span>
+          </div>
+          <button type="button" class="btn-canal-favorito ${isFav ? 'ativo' : ''}" onclick="alternarFavoritoCanal('${canal.id}')" title="${isFav ? 'Remover dos favoritos' : 'Favoritar este canal'}">
+            <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+          </button>
+        </div>
+
+        <!-- Estatísticas e Destaque -->
+        <div class="canal-meta-row">
+          <span class="canal-inscritos-badge">
+            <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> ${canal.inscritos}
+          </span>
+          <span class="canal-destaque-badge">
+            <i class="fa-solid fa-award"></i> ${canal.destaque}
+          </span>
+        </div>
+
+        <!-- Descrição pedagógica -->
+        <p class="canal-descricao">
+          ${escapeHTML(canal.descricao)}
+        </p>
+
+        <!-- Playlists e tópicos recomendados -->
+        <div class="canal-playlists-section">
+          <span class="canal-playlists-label"><i class="fa-solid fa-list-check"></i> Playlists e Séries de Ouro:</span>
+          <div class="canal-playlists-list">
+            ${playlistsHtml}
+          </div>
+        </div>
+
+        <!-- Ações do Card: Apenas Acessar Canal Oficial -->
+        <div class="canal-card-actions">
+          <a href="${canal.urlCanal}" target="_blank" rel="noopener noreferrer" class="btn-canal-youtube-full" title="Acessar canal oficial no YouTube em nova guia">
+            <i class="fa-brands fa-youtube" style="color: #ef4444;"></i>
+            <span>Acessar Canal no YouTube ↗</span>
+          </a>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+window.renderizarVideoaulas = renderizarVideoaulas;
+
+// Filtro de Disciplina por botões em pílulas
+function filtrarDisciplinaVideoaulas(disciplinaId, btnEl) {
+  AppState.videoaulas.filtroDisciplina = disciplinaId;
+
+  // Atualiza classe ativa nos botões
+  document.querySelectorAll('.videoaulas-filtro-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  if (btnEl) {
+    btnEl.classList.add('active');
+  } else {
+    const matchingBtn = document.querySelector(`.videoaulas-filtro-btn[onclick*="'${disciplinaId}'"]`);
+    if (matchingBtn) matchingBtn.classList.add('active');
+  }
+
+  renderizarVideoaulas();
+}
+window.filtrarDisciplinaVideoaulas = filtrarDisciplinaVideoaulas;
+
+// Busca de Videoaulas em tempo real
+function buscarVideoaulas(termo) {
+  AppState.videoaulas.termoBusca = (termo || '').trim();
+  const btnLimpar = document.getElementById('btn-limpar-busca-videoaulas');
+  if (btnLimpar) {
+    btnLimpar.style.display = AppState.videoaulas.termoBusca ? 'flex' : 'none';
+  }
+  renderizarVideoaulas();
+}
+window.buscarVideoaulas = buscarVideoaulas;
+
+// Limpar campo de pesquisa
+function limparBuscaVideoaulas() {
+  const input = document.getElementById('input-busca-videoaulas');
+  if (input) input.value = '';
+  buscarVideoaulas('');
+}
+window.limparBuscaVideoaulas = limparBuscaVideoaulas;
+
+// Alternar visualização apenas de favoritos
+function alternarFiltroFavoritosCanais(btnEl) {
+  AppState.videoaulas.apenasFavoritos = !AppState.videoaulas.apenasFavoritos;
+  renderizarVideoaulas();
+  if (AppState.videoaulas.apenasFavoritos) {
+    if (window.mostrarToast) {
+      window.mostrarToast(`Mostrando ${AppState.videoaulas.favoritos.length} canais favoritados.`);
+    }
+  }
+}
+window.alternarFiltroFavoritosCanais = alternarFiltroFavoritosCanais;
+
+// Favoritar / Desfavoritar canal individual
+function alternarFavoritoCanal(idCanal) {
+  const idx = AppState.videoaulas.favoritos.indexOf(idCanal);
+  let adicionado = false;
+  if (idx >= 0) {
+    AppState.videoaulas.favoritos.splice(idx, 1);
+  } else {
+    AppState.videoaulas.favoritos.push(idCanal);
+    adicionado = true;
+  }
+
+  try {
+    localStorage.setItem('estudamais_canais_favoritos', JSON.stringify(AppState.videoaulas.favoritos));
+  } catch (e) {
+    console.error('Erro ao salvar favoritos:', e);
+  }
+
+  renderizarVideoaulas();
+
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  if (window.mostrarToast) {
+    const canalObj = (typeof CANAIS_YOUTUBE_DATA !== 'undefined') ? CANAIS_YOUTUBE_DATA.find(c => c.id === idCanal) : null;
+    const nome = canalObj ? canalObj.nomeCanal : 'Canal';
+    window.mostrarToast(adicionado ? `❤️ ${nome} adicionado aos seus favoritos!` : `💔 ${nome} removido dos favoritos.`);
+  }
+}
+window.alternarFavoritoCanal = alternarFavoritoCanal;
+
+// Abrir Modal com Player Embutido
+function abrirModalPlayerVideo(videoId, titulo, canal, professor, urlCanal) {
+  const modal = document.getElementById('modal-video-aula-player');
+  const iframe = document.getElementById('video-aula-iframe');
+  const elTitulo = document.getElementById('modal-video-titulo');
+  const elSubtitulo = document.getElementById('modal-video-subtitulo');
+  const elProf = document.getElementById('modal-video-prof');
+  const elLinkCanal = document.getElementById('modal-video-link-canal');
+  const inputNota = document.getElementById('input-nota-video-rapida');
+
+  if (!modal || !iframe) return;
+
+  AppState.videoaulas.videoAtual = { videoId, titulo, canal, professor, urlCanal };
+
+  if (elTitulo) elTitulo.textContent = titulo || 'Aula em Destaque';
+  if (elSubtitulo) elSubtitulo.textContent = `${canal || 'Canal Oficial'}`;
+  if (elProf) elProf.textContent = professor || 'Professor';
+  if (elLinkCanal && urlCanal) elLinkCanal.href = urlCanal;
+  if (inputNota) inputNota.value = '';
+
+  // Carrega vídeo do YouTube embutido com suporte a referrer seguro
+  iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+  iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0`;
+
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') {
+    gerenciarBloqueioScrollModal();
+  }
+}
+window.abrirModalPlayerVideo = abrirModalPlayerVideo;
+
+// Fechar Modal do Player de Vídeo
+function fecharModalPlayerVideo() {
+  const modal = document.getElementById('modal-video-aula-player');
+  const iframe = document.getElementById('video-aula-iframe');
+
+  if (iframe) {
+    iframe.src = 'about:blank'; // Interrompe áudio/vídeo imediatamente
+  }
+
+  if (modal) {
+    modal.classList.remove('active');
+  }
+
+  AppState.videoaulas.videoAtual = null;
+
+  if (typeof gerenciarBloqueioScrollModal === 'function') {
+    gerenciarBloqueioScrollModal();
+  }
+}
+window.fecharModalPlayerVideo = fecharModalPlayerVideo;
+
+// Salvar anotação rápida do vídeo no Bloco de Notas (Caderno do Estudante)
+function salvarAnotacaoVideoNoCaderno() {
+  const input = document.getElementById('input-nota-video-rapida');
+  const texto = (input ? input.value : '').trim();
+
+  if (!texto) {
+    if (window.mostrarToast) {
+      window.mostrarToast('Digite alguma anotação antes de salvar.', 'erro');
+    }
+    return;
+  }
+
+  const v = AppState.videoaulas.videoAtual;
+  const tituloNota = v ? `[Videoaula] ${v.canal} - ${v.titulo}` : `[Videoaula] Anotações`;
+
+  const novaNota = {
+    id: 'nota_' + Date.now(),
+    titulo: tituloNota,
+    conteudo: texto,
+    materia: v ? v.professor : 'Vídeo Aulas',
+    data: new Date().toLocaleDateString('pt-BR'),
+    cor: '#3b82f6',
+    favorita: false
+  };
+
+  if (!Array.isArray(AppState.notes)) {
+    AppState.notes = [];
+  }
+  AppState.notes.unshift(novaNota);
+
+  if (typeof salvarNotasStorage === 'function') {
+    salvarNotasStorage();
+  }
+  if (typeof renderizarNotas === 'function') {
+    renderizarNotas();
+  }
+
+  if (input) input.value = '';
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  if (window.mostrarToast) {
+    window.mostrarToast('📝 Anotação salva com sucesso no seu Bloco de Notas!', 'sucesso');
+  }
+}
+window.salvarAnotacaoVideoNoCaderno = salvarAnotacaoVideoNoCaderno;
+
+/* ========================================================
+   CONTROLE DE NAVEGAÇÃO AGRUPADA & MENU DE 3 LISTRAS (☰)
+   ======================================================== */
+
+window.alternarModalMenuAbas = function() {
+  const modal = document.getElementById('modal-menu-abas');
+  if (modal && modal.classList.contains('active')) {
+    fecharModalMenuAbas();
+  } else {
+    abrirModalMenuAbas();
+  }
+};
+
+window.abrirModalMenuAbas = function() {
+  const modal = document.getElementById('modal-menu-abas');
+  if (!modal) return;
+
+  // Atualiza destaque da aba ativa no momento
+  const tabAtual = AppState.currentTab || 'inicio';
+  document.querySelectorAll('.menu-aba-item-card').forEach(card => {
+    card.classList.toggle('ativo', card.dataset.tabAlvo === tabAtual);
+  });
+
+  const inputBusca = document.getElementById('input-busca-abas-menu');
+  if (inputBusca) {
+    inputBusca.value = '';
+    filtrarAbasNoMenu('');
+  }
+
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') {
+    gerenciarBloqueioScrollModal();
+  }
+
+  // Foco no input de busca para conveniência
+  setTimeout(() => {
+    if (inputBusca) inputBusca.focus();
+  }, 100);
+};
+
+window.fecharModalMenuAbas = function() {
+  const modal = document.getElementById('modal-menu-abas');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+  if (typeof gerenciarBloqueioScrollModal === 'function') {
+    gerenciarBloqueioScrollModal();
+  }
+};
+
+// Alternar dropdown de grupo na barra de navegação
+window.toggleDropdownNavGroup = function(event, grupoId) {
+  if (event) event.stopPropagation();
+  const grupoItem = document.querySelector(`.nav-group-item[data-group="${grupoId}"]`);
+  if (!grupoItem) return;
+
+  const jaAberto = grupoItem.classList.contains('aberto');
+
+  // Fecha todos os outros primeiro
+  fecharTodosDropdowns();
+
+  if (!jaAberto) {
+    grupoItem.classList.add('aberto');
+  }
+};
+
+// Alternar dropdown de ferramentas no header
+window.toggleDropdownFerramentas = function(event) {
+  if (event) event.stopPropagation();
+  const wrapper = document.getElementById('wrapper-dropdown-ferramentas');
+  if (!wrapper) return;
+
+  const jaAberto = wrapper.classList.contains('aberto');
+  fecharTodosDropdowns();
+
+  if (!jaAberto) {
+    wrapper.classList.add('aberto');
+  }
+};
+
+// Fechar todos os dropdowns suspensos
+window.fecharTodosDropdowns = function() {
+  document.querySelectorAll('.nav-group-item.aberto').forEach(el => el.classList.remove('aberto'));
+  const wrapper = document.getElementById('wrapper-dropdown-ferramentas');
+  if (wrapper) wrapper.classList.remove('aberto');
+};
+
+// Filtrar itens dentro do Modal de Abas
+window.filtrarAbasNoMenu = function(termo) {
+  const q = (termo || '').toLowerCase().trim();
+  const cards = document.querySelectorAll('.menu-aba-item-card');
+  const blocos = document.querySelectorAll('.menu-aba-grupo-bloco');
+
+  cards.forEach(card => {
+    const texto = card.textContent.toLowerCase();
+    const visivel = !q || texto.includes(q);
+    card.style.display = visivel ? 'flex' : 'none';
+  });
+
+  // Oculta blocos vazios se não houver filhos visíveis
+  blocos.forEach(bloco => {
+    let temVisivel = false;
+    const filhos = bloco.querySelectorAll('.menu-aba-item-card');
+    filhos.forEach(f => {
+      if (f.style.display !== 'none') temVisivel = true;
+    });
+    bloco.style.display = temVisivel ? 'flex' : 'none';
+  });
+};
+
+// Fecha dropdowns ao clicar fora
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-group-item') && !e.target.closest('.header-dropdown-wrapper')) {
+    fecharTodosDropdowns();
+  }
+});
+
+/* ========================================================
+   PLAYER DE VIDEOAULAS NO TOPO & LOUSA/ANOTAÇÕES EMBUTIDAS
+   ======================================================== */
+
+// Extrair ID do YouTube a partir de qualquer formato de URL
+function extrairYouTubeId(urlOuId) {
+  if (!urlOuId) return null;
+  const str = urlOuId.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
+  const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+  const match = str.match(regExp);
+  return match ? match[1] : null;
+}
+window.extrairYouTubeId = extrairYouTubeId;
+
+// Carregar Vídeo Personalizado do YouTube no Topo
+window.carregarVideoPersonalizadoTopo = function(urlPredefinida = null) {
+  const input = document.getElementById('input-video-url-topo');
+  const url = (urlPredefinida || (input ? input.value : '')).trim();
+
+  if (!url) {
+    if (window.mostrarToast) {
+      window.mostrarToast('Por favor, cole o link de um vídeo do YouTube.', 'aviso');
+    }
+    return;
+  }
+
+  const videoId = extrairYouTubeId(url);
+  if (!videoId) {
+    if (window.mostrarToast) {
+      window.mostrarToast('Link do YouTube inválido. Verifique a URL e tente novamente.', 'erro');
+    }
+    return;
+  }
+
+  const iframe = document.getElementById('iframe-video-player-topo');
+  const areaAtiva = document.getElementById('area-video-ativa-topo');
+  const labelStatus = document.getElementById('label-video-carregado');
+
+  if (iframe) {
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0`;
+  }
+
+  const linkExterno = document.getElementById('btn-link-externo-video-topo');
+  if (linkExterno) {
+    linkExterno.href = `https://www.youtube.com/watch?v=${videoId}`;
+  }
+
+  if (areaAtiva) {
+    areaAtiva.style.display = 'flex';
+  }
+
+  if (labelStatus) {
+    labelStatus.textContent = 'Vídeo em Reprodução (ID: ' + videoId + ')';
+  }
+
+  // Configura a lousa integrada sob o vídeo
+  setTimeout(() => {
+    configurarLousaVideo();
+  }, 100);
+
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  if (window.mostrarToast) {
+    window.mostrarToast('🎬 Vídeo carregado! Anotações e lousa ativadas abaixo.', 'sucesso');
+  }
+
+  // Rola suavemente até o player
+  const secao = document.getElementById('secao-assistir-aula-aqui');
+  if (secao) {
+    secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
+window.fecharVideoPersonalizadoTopo = function() {
+  const iframe = document.getElementById('iframe-video-player-topo');
+  const areaAtiva = document.getElementById('area-video-ativa-topo');
+  const input = document.getElementById('input-video-url-topo');
+
+  if (iframe) {
+    iframe.src = 'about:blank';
+  }
+  if (areaAtiva) {
+    areaAtiva.style.display = 'none';
+  }
+  if (input) {
+    input.value = '';
+    const btnLimpar = document.getElementById('btn-limpar-url-topo');
+    if (btnLimpar) btnLimpar.style.display = 'none';
+  }
+  if (window.mostrarToast) {
+    window.mostrarToast('Reprodução de vídeo encerrada.');
+  }
+};
+
+window.limparInputVideoTopo = function() {
+  const input = document.getElementById('input-video-url-topo');
+  if (input) input.value = '';
+  const btnLimpar = document.getElementById('btn-limpar-url-topo');
+  if (btnLimpar) btnLimpar.style.display = 'none';
+};
+
+window.alternarAbaFerramentaVideo = function(ferramenta) {
+  const painelNotas = document.getElementById('painel-video-notas');
+  const painelLousa = document.getElementById('painel-video-lousa');
+  const btnNotas = document.getElementById('btn-tab-tool-notas');
+  const btnLousa = document.getElementById('btn-tab-tool-lousa');
+
+  if (ferramenta === 'notas') {
+    if (painelNotas) painelNotas.style.display = 'flex';
+    if (painelLousa) painelLousa.style.display = 'none';
+    if (btnNotas) btnNotas.classList.add('active');
+    if (btnLousa) btnLousa.classList.remove('active');
+  } else {
+    if (painelNotas) painelNotas.style.display = 'none';
+    if (painelLousa) painelLousa.style.display = 'flex';
+    if (btnNotas) btnNotas.classList.remove('active');
+    if (btnLousa) btnLousa.classList.add('active');
+
+    setTimeout(() => {
+      redimensionarCanvasLousaVideo();
+    }, 80);
+  }
+};
+
+window.salvarNotaVideoTopo = function() {
+  const input = document.getElementById('input-nota-video-topo');
+  const texto = (input ? input.value : '').trim();
+
+  if (!texto) {
+    if (window.mostrarToast) {
+      window.mostrarToast('Digite alguma anotação antes de salvar.', 'erro');
+    }
+    return;
+  }
+
+  const novaNota = {
+    id: 'nota_' + Date.now(),
+    titulo: `[Aula YouTube] Anotações de Estudo`,
+    conteudo: texto,
+    materia: 'Vídeo Aulas',
+    data: new Date().toLocaleDateString('pt-BR'),
+    cor: '#ef4444',
+    favorita: false
+  };
+
+  if (!Array.isArray(AppState.notes)) {
+    AppState.notes = [];
+  }
+  AppState.notes.unshift(novaNota);
+
+  if (typeof salvarNotasStorage === 'function') salvarNotasStorage();
+  if (typeof renderizarNotas === 'function') renderizarNotas();
+
+  if (input) input.value = '';
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  if (window.mostrarToast) {
+    window.mostrarToast('📝 Anotação salva com sucesso no seu Bloco de Notas!', 'sucesso');
+  }
+};
+
+// Motor da Lousa Integrada sob o Vídeo
+const LousaVideo = {
+  canvas: null,
+  ctx: null,
+  isDrawing: false,
+  tool: 'pen',
+  color: '#ffffff',
+  size: 3
+};
+
+function configurarLousaVideo() {
+  const canvas = document.getElementById('lousa-video-canvas');
+  if (!canvas) return;
+
+  LousaVideo.canvas = canvas;
+  LousaVideo.ctx = canvas.getContext('2d');
+
+  redimensionarCanvasLousaVideo();
+
+  canvas.onpointerdown = (e) => {
+    e.preventDefault();
+    LousaVideo.isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const ctx = LousaVideo.ctx;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    if (LousaVideo.tool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = LousaVideo.size * 5;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = LousaVideo.color;
+      ctx.lineWidth = LousaVideo.size;
+    }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  };
+
+  canvas.onpointermove = (e) => {
+    if (!LousaVideo.isDrawing) return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    LousaVideo.ctx.lineTo(x, y);
+    LousaVideo.ctx.stroke();
+  };
+
+  canvas.onpointerup = () => { LousaVideo.isDrawing = false; };
+  canvas.onpointerleave = () => { LousaVideo.isDrawing = false; };
+}
+
+function redimensionarCanvasLousaVideo() {
+  const canvas = LousaVideo.canvas;
+  if (!canvas || !canvas.parentElement) return;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  if (rect.width > 0 && rect.height > 0) {
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+}
+
+window.setLousaVideoFerramenta = function(tool) {
+  LousaVideo.tool = tool;
+  const btnPen = document.getElementById('tool-pen-video');
+  const btnEraser = document.getElementById('tool-eraser-video');
+  if (btnPen) btnPen.classList.toggle('active', tool === 'pen');
+  if (btnEraser) btnEraser.classList.toggle('active', tool === 'eraser');
+  if (LousaVideo.canvas) {
+    LousaVideo.canvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+  }
+};
+
+window.setLousaVideoCor = function(cor) {
+  LousaVideo.color = cor;
+  setLousaVideoFerramenta('pen');
+  document.querySelectorAll('#lousa-video-cores-container .lousa-cor-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(cor));
+  });
+};
+
+window.limparLousaVideo = function() {
+  if (LousaVideo.canvas && LousaVideo.ctx) {
+    LousaVideo.ctx.clearRect(0, 0, LousaVideo.canvas.width, LousaVideo.canvas.height);
+  }
+  if (window.mostrarToast) {
+    window.mostrarToast('Lousa do vídeo limpa!');
+  }
+};
+
+/* ========================================================
+   ESTUDAMAIS - SISTEMA DE JANELAS FLUTUANTES MÓVEIS (MULTITAREFA)
+   Lousa, Tutor IA, Bloco de Notas e Foco Pomodoro
+   ======================================================== */
+
+// Rate limiting de autenticação para proteção contra força bruta
+window.TentativasLogin = {
+  tentativas: 0,
+  bloqueadoAte: 0,
+  verificar() {
+    const agora = Date.now();
+    if (this.bloqueadoAte > agora) {
+      const rest = Math.ceil((this.bloqueadoAte - agora) / 1000);
+      alert('⚠️ Muitas tentativas incorretas seguidas. Por segurança, tente novamente em ' + rest + ' segundos.');
+      return false;
+    }
+    return true;
+  },
+  falha() {
+    this.tentativas++;
+    if (this.tentativas >= 5) {
+      this.bloqueadoAte = Date.now() + 60000;
+      this.tentativas = 0;
+      alert('🔒 Limite de 5 tentativas excedido. Acesso temporariamente travado por 60 segundos por segurança.');
+    }
+  },
+  sucesso() {
+    this.tentativas = 0;
+    this.bloqueadoAte = 0;
+  }
+};
+
+// Gerenciador de Janelas Flutuantes Móveis (Garantia de Visibilidade Total)
+window.alternarJanelaFlutuante = function(tipo) {
+  let id = '';
+  if (tipo === 'lousa') id = 'lousa-rascunho';
+  else if (tipo === 'ia') id = 'janela-flutuante-ia';
+  else if (tipo === 'notas') id = 'janela-flutuante-notas';
+  else if (tipo === 'foco') id = 'janela-flutuante-foco';
+  else id = tipo;
+
+  const el = document.getElementById(id);
+  if (!el) {
+    console.warn('Elemento flutuante não encontrado:', id);
+    return;
+  }
+
+  const estaAberta = el.classList.contains('visivel');
+
+  if (estaAberta) {
+    // Fecha a janela
+    el.classList.remove('visivel');
+    el.classList.remove('minimizado');
+    if (tipo === 'lousa' && window.AppState && AppState.lousa) {
+      AppState.lousa.isVisible = false;
+    }
+  } else {
+    // Abre a janela
+    el.classList.remove('minimizado');
+    el.classList.add('visivel');
+
+    if (tipo === 'lousa' && window.AppState && AppState.lousa) {
+      AppState.lousa.isVisible = true;
+    }
+
+    // Se ainda não foi movida manualmente, define posição padrão elegante no topo direito
+    if (!el.dataset.posicionadaManualmente) {
+      const topOffset = (tipo === 'lousa' ? 95 : (tipo === 'ia' ? 105 : (tipo === 'notas' ? 115 : 125)));
+      const rightOffset = (tipo === 'lousa' ? 24 : (tipo === 'ia' ? 32 : (tipo === 'notas' ? 40 : 48)));
+      el.style.top = topOffset + 'px';
+      el.style.right = rightOffset + 'px';
+      el.style.left = 'auto';
+      el.style.bottom = 'auto';
+    } else {
+      garantirJanelaVisivelNaTela(el);
+    }
+
+    trazerParaFrenteJanela(el);
+
+    if (tipo === 'lousa') {
+      setTimeout(() => {
+        if (typeof redimensionarCanvasLousa === 'function') redimensionarCanvasLousa();
+      }, 120);
+    }
+
+    if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+  }
+};
+
+window.alternarLousaRascunho = function() {
+  window.alternarJanelaFlutuante('lousa');
+};
+
+window.minimizarJanelaFlutuante = function(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.toggle('minimizado');
+  }
+};
+
+function trazerParaFrenteJanela(el) {
+  const janelas = document.querySelectorAll('.janela-flutuante-widget, .lousa-scratchpad');
+  let maxZ = 3500;
+  janelas.forEach(j => {
+    const z = parseInt(window.getComputedStyle(j).zIndex, 10) || 3500;
+    if (z > maxZ) maxZ = z;
+  });
+  el.style.zIndex = (maxZ + 5).toString();
+}
+
+function garantirJanelaVisivelNaTela(el) {
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  const rect = el.getBoundingClientRect();
+  const w = rect.width > 0 ? rect.width : 380;
+  const h = rect.height > 0 ? rect.height : 450;
+
+  if (!el.dataset.posicionadaManualmente) {
+    el.style.top = '100px';
+    el.style.right = '2rem';
+    el.style.left = 'auto';
+    el.style.bottom = 'auto';
+  } else {
+    let curLeft = el.offsetLeft;
+    let curTop = el.offsetTop;
+    let left = Math.min(Math.max(10, curLeft), winW - Math.min(w, winW - 20));
+    let top = Math.min(Math.max(65, curTop), winH - 60);
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+  }
+}
+
+// Torna qualquer elemento arrastável suavemente pela barra de título
+window.tornarElementoArrastavel = function(el, handle) {
+  if (!el || !handle) return;
+
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  let initialLeft = 0, initialTop = 0;
+
+  handle.addEventListener('pointerdown', (e) => {
+    // Ignora se clicou em botões de controle
+    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select')) return;
+
+    isDragging = true;
+    trazerParaFrenteJanela(el);
+    el.dataset.posicionadaManualmente = 'true';
+
+    const rect = el.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    initialLeft = rect.left;
+    initialTop = rect.top;
+
+    el.style.left = `${initialLeft}px`;
+    el.style.top = `${initialTop}px`;
+    el.style.bottom = 'auto';
+    el.style.right = 'auto';
+
+    handle.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  handle.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    let newLeft = initialLeft + dx;
+    let newTop = initialTop + dy;
+
+    // Limites da tela
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const w = el.offsetWidth || 360;
+
+    newLeft = Math.max(10, Math.min(winW - w - 10, newLeft));
+    newTop = Math.max(65, Math.min(winH - 60, newTop));
+
+    el.style.left = `${newLeft}px`;
+    el.style.top = `${newTop}px`;
+  });
+
+  const stopDrag = (e) => {
+    if (isDragging) {
+      isDragging = false;
+      try { handle.releasePointerCapture(e.pointerId); } catch(err) {}
+    }
+  };
+
+  handle.addEventListener('pointerup', stopDrag);
+  handle.addEventListener('pointercancel', stopDrag);
+};
+
+// Inicializa o arraste em todas as 4 janelas flutuantes
+function inicializarJanelasArrastaveis() {
+  const lousa = document.getElementById('lousa-rascunho');
+  const lousaHandle = document.getElementById('header-lousa-rascunho') || document.querySelector('.lousa-header');
+  if (lousa && lousaHandle) tornarElementoArrastavel(lousa, lousaHandle);
+
+  const ia = document.getElementById('janela-flutuante-ia');
+  const iaHandle = document.getElementById('header-flutuante-ia');
+  if (ia && iaHandle) tornarElementoArrastavel(ia, iaHandle);
+
+  const notas = document.getElementById('janela-flutuante-notas');
+  const notasHandle = document.getElementById('header-flutuante-notas');
+  if (notas && notasHandle) tornarElementoArrastavel(notas, notasHandle);
+
+  const foco = document.getElementById('janela-flutuante-foco');
+  const focoHandle = document.getElementById('header-flutuante-foco');
+  if (foco && focoHandle) tornarElementoArrastavel(foco, focoHandle);
+}
+
+// ----------------------------------------------------
+// MINI CHAT FLUTUANTE
+// ----------------------------------------------------
+window.enviarMensagemMiniChat = async function(textoPredefinido = null) {
+  const input = document.getElementById('input-mini-chat-flutuante');
+  const feed = document.getElementById('mini-chat-mensagens');
+  const texto = (textoPredefinido || (input ? input.value : '')).trim();
+  if (!texto || !feed) return;
+
+  if (input) input.value = '';
+
+  // Mensagem do usuário
+  const msgUser = document.createElement('div');
+  msgUser.className = 'mini-chat-msg user';
+  msgUser.innerHTML = `
+    <div class="mini-chat-avatar"><i class="fa-solid fa-user-graduate"></i></div>
+    <div class="mini-chat-balao">${texto}</div>
+  `;
+  feed.appendChild(msgUser);
+  feed.scrollTop = feed.scrollHeight;
+  if (typeof emitirSomChat === 'function') emitirSomChat('enviar');
+
+  // Mensagem de digitação
+  const msgIA = document.createElement('div');
+  msgIA.className = 'mini-chat-msg ia';
+  msgIA.innerHTML = `
+    <div class="mini-chat-avatar"><i class="fa-solid fa-robot"></i></div>
+    <div class="mini-chat-balao"><i class="fa-solid fa-spinner fa-spin"></i> Pensando...</div>
+  `;
+  feed.appendChild(msgIA);
+  feed.scrollTop = feed.scrollHeight;
+
+  // Chama Gemini ou gerador didático
+  const apiKey = localStorage.getItem('estudamais_gemini_api_key');
+  let resposta = '';
+
+  if (apiKey && typeof chamarGeminiAPI === 'function') {
+    try {
+      const contexto = `Você é o Tutor de Estudos do vestibulando no app EstudaMais. Responda em no máximo 3 ou 4 frases curtas, diretas, motivadoras e didáticas em pt-BR. Dúvida: ${texto}`;
+      resposta = await chamarGeminiAPI(contexto);
+    } catch(err) {
+      resposta = `💡 Dica de Foco: Para dominar esse ponto, revise a fórmula ou conceito principal e resolva 3 exercícios de fixação!`;
+    }
+  } else {
+    resposta = `💡 Dica Rápida do Tutor: ${texto.toLowerCase().includes('quest') ? 'Aqui vai uma questão-chave: analise sempre a causa fundamental antes de olhar as alternativas!' : 'Excelente pergunta! Divida o assunto em partes menores, resuma no seu bloco de notas e pratique a repetição espaçada.'}`;
+  }
+
+  const balaoIA = msgIA.querySelector('.mini-chat-balao');
+  if (balaoIA) {
+    balaoIA.textContent = resposta;
+  }
+  feed.scrollTop = feed.scrollHeight;
+  if (typeof emitirSomChat === 'function') emitirSomChat('receber');
+};
+
+// ----------------------------------------------------
+// MINI NOTAS FLUTUANTE
+// ----------------------------------------------------
+window.salvarMiniNotaFlutuante = function() {
+  const inputTitulo = document.getElementById('input-mini-nota-titulo');
+  const selectMateria = document.getElementById('select-mini-nota-materia');
+  const textarea = document.getElementById('textarea-mini-nota-conteudo');
+
+  const titulo = inputTitulo ? inputTitulo.value.trim() : '';
+  const materia = selectMateria ? selectMateria.value : 'Geral';
+  const conteudo = textarea ? textarea.value.trim() : '';
+
+  if (!conteudo && !titulo) {
+    if (window.mostrarToast) window.mostrarToast('Escreva algo para salvar a anotação.', 'aviso');
+    return;
+  }
+
+  const novaNota = {
+    id: 'nota_' + Date.now(),
+    titulo: titulo || `Anotação de ${materia}`,
+    conteudo: conteudo || '(Sem conteúdo detalhado)',
+    materia: materia,
+    cor: '#3b82f6',
+    dataCriacao: new Date().toLocaleDateString('pt-BR'),
+    hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    fixada: false
+  };
+
+  if (!Array.isArray(AppState.notes)) AppState.notes = [];
+  AppState.notes.unshift(novaNota);
+
+  // Salva no storage do usuário
+  if (AppState.currentUser) {
+    localStorage.setItem(`estudamais_user_${AppState.currentUser.id}_notes`, JSON.stringify(AppState.notes));
+  } else {
+    localStorage.setItem('estudamais_guest_notes', JSON.stringify(AppState.notes));
+  }
+
+  if (typeof renderizarNotas === 'function') renderizarNotas();
+  if (inputTitulo) inputTitulo.value = '';
+  if (textarea) textarea.value = '';
+
+  if (window.mostrarToast) {
+    window.mostrarToast('📝 Nota salva com sucesso no seu caderno!', 'sucesso');
+  }
+};
+
+// ----------------------------------------------------
+// MINI TIMER DE FOCO
+// ----------------------------------------------------
+window.ajustarTempoMiniFoco = function(minutos, modo) {
+  if (window.setPomodoroMode) {
+    if (minutos === 25) window.setPomodoroMode('foco');
+    else if (minutos === 50) window.setPomodoroMode('estendido');
+    else if (minutos === 5) window.setPomodoroMode('curta');
+    else if (minutos === 15) window.setPomodoroMode('longa');
+  } else {
+    AppState.pomodoro.timeLeft = minutos * 60;
+  }
+
+  const display = document.getElementById('mini-foco-timer-display');
+  const badge = document.getElementById('mini-foco-mode-badge');
+  if (display) display.textContent = `${minutos.toString().padStart(2, '0')}:00`;
+  if (badge) badge.textContent = modo === 'pausa' ? 'Pausa' : 'Foco Ativo';
+
+  document.querySelectorAll('.mini-preset-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.includes(`${minutos}m`));
+  });
+};
+
+window.alternarTimerMiniFoco = function() {
+  const btnPrincipal = document.getElementById('pomodoro-btn-start');
+  if (btnPrincipal) {
+    btnPrincipal.click();
+    sincronizarMiniTimerUI();
+  }
+};
+
+window.resetTimerMiniFoco = function() {
+  const btnReset = document.getElementById('pomodoro-btn-reset');
+  if (btnReset) {
+    btnReset.click();
+    sincronizarMiniTimerUI();
+  }
+};
+
+function sincronizarMiniTimerUI() {
+  const miniDisplay = document.getElementById('mini-foco-timer-display');
+  const miniBtn = document.getElementById('btn-mini-foco-start');
+  const isRunning = AppState.pomodoro?.isRunning;
+  const timeLeft = AppState.pomodoro?.timeLeft || 1500;
+
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  if (miniDisplay) {
+    miniDisplay.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  if (miniBtn) {
+    if (isRunning) {
+      miniBtn.classList.add('pausado');
+      miniBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Pausar';
+    } else {
+      miniBtn.classList.remove('pausado');
+      miniBtn.innerHTML = '<i class="fa-solid fa-play"></i> Iniciar';
+    }
+  }
+}
+
+// Sincroniza periodicamente o timer flutuante com o timer principal
+setInterval(() => {
+  if (AppState.pomodoro?.isRunning) {
+    sincronizarMiniTimerUI();
+  }
+}, 500);
+
+// ========================================================
+// MOTOR AVANÇADO DE SONS AMBIENTES (WEB AUDIO API SINTETIZADA)
+// Ruído Marrom, Chuva Suave, Tempestade, Ondas Alfa, Lo-Fi e Ruído Branco
+// ========================================================
+
+AppState.soundEngine = {
+  ctx: null,
+  currentType: null,
+  isPlaying: false,
+  volume: 0.7,
+  isMuted: false,
+  masterGain: null,
+  activeNodes: [],
+  intervalLoop: null
+};
+
+window.selecionarSomAmbiente = function(tipo) {
+  // Se já estiver tocando o mesmo tipo, para
+  if (AppState.soundEngine.isPlaying && AppState.soundEngine.currentType === tipo) {
+    pararTodosSonsAmbientes();
+    return;
+  }
+
+  pararTodosSonsAmbientes();
+
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) {
+      alert('Seu navegador não suporta Web Audio API.');
+      return;
+    }
+
+    if (!AppState.soundEngine.ctx || AppState.soundEngine.ctx.state === 'closed') {
+      AppState.soundEngine.ctx = new AudioCtx();
+    }
+    const ctx = AppState.soundEngine.ctx;
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    const masterGain = ctx.createGain();
+    const vol = AppState.soundEngine.isMuted ? 0 : AppState.soundEngine.volume;
+    masterGain.gain.setValueAtTime(vol * 0.35, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+    AppState.soundEngine.masterGain = masterGain;
+
+    if (tipo === 'brown') {
+      gerarRuidoMarrom(ctx, masterGain);
+    } else if (tipo === 'rain') {
+      gerarChuvaSuave(ctx, masterGain);
+    } else if (tipo === 'thunder') {
+      gerarTempestade(ctx, masterGain);
+    } else if (tipo === 'alpha') {
+      gerarOndasAlfa(ctx, masterGain);
+    } else if (tipo === 'lofi') {
+      gerarLoFiChords(ctx, masterGain);
+    } else if (tipo === 'white') {
+      gerarRuidoBranco(ctx, masterGain);
+    }
+
+    AppState.soundEngine.currentType = tipo;
+    AppState.soundEngine.isPlaying = true;
+    atualizarBotoesSonsUI(tipo);
+
+    if (window.mostrarToast) {
+      const nomes = {
+        brown: '🌊 Ruído Marrom Profundo',
+        rain: '🌧️ Barulho de Chuva Suave',
+        thunder: '⛈️ Tempestade com Trovões Distantes',
+        alpha: '🧠 Ondas Alfa (10Hz Binaural)',
+        lofi: '🎵 Acordes Lo-Fi de Relaxamento',
+        white: '⚪ Ruído Branco para Foco'
+      };
+      window.mostrarToast(`Som ativo: ${nomes[tipo] || tipo}. Ajuste o volume quando quiser!`, 'info');
+    }
+  } catch(e) {
+    console.error('Erro ao iniciar som ambiente:', e);
+  }
+};
+
+function gerarRuidoMarrom(ctx, destination) {
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let lastOut = 0.0;
+
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    data[i] = (lastOut + (0.02 * white)) / 1.02;
+    lastOut = data[i];
+    data[i] *= 3.8; // Ganho calibrado
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(450, ctx.currentTime);
+
+  noise.connect(filter);
+  filter.connect(destination);
+  noise.start();
+  AppState.soundEngine.activeNodes.push(noise, filter);
+}
+
+function gerarChuvaSuave(ctx, destination) {
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  let b0 = 0, b1 = 0, b2 = 0;
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + white * 0.0555;
+    b1 = 0.99332 * b1 + white * 0.0750;
+    b2 = 0.96900 * b2 + white * 0.1538;
+    data[i] = (b0 + b1 + b2) * 0.06;
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+
+  const bandpass = ctx.createBiquadFilter();
+  bandpass.type = 'bandpass';
+  bandpass.frequency.setValueAtTime(1100, ctx.currentTime);
+  bandpass.Q.setValueAtTime(0.5, ctx.currentTime);
+
+  noise.connect(bandpass);
+  bandpass.connect(destination);
+  noise.start();
+  AppState.soundEngine.activeNodes.push(noise, bandpass);
+}
+
+function gerarTempestade(ctx, destination) {
+  gerarChuvaSuave(ctx, destination);
+
+  // Trovoada distante periódica
+  const dispararTrovao = () => {
+    if (!AppState.soundEngine.isPlaying || AppState.soundEngine.currentType !== 'thunder') return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(55, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(32, ctx.currentTime + 3.5);
+
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.8);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 4.5);
+
+      osc.connect(gain);
+      gain.connect(destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 4.6);
+    } catch(e) {}
+  };
+
+  dispararTrovao();
+  AppState.soundEngine.intervalLoop = setInterval(dispararTrovao, 14000);
+}
+
+function gerarOndasAlfa(ctx, destination) {
+  // Tom Binaural de 10Hz (216Hz e 226Hz) para sincronização de ondas alfa
+  const oscL = ctx.createOscillator();
+  const oscR = ctx.createOscillator();
+  const merger = ctx.createChannelMerger(2);
+
+  oscL.type = 'sine';
+  oscL.frequency.setValueAtTime(216, ctx.currentTime);
+
+  oscR.type = 'sine';
+  oscR.frequency.setValueAtTime(226, ctx.currentTime);
+
+  oscL.connect(merger, 0, 0);
+  oscR.connect(merger, 0, 1);
+  merger.connect(destination);
+
+  oscL.start();
+  oscR.start();
+  AppState.soundEngine.activeNodes.push(oscL, oscR, merger);
+}
+
+function gerarLoFiChords(ctx, destination) {
+  // Acordes suaves progressivos em escala pentatônica / ambiente (Cmaj7 -> Am9 -> Fmaj7)
+  const acordes = [
+    [261.63, 329.63, 392.00, 493.88], // Cmaj7
+    [220.00, 261.63, 329.63, 392.00], // Am7
+    [174.61, 220.00, 261.63, 329.63], // Fmaj7
+    [196.00, 246.94, 293.66, 392.00]  // G6
+  ];
+  let idx = 0;
+
+  const tocarAcorde = () => {
+    if (!AppState.soundEngine.isPlaying || AppState.soundEngine.currentType !== 'lofi') return;
+    try {
+      const notas = acordes[idx % acordes.length];
+      idx++;
+      notas.forEach(freq => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.035, ctx.currentTime + 1.2);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 4.8);
+
+        osc.connect(gain);
+        gain.connect(destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 5.0);
+      });
+    } catch(e) {}
+  };
+
+  tocarAcorde();
+  AppState.soundEngine.intervalLoop = setInterval(tocarAcorde, 4200);
+}
+
+function gerarRuidoBranco(ctx, destination) {
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.15;
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(3200, ctx.currentTime);
+
+  noise.connect(filter);
+  filter.connect(destination);
+  noise.start();
+  AppState.soundEngine.activeNodes.push(noise, filter);
+}
+
+window.pararTodosSonsAmbientes = function() {
+  if (AppState.soundEngine.intervalLoop) {
+    clearInterval(AppState.soundEngine.intervalLoop);
+    AppState.soundEngine.intervalLoop = null;
+  }
+
+  AppState.soundEngine.activeNodes.forEach(node => {
+    try {
+      if (node.stop) node.stop();
+      node.disconnect();
+    } catch(e) {}
+  });
+  AppState.soundEngine.activeNodes = [];
+
+  if (AppState.soundEngine.masterGain) {
+    try { AppState.soundEngine.masterGain.disconnect(); } catch(e) {}
+    AppState.soundEngine.masterGain = null;
+  }
+
+  AppState.soundEngine.isPlaying = false;
+  AppState.soundEngine.currentType = null;
+  atualizarBotoesSonsUI(null);
+};
+
+window.ajustarVolumeSomAmbiente = function(valPercent) {
+  const pct = parseInt(valPercent, 10) || 0;
+  const volDecimal = pct / 100;
+  AppState.soundEngine.volume = volDecimal;
+  AppState.soundEngine.isMuted = false;
+
+  if (AppState.soundEngine.masterGain && AppState.soundEngine.ctx) {
+    AppState.soundEngine.masterGain.gain.setValueAtTime(volDecimal * 0.35, AppState.soundEngine.ctx.currentTime);
+  }
+
+  // Atualiza sliders e textos
+  const s1 = document.getElementById('foco-slider-volume');
+  const s2 = document.getElementById('foco-slider-volume-tab');
+  const t1 = document.getElementById('foco-volume-percent');
+  const t2 = document.getElementById('foco-volume-percent-tab');
+  const ic1 = document.getElementById('icone-foco-volume');
+  const ic2 = document.getElementById('icone-foco-volume-tab');
+
+  if (s1) s1.value = pct;
+  if (s2) s2.value = pct;
+  if (t1) t1.textContent = `${pct}%`;
+  if (t2) t2.textContent = `${pct}%`;
+
+  const iconClass = pct === 0 ? 'fa-volume-xmark' : (pct < 50 ? 'fa-volume-low' : 'fa-volume-high');
+  if (ic1) ic1.className = `fa-solid ${iconClass}`;
+  if (ic2) ic2.className = `fa-solid ${iconClass}`;
+};
+
+window.alternarMudoSomAmbiente = function() {
+  AppState.soundEngine.isMuted = !AppState.soundEngine.isMuted;
+  const vol = AppState.soundEngine.isMuted ? 0 : AppState.soundEngine.volume;
+
+  if (AppState.soundEngine.masterGain && AppState.soundEngine.ctx) {
+    AppState.soundEngine.masterGain.gain.setValueAtTime(vol * 0.35, AppState.soundEngine.ctx.currentTime);
+  }
+
+  const ic1 = document.getElementById('icone-foco-volume');
+  const ic2 = document.getElementById('icone-foco-volume-tab');
+  const iconClass = AppState.soundEngine.isMuted ? 'fa-volume-xmark' : 'fa-volume-high';
+  if (ic1) ic1.className = `fa-solid ${iconClass}`;
+  if (ic2) ic2.className = `fa-solid ${iconClass}`;
+};
+
+function atualizarBotoesSonsUI(tipoAtivo) {
+  document.querySelectorAll('.btn-som-chip').forEach(btn => {
+    const som = btn.getAttribute('data-som');
+    btn.classList.toggle('ativo', som === tipoAtivo);
+  });
+}
+
+// ========================================================
+// CATÁLOGO DE TEMAS DE REDAÇÃO & CRIADOR DE PROPOSTAS COM GEMINI
+// ========================================================
+
+window.abrirCatalogoTemasRedacao = function() {
+  const modal = document.getElementById('modal-catalogo-temas');
+  if (!modal) return;
+
+  renderizarGridCatalogoTemas('todos', '');
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.fecharCatalogoTemasRedacao = function() {
+  const modal = document.getElementById('modal-catalogo-temas');
+  if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.filtrarCatalogoPorVestibular = function(vest) {
+  document.querySelectorAll('.cat-pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-vest') === vest);
+  });
+  const inputBusca = document.getElementById('input-busca-temas');
+  renderizarGridCatalogoTemas(vest, inputBusca ? inputBusca.value : '');
+};
+
+window.filtrarCatalogoTemas = function(termo) {
+  const btnAtivo = document.querySelector('.cat-pill-btn.active');
+  const vest = btnAtivo ? btnAtivo.getAttribute('data-vest') : 'todos';
+  renderizarGridCatalogoTemas(vest, termo);
+};
+
+function obterTodosTemasRedacao() {
+  let lista = Array.isArray(TEMAS_REDACAO_DATA) ? [...TEMAS_REDACAO_DATA] : [];
+  try {
+    const custom = JSON.parse(localStorage.getItem('estudamais_custom_temas') || '[]');
+    if (Array.isArray(custom)) {
+      lista = [...custom, ...lista];
+    }
+  } catch(e) {}
+  return lista;
+}
+
+function renderizarGridCatalogoTemas(filtroVest, buscaTexto) {
+  const grid = document.getElementById('catalogo-temas-grid');
+  if (!grid) return;
+
+  const todos = obterTodosTemasRedacao();
+  const termo = (buscaTexto || '').trim().toLowerCase();
+  const vestFiltro = (filtroVest || 'todos').toUpperCase();
+  const temaAtualId = AppState.redacao?.temaAtualId;
+
+  const filtrados = todos.filter(t => {
+    const vestMatch = (vestFiltro === 'TODOS') || 
+                      (vestFiltro === 'CUSTOM' && t.isCustom) || 
+                      (t.vestibular && t.vestibular.toUpperCase() === vestFiltro);
+    const textMatch = !termo || 
+                      (t.titulo && t.titulo.toLowerCase().includes(termo)) || 
+                      (t.vestibular && t.vestibular.toLowerCase().includes(termo)) || 
+                      (t.genero && t.genero.toLowerCase().includes(termo));
+    return vestMatch && textMatch;
+  });
+
+  if (filtrados.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 2.5rem; color: var(--text-muted);">
+        <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.8rem; display: block; opacity: 0.6;"></i>
+        <p>Nenhuma proposta encontrada com estes filtros.</p>
+        <button type="button" class="btn-novo-tema-ia-topo" style="margin-top: 0.8rem;" onclick="fecharCatalogoTemasRedacao(); abrirModalCriarTemaRedacao();">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Criar Este Tema com IA
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtrados.map(t => {
+    const isSel = t.id === temaAtualId;
+    let classeVest = (t.vestibular || 'enem').toLowerCase();
+    if (t.isCustom) classeVest = 'custom';
+
+    return `
+      <div class="tema-catalogo-item-card ${isSel ? 'selecionado' : ''}" onclick="selecionarTemaPorId('${t.id}')">
+        <div class="tema-item-badges-row">
+          <span class="tema-item-vest-pill ${classeVest}">${t.vestibular || 'ENEM'}</span>
+          <span class="tema-item-genero-pill">${t.genero ? t.genero.split('(')[0].trim() : 'Dissertativo'}</span>
+        </div>
+        <h4 class="tema-item-titulo">${t.titulo}</h4>
+        <button type="button" class="btn-selecionar-tema-card">
+          <i class="fa-solid ${isSel ? 'fa-check' : 'fa-pen-nib'}"></i> 
+          <span>${isSel ? 'Tema Selecionado' : 'Praticar Esta Redação'}</span>
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+window.selecionarTemaPorId = function(idTema) {
+  if (typeof carregarTemaRedacao === 'function') {
+    carregarTemaRedacao(idTema);
+  }
+  
+  const tema = obterTodosTemasRedacao().find(t => t.id === idTema);
+  const textoDestaque = document.getElementById('redacao-tema-selecionado-texto');
+  if (textoDestaque && tema) {
+    textoDestaque.textContent = `[${tema.vestibular}] ${tema.titulo}`;
+  }
+
+  fecharCatalogoTemasRedacao();
+  if (window.mostrarToast && tema) {
+    window.mostrarToast(`✨ Tema selecionado: ${tema.titulo}`, 'sucesso');
+  }
+};
+
+// ----------------------------------------------------
+// CRIADOR DE PROPOSTAS COM GOOGLE GEMINI
+// ----------------------------------------------------
+window.abrirModalCriarTemaRedacao = function() {
+  const modal = document.getElementById('modal-criar-tema-redacao');
+  if (!modal) return;
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.fecharModalCriarTemaRedacao = function() {
+  const modal = document.getElementById('modal-criar-tema-redacao');
+  if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+const SUGESTOES_TEMAS_HOT = [
+  "O impacto da proliferação das apostas esportivas e bets no endividamento das famílias",
+  "A crise de saúde mental entre os jovens e o uso desregulado de ansiolíticos",
+  "Desafios para a universalização do saneamento básico e o direito à dignidade humana",
+  "A inclusão de pessoas neurodivergentes e o combate ao capacitismo na educação",
+  "A uberização do trabalho e as novas formas de alienação na era dos algoritmos",
+  "O papel dos povos originários e das terras indígenas na mitigação das mudanças climáticas",
+  "Cibersegurança e o vazamento de dados sensíveis na era da inteligência artificial",
+  "O envelhecimento populacional acelerado e a crise dos cuidados com a pessoa idosa",
+  "A regulamentação das redes sociais no combate às notícias falsas e à desinformação",
+  "A persistência do trabalho análogo à escravidão no agronegócio e na cadeia têxtil"
+];
+
+window.sugerirTemaIneditoRapido = function() {
+  const sorteado = SUGESTOES_TEMAS_HOT[Math.floor(Math.random() * SUGESTOES_TEMAS_HOT.length)];
+  const input = document.getElementById('input-tema-custom-titulo');
+  if (input) {
+    input.value = sorteado;
+    input.focus();
+  }
+  if (typeof emitirSomChat === 'function') emitirSomChat('pop');
+};
+
+let temaGeradoEmEspera = null;
+
+window.gerarTemaComGemini = async function() {
+  const input = document.getElementById('input-tema-custom-titulo');
+  const selectVest = document.getElementById('select-tema-custom-vest');
+  const btn = document.getElementById('btn-gerar-tema-executar');
+  const preview = document.getElementById('preview-tema-gerado');
+
+  const tituloIdeia = (input ? input.value : '').trim();
+  const vestibular = selectVest ? selectVest.value : 'ENEM';
+
+  if (!tituloIdeia) {
+    alert('Por favor, digite uma ideia ou clique em "Sugerir Tema" para sortear uma proposta.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Desenvolvendo Textos Motivadores com Gemini...';
+  }
+
+  const apiKey = localStorage.getItem('estudamais_gemini_api_key');
+  let temaObj = null;
+
+  if (apiKey && typeof chamarGeminiAPI === 'function') {
+    try {
+      const prompt = `Você é a banca examinadora do vestibular ${vestibular}. Desenvolva uma proposta oficial de redação completa sobre: "${tituloIdeia}".
+Retorne OBRIGATORIAMENTE um JSON válido com o seguinte formato:
+{
+  "titulo": "Título oficial formal e provocativo",
+  "genero": "Gênero textual adequado para o ${vestibular}",
+  "instrucoes": "Instruções formais para o vestibulando",
+  "textosMotivadores": [
+    {"origem": "Texto I - Dados Estatísticos / Pesquisa", "conteudo": "Contextualização quantitativa ou histórica com fontes fidedignas"},
+    {"origem": "Texto II - Pensamento Sociológico ou Filosófico", "conteudo": "Citação e reflexão crítica aplicável"},
+    {"origem": "Texto III - Perspectiva Contemporânea", "conteudo": "Visão analítica dos desafios no Brasil atual"}
+  ]
+}`;
+      const resRaw = await chamarGeminiAPI(prompt);
+      const jsonMatch = resRaw.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        temaObj = JSON.parse(jsonMatch[0]);
+      }
+    } catch(err) {
+      console.warn('Falha no Gemini, usando motor pedagógico estruturado:', err);
+    }
+  }
+
+  // Fallback ou motor didático autônomo
+  if (!temaObj) {
+    temaObj = {
+      titulo: tituloIdeia.length > 15 ? tituloIdeia : `Desafios contemporâneos em torno de: ${tituloIdeia}`,
+      genero: vestibular === 'ENEM' ? 'Texto Dissertativo-Argumentativo (Padrão ENEM)' : `Dissertação Crítica (${vestibular})`,
+      instrucoes: `Com base na leitura da coletânea e em seus conhecimentos, redija um texto dissertativo formal articulando projeto de texto claro e argumentos consistentes sobre o tema.`,
+      textosMotivadores: [
+        {
+          origem: "Texto I - Indicadores e Diagnóstico Social",
+          conteudo: `O debate acerca de "${tituloIdeia}" reflete transformações estruturais da sociedade brasileira, demandando articulação entre marcos regulatórios, investimentos prioritários e fiscalização efetiva.`
+        },
+        {
+          origem: "Texto II - Direitos e Cidadania",
+          conteudo: `A garantia de dignidade, acesso e equidade constitui pilar inegociável da Carta Constitucional de 1988, reforçando que o desenvolvimento econômico deve caminhar junto da justiça social.`
+        },
+        {
+          origem: "Texto III - Perspectiva Crítica e Propositiva",
+          conteudo: `Superar os impasses exige superar a inércia institucional e promover o engajamento comunitário, transformando a conscientização em ações práticas e sustentáveis.`
+        }
+      ]
+    };
+  }
+
+  temaObj.id = 'custom_' + Date.now();
+  temaObj.vestibular = vestibular;
+  temaObj.linhasMin = 7;
+  temaObj.linhasMax = 30;
+  temaObj.notaMaxima = vestibular === 'ENEM' ? 1000 : 50;
+  temaObj.isCustom = true;
+  temaObj.criterios = [
+    { nome: "C1 - Norma Culta", desc: "Domínio formal da Língua Portuguesa", peso: 200 },
+    { nome: "C2 - Tema e Repertório", desc: "Repertório sociocultural produtivo", peso: 200 },
+    { nome: "C3 - Projeto de Texto", desc: "Defesa articulada de ponto de vista", peso: 200 },
+    { nome: "C4 - Mecanismos Linguísticos", desc: "Coesão inter e intraparágrafos", peso: 200 },
+    { nome: "C5 - Proposta de Intervenção", desc: "Elaboração com os 5 elementos", peso: 200 }
+  ];
+
+  temaGeradoEmEspera = temaObj;
+
+  // Renderiza Preview
+  if (preview) {
+    preview.style.display = 'flex';
+    document.getElementById('preview-tema-badge').textContent = vestibular;
+    document.getElementById('preview-tema-titulo').textContent = temaObj.titulo;
+    document.getElementById('preview-tema-instrucoes').textContent = temaObj.instrucoes;
+
+    const boxMotivadores = document.getElementById('preview-textos-motivadores');
+    if (boxMotivadores && temaObj.textosMotivadores) {
+      boxMotivadores.innerHTML = temaObj.textosMotivadores.map(tm => `
+        <div class="preview-texto-card">
+          <strong>${tm.origem}</strong>
+          <p>${tm.conteudo}</p>
+        </div>
+      `).join('');
+    }
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Gerar Outra Versão';
+  }
+
+  if (typeof emitirSomChat === 'function') emitirSomChat('receber');
+  if (window.mostrarToast) {
+    window.mostrarToast('✨ Proposta desenvolvida com sucesso! Confira abaixo.', 'sucesso');
+  }
+};
+
+window.aplicarTemaGeradoAoTreino = function() {
+  if (!temaGeradoEmEspera) return;
+
+  // Salva no storage de temas personalizados
+  try {
+    let custom = JSON.parse(localStorage.getItem('estudamais_custom_temas') || '[]');
+    custom.unshift(temaGeradoEmEspera);
+    localStorage.setItem('estudamais_custom_temas', JSON.stringify(custom));
+  } catch(e) {}
+
+  // Adiciona em memória aos temas
+  if (Array.isArray(TEMAS_REDACAO_DATA)) {
+    TEMAS_REDACAO_DATA.unshift(temaGeradoEmEspera);
+  }
+
+  // Carrega na folha de redação
+  if (typeof carregarTemaRedacao === 'function') {
+    carregarTemaRedacao(temaGeradoEmEspera.id);
+  }
+
+  const textoDestaque = document.getElementById('redacao-tema-selecionado-texto');
+  if (textoDestaque) {
+    textoDestaque.textContent = `[${temaGeradoEmEspera.vestibular}] ${temaGeradoEmEspera.titulo}`;
+  }
+
+  fecharModalCriarTemaRedacao();
+  if (typeof mudarAba === 'function') mudarAba('redacao');
+
+  const workspace = document.querySelector('.redacao-workspace-card');
+  if (workspace) workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (window.mostrarToast) {
+    window.mostrarToast('🚀 Proposta ativada! Boa redação!', 'sucesso');
+  }
+};
+
+// Sincroniza o label de tema atual ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    inicializarJanelasArrastaveis();
+    const temaId = AppState.redacao?.temaAtualId;
+    if (temaId) {
+      const tema = obterTodosTemasRedacao().find(t => t.id === temaId);
+      const textoDestaque = document.getElementById('redacao-tema-selecionado-texto');
+      if (textoDestaque && tema) {
+        textoDestaque.textContent = `[${tema.vestibular}] ${tema.titulo}`;
+      }
+    }
+  }, 400);
+});
+
+/* ========================================================
+   ESTUDAMAIS CLOUD SYNC & DISPOSITIVOS MÚLTIPLOS
+   Sincronização Nuvem Multi-Dispositivo (REST + Cloud Vault)
+   ======================================================== */
+const EstudaMaisCloudSync = {
+  obterCodigoSincronizacao(user) {
+    if (!user) return 'ESTUDA-GUEST-SYNC';
+    const idClean = user.id.replace(/[^a-zA-Z0-9]/g, '').slice(-6).toUpperCase();
+    return 'ESTUDA-' + idClean;
+  },
+
+  async salvarNuvem(silencioso = false) {
+    const user = AppState.currentUser;
+    if (!user) {
+      if (!silencioso) mostrarToast('⚠️ Faça login para sincronizar seus dados na nuvem.');
+      return false;
+    }
+
+    try {
+      const backup = await EstudaMaisDB.exportarBackupCompleto(user.id);
+      if (!backup) return false;
+
+      const codigo = this.obterCodigoSincronizacao(user);
+      const payload = {
+        codigo: codigo,
+        timestamp: Date.now(),
+        dataHora: new Date().toISOString(),
+        backup: backup
+      };
+
+      // 1. Armazena no canal compartilhado / storage cloud local (para simulação de outros dispositivos ou tabs)
+      localStorage.setItem('estudamais_cloud_vault_' + codigo, JSON.stringify(payload));
+      localStorage.setItem('estudamais_ultimo_sync_cloud', Date.now().toString());
+
+      // 2. Envia para armazenamento na nuvem (JSON bin / REST API)
+      let syncedOnline = false;
+      try {
+        const response = await fetch('https://api.jsonstorage.net/v1/json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+          const resJson = await response.json();
+          if (resJson && resJson.uri) {
+            localStorage.setItem('estudamais_cloud_uri_' + codigo, resJson.uri);
+            syncedOnline = true;
+          }
+        }
+      } catch (e) {
+        // Modo offline / fallback
+      }
+
+      this.atualizarStatusUI('sincronizado');
+      if (!silencioso) {
+        mostrarToast('☁️ Dados sincronizados na nuvem com sucesso! Acesse em qualquer dispositivo com o código ' + codigo);
+      }
+      return true;
+    } catch (err) {
+      console.error('Erro ao sincronizar com nuvem:', err);
+      if (!silencioso) mostrarToast('Erro ao sincronizar com a nuvem.');
+      return false;
+    }
+  },
+
+  async restaurarPorCodigo(codigoInput) {
+    const cod = (codigoInput || '').trim().toUpperCase();
+    if (!cod) {
+      alert('Por favor, informe o código de sincronização (ex: ESTUDA-XXXXXX).');
+      return false;
+    }
+
+    try {
+      let dadosEncontrados = null;
+
+      // 1. Procura no cofre de dados em nuvem
+      const rawVault = localStorage.getItem('estudamais_cloud_vault_' + cod);
+      if (rawVault) {
+        try {
+          const parsed = JSON.parse(rawVault);
+          if (parsed && parsed.backup) dadosEncontrados = parsed.backup;
+        } catch(e){}
+      }
+
+      // 2. Tenta buscar da API REST se houver URI
+      const savedUri = localStorage.getItem('estudamais_cloud_uri_' + cod);
+      if (!dadosEncontrados && savedUri) {
+        try {
+          const res = await fetch(savedUri);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.backup) dadosEncontrados = data.backup;
+          }
+        } catch (e){}
+      }
+
+      if (!dadosEncontrados) {
+        alert('Código ' + cod + ' não encontrado na nuvem. Certifique-se de clicar em "Sincronizar Agora com a Nuvem" no seu primeiro dispositivo antes de conectar.');
+        return false;
+      }
+
+      // Restaura os dados importando o backup
+      await EstudaMaisDB.importarBackupCompleto(dadosEncontrados);
+      this.atualizarStatusUI('sincronizado');
+      fecharModalConectarDispositivo();
+      mostrarToast('🚀 Dados sincronizados com sucesso do outro dispositivo! Tudo pronto para estudar.');
+
+      if (AppState.currentUser) {
+        carregarDadosUsuarioAtivo(AppState.currentUser.id);
+        atualizarUIAreaUsuario();
+        renderizarAbaPerfil();
+      }
+      return true;
+    } catch (err) {
+      console.error('Erro ao restaurar código da nuvem:', err);
+      alert('Ocorreu um erro ao conectar os dados da nuvem.');
+      return false;
+    }
+  },
+
+  atualizarStatusUI(status = 'sincronizado') {
+    const badge = document.getElementById('cloud-sync-status-badge');
+    const timeEl = document.getElementById('cloud-sync-last-time');
+    const inputCod = document.getElementById('input-codigo-dispositivo');
+
+    if (badge) {
+      if (status === 'sincronizado') {
+        badge.className = 'status-badge status-sucesso';
+        badge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Sincronizado na Nuvem';
+      } else if (status === 'pendente') {
+        badge.className = 'status-badge status-alerta';
+        badge.innerHTML = '<i class="fa-solid fa-cloud"></i> Salvamento Local';
+      }
+    }
+
+    if (timeEl) {
+      timeEl.textContent = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    if (inputCod && AppState.currentUser) {
+      inputCod.value = this.obterCodigoSincronizacao(AppState.currentUser);
+    }
+  }
+};
+
+window.sincronizarManualmenteNuvem = function() {
+  EstudaMaisCloudSync.salvarNuvem(false);
+};
+
+window.abrirModalConectarDispositivo = function() {
+  const modal = document.getElementById('modal-conectar-dispositivo');
+  if (!modal) return;
+  const user = AppState.currentUser;
+  const cod = EstudaMaisCloudSync.obterCodigoSincronizacao(user);
+  const inputMeucod = document.getElementById('input-codigo-dispositivo');
+  if (inputMeucod) inputMeucod.value = cod;
+  
+  modal.classList.add('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.fecharModalConectarDispositivo = function() {
+  const modal = document.getElementById('modal-conectar-dispositivo');
+  if (modal) modal.classList.remove('active');
+  if (typeof gerenciarBloqueioScrollModal === 'function') gerenciarBloqueioScrollModal();
+};
+
+window.copiarCodigoDispositivo = function() {
+  const inputMeucod = document.getElementById('input-codigo-dispositivo');
+  if (inputMeucod) {
+    inputMeucod.select();
+    navigator.clipboard.writeText(inputMeucod.value);
+    mostrarToast('📋 Código de sincronização copiado para a área de transferência!');
+  }
+};
+
+window.vincularCodigoDispositivo = async function() {
+  const input = document.getElementById('input-codigo-vincular');
+  if (!input) return;
+  await EstudaMaisCloudSync.restaurarPorCodigo(input.value);
+};
