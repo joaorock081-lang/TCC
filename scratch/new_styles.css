@@ -1,0 +1,857 @@
+/* ========================================================
+   ESTILOS: CHAT IA & CRONOGRAMA DE ESTUDOS INTELIGENTE
+   ======================================================== */
+
+/* --- ABA CHAT IA --- */
+.chat-ia-header-card {
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-850) 50%, var(--navy-800) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 2.4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-ia-header-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.chat-ia-header-info {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+}
+
+.chat-ia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: color-mix(in srgb, var(--primary-accent) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary-accent) 45%, transparent);
+  border-radius: var(--radius-full);
+  color: var(--primary-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.chat-ia-header-info h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.chat-ia-header-info p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.96rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.chat-ia-header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.btn-chat-limpar,
+.btn-chat-config-gemini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-chat-limpar {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.btn-chat-limpar:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.btn-chat-config-gemini {
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-light));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.btn-chat-config-gemini:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+/* Sugestões Rápidas */
+.chat-ia-sugestoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.chat-ia-sugestao-chip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.1rem;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-ia-sugestao-chip i {
+  color: var(--primary-accent);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.chat-ia-sugestao-chip:hover {
+  border-color: var(--primary-accent);
+  background: color-mix(in srgb, var(--primary-accent) 10%, var(--bg-surface));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+/* Container do Chat */
+.chat-ia-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  height: 640px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.chat-ia-mensagens-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.chat-ia-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2rem;
+}
+
+.chat-ia-vazio-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+  color: var(--primary-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+/* Balões de Mensagem */
+.chat-ia-msg-wrapper {
+  display: flex;
+  gap: 0.85rem;
+  max-width: 88%;
+}
+
+.chat-ia-msg-wrapper.msg-usuario {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-ia-msg-wrapper.msg-ia {
+  align-self: flex-start;
+}
+
+.chat-ia-msg-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.msg-ia .chat-ia-msg-avatar {
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-base));
+  color: #fff;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.msg-usuario .chat-ia-msg-avatar {
+  background: var(--bg-paper);
+  border: 1.5px solid var(--border-light);
+  color: var(--primary-accent);
+}
+
+.chat-ia-msg-balao {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-light);
+  border-radius: 18px;
+  padding: 1.1rem 1.3rem;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  line-height: 1.6;
+  font-size: 0.94rem;
+}
+
+.msg-usuario .chat-ia-msg-balao {
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-light));
+  color: #ffffff;
+  border-color: transparent;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-usuario .chat-ia-msg-balao * {
+  color: #ffffff !important;
+}
+
+.msg-ia .chat-ia-msg-balao {
+  border-bottom-left-radius: 4px;
+}
+
+.chat-ia-msg-autor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.45rem;
+}
+
+.msg-ia .chat-ia-msg-autor strong {
+  color: var(--primary-accent);
+}
+
+.chat-ia-msg-hora {
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+
+.chat-ia-msg-conteudo ul.chat-lista-resumo {
+  margin: 0.6rem 0;
+  padding-left: 1.25rem;
+}
+
+.chat-ia-msg-conteudo pre.chat-code-block {
+  background: rgba(0, 0, 0, 0.4);
+  color: #f8fafc;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.88rem;
+  margin: 0.6rem 0;
+}
+
+.chat-ia-msg-conteudo code.chat-inline-code {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.88rem;
+}
+
+.btn-chat-aplicar-cronograma {
+  margin-top: 0.85rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  transition: all var(--transition-fast);
+}
+
+.btn-chat-aplicar-cronograma:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Indicador de Digitação */
+.typing-balao {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.1rem;
+}
+
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.typing-dots span {
+  width: 7px;
+  height: 7px;
+  background: var(--primary-accent);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Formulário de Envio */
+.chat-ia-form {
+  padding: 1.1rem 1.4rem;
+  background: var(--bg-paper);
+  border-top: 1px solid var(--border-light);
+}
+
+.chat-ia-input-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.chat-ia-textarea {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.1rem;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.94rem;
+  resize: none;
+  min-height: 52px;
+  max-height: 120px;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.chat-ia-textarea:focus {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 20%, transparent);
+}
+
+.btn-chat-ia-enviar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-light));
+  border: none;
+  color: #fff;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  transition: all var(--transition-fast);
+}
+
+.btn-chat-ia-enviar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.btn-chat-ia-enviar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chat-ia-form-footer {
+  margin-top: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.btn-chat-atalho-cronograma {
+  background: none;
+  border: none;
+  color: var(--primary-accent);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-chat-atalho-cronograma:hover {
+  text-decoration: underline;
+}
+
+/* --- ABA CRONOGRAMA --- */
+.cronograma-hero-card {
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-850) 50%, var(--navy-800) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 2.4rem;
+  margin-bottom: 2rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.cronograma-hero-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.cronograma-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.cronograma-badge-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  color: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cronograma-badge-item strong {
+  color: #ffffff;
+}
+
+.cronograma-badge-ia {
+  background: color-mix(in srgb, var(--primary-accent) 25%, transparent);
+  border-color: var(--primary-accent);
+  color: var(--primary-accent-light, #93c5fd);
+  font-weight: 700;
+}
+
+.cronograma-hero-acoes {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-gerar-cronograma-ia {
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-light));
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 18px var(--primary-glow);
+  transition: all var(--transition-fast);
+}
+
+.btn-gerar-cronograma-ia:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+.btn-cronograma-reiniciar-semana {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-cronograma-reiniciar-semana:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cronograma-hero-titulo {
+  font-size: 1.85rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.cronograma-hero-desc {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 820px;
+  line-height: 1.55;
+  margin-bottom: 1.4rem;
+}
+
+/* Barra de Progresso Semanal */
+.cronograma-progresso-wrapper {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.3rem;
+}
+
+.cronograma-progresso-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  font-size: 0.88rem;
+}
+
+.cronograma-progresso-rotulo {
+  color: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cronograma-progresso-valor {
+  font-weight: 800;
+  color: var(--primary-accent-lighter, #93c5fd);
+}
+
+.cronograma-contador-rotulo {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.82rem;
+}
+
+.cronograma-progresso-trilho {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.cronograma-progresso-preenchimento {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-accent), #10b981);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+/* Grade dos Dias da Semana */
+.cronograma-semanal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.4rem;
+}
+
+.cronograma-dia-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.3rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-fast);
+}
+
+.cronograma-dia-card:hover {
+  border-color: var(--primary-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.cronograma-dia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cronograma-dia-titulo {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.cronograma-dia-titulo i {
+  color: var(--primary-accent);
+}
+
+.cronograma-dia-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-paper);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+}
+
+.cronograma-dia-badge.badge-completo {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.cronograma-dia-tarefas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.cronograma-tarefa-item {
+  background: var(--bg-paper);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cronograma-tarefa-item:hover {
+  border-color: var(--primary-accent);
+  transform: translateX(3px);
+}
+
+.cronograma-check-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: transparent;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.cronograma-tarefa-corpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cronograma-tarefa-materia {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  margin-bottom: 0.15rem;
+}
+
+.cronograma-tarefa-topico {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cronograma-tarefa-tempo {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--primary-accent);
+  background: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* Tarefa Concluída */
+.cronograma-tarefa-item.feita {
+  opacity: 0.65;
+  background: color-mix(in srgb, #10b981 8%, var(--bg-paper));
+  border-color: #10b981;
+}
+
+.cronograma-tarefa-item.feita .cronograma-check-box {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.cronograma-tarefa-item.feita .cronograma-tarefa-materia {
+  text-decoration: line-through;
+}
+
+.cronograma-dia-footer {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-light);
+}
+
+.btn-adicionar-tarefa-dia {
+  width: 100%;
+  background: none;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.55rem;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-adicionar-tarefa-dia:hover {
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+  background: color-mix(in srgb, var(--primary-accent) 8%, transparent);
+}
+
+/* Modais de Cronograma */
+.modal-cronograma-ia-card {
+  max-width: 620px;
+  width: 95%;
+}
+
+.cronograma-ia-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cronograma-ia-dica-card {
+  margin-top: 1rem;
+  background: color-mix(in srgb, var(--primary-accent) 12%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--primary-accent) 35%, transparent);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  font-size: 0.86rem;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+
+.cronograma-ia-dica-card i {
+  color: var(--primary-accent);
+  font-size: 1.25rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.cronograma-ia-dica-card p {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .chat-ia-header-card,
+  .cronograma-hero-card {
+    padding: 1.6rem 1.4rem;
+  }
+
+  .chat-ia-header-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chat-ia-box {
+    height: 520px;
+  }
+
+  .chat-ia-msg-wrapper {
+    max-width: 96%;
+  }
+
+  .cronograma-ia-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cronograma-hero-topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cronograma-hero-acoes {
+    flex-direction: column;
+  }
+
+  .btn-gerar-cronograma-ia,
+  .btn-cronograma-reiniciar-semana {
+    justify-content: center;
+  }
+}

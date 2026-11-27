@@ -1,0 +1,5 @@
+$index = [System.IO.File]::ReadAllText("$PWD\index.html", [System.Text.Encoding]::UTF8)
+Write-Host "modal-tour-site present:" $index.Contains("modal-tour-site")
+Write-Host "btn-header-tour present:" $index.Contains("btn-header-tour")
+Write-Host "abrirTourSlides present:" $index.Contains("abrirTourSlides")
+Write-Host "tourProximoSlide present:" $index.Contains("tourProximoSlide")

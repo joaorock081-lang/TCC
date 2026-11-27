@@ -1,0 +1,223 @@
+/* ========================================================
+   ESTILOS APRIMORADOS: BOTÕES DE MODAIS & CHAT IA / CRONOGRAMA V2
+   ======================================================== */
+
+.btn-modal-confirm {
+  background: linear-gradient(135deg, var(--primary-accent, #2563eb), var(--primary-light, #1d4ed8)) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.75rem 1.6rem !important;
+  border-radius: var(--radius-full) !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.6rem !important;
+  box-shadow: 0 4px 18px var(--primary-glow, rgba(37, 99, 235, 0.45)) !important;
+  transition: all var(--transition-fast) !important;
+  outline: none !important;
+}
+
+.btn-modal-confirm:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.15) !important;
+  box-shadow: 0 6px 24px var(--primary-glow, rgba(37, 99, 235, 0.6)) !important;
+}
+
+.btn-modal-confirm i {
+  color: #ffffff !important;
+  font-size: 1rem;
+}
+
+/* Barra de Modos de Personalidade da IA */
+.chat-ia-modos-bar {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.4rem 0.2rem 0.85rem;
+  margin-bottom: 0.85rem;
+  scrollbar-width: none;
+}
+
+.chat-ia-modos-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-ia-modo-pill {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-full);
+  padding: 0.45rem 1rem;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-ia-modo-pill:hover {
+  border-color: var(--primary-accent);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.chat-ia-modo-pill.active {
+  background: linear-gradient(135deg, var(--primary-accent), var(--primary-light));
+  color: #ffffff !important;
+  border-color: transparent;
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.chat-ia-modo-pill.active i {
+  color: #ffffff !important;
+}
+
+/* Ferramentas de Mensagem no Chat */
+.chat-ia-msg-ferramentas {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.msg-ia .chat-ia-msg-ferramentas {
+  border-top-color: var(--border-light);
+}
+
+.btn-chat-tool {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-chat-tool:hover {
+  border-color: var(--primary-accent);
+  color: var(--primary-accent);
+  background: color-mix(in srgb, var(--primary-accent) 10%, transparent);
+}
+
+/* Destaque do Dia Atual no Cronograma */
+.cronograma-dia-card.dia-atual-destaque {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-accent) 45%, transparent), var(--shadow-md);
+  position: relative;
+}
+
+.dia-hoje-tag {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.5px;
+}
+
+/* Ações em Cada Tarefa do Cronograma */
+.cronograma-tarefa-acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-tarefa-foco,
+.btn-tarefa-excluir {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-tarefa-foco:hover {
+  color: var(--primary-accent);
+  background: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+}
+
+.btn-tarefa-excluir:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* Badges Gamificados de XP e Streak */
+.cronograma-badge-xp {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  font-weight: 800 !important;
+}
+
+.cronograma-badge-streak {
+  background: linear-gradient(135deg, #f59e0b, #b45309) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  font-weight: 800 !important;
+}
+
+.cronograma-dia-vazio {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cronograma-dia-vazio i {
+  font-size: 1.4rem;
+  opacity: 0.5;
+}
+
+/* Estilos de Impressão Limpa */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .site-header,
+  .mobile-bottom-nav,
+  .lousa-scratchpad,
+  .modal-overlay,
+  .btn-adicionar-tarefa-dia,
+  .cronograma-hero-acoes,
+  .btn-tarefa-foco,
+  .btn-tarefa-excluir,
+  .chat-ia-box,
+  .chat-ia-sugestoes-grid,
+  .chat-ia-modos-bar {
+    display: none !important;
+  }
+  .cronograma-dia-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
